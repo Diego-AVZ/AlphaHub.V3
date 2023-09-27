@@ -18,8 +18,8 @@ contract alphaHubV3 {
 
     uint idCount;
 
-    info[] public infoList; //LIsta global
-    info[] infoList2;       //Lista Personal del AlphaProv
+    info[] public infoListGlob; //Lista global
+    info[] infoList;       //Lista Personal del AlphaProv
 
     mapping(address => info[]) public alphaInfoFromAddress;
 
@@ -29,49 +29,49 @@ contract alphaHubV3 {
     uint16 public maxLength = 100;
 
     function provideInfo(string memory _msg, uint8 _type) public {
-        if(infoList.length > maxLength) {
-            for (uint256 i = 0; i < infoList.length - 1; i++) {
-                infoList[i] = infoList[i + 1];
+        if(infoListGlob.length > maxLength) {
+            for (uint256 i = 0; i < infoListGlob.length - 1; i++) {
+                infoListGlob[i] = infoListGlob[i + 1];
             }
-            infoList.pop();
+            infoListGlob.pop();
         }
         idCount = idCount + 1;
         info memory newInfo = info(_msg, block.timestamp, _type, idCount, msg.sender);
-        infoList2.push(newInfo);
-        alphaInfoFromAddress[msg.sender] = infoList2;
         infoList.push(newInfo);
+        alphaInfoFromAddress[msg.sender] = infoList;
+        infoListGlob.push(newInfo);
         uint _score = seeAlphaScore[msg.sender];
         uint altIndex = 50 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 50;
         uint altIndex2 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
         uint altIndex3 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
         uint altIndex4 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
         uint altIndex5 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
-        if(_score > 10){infoList[altIndex] = newInfo;} 
-        else if(_score > 25){infoList[altIndex] = newInfo; infoList[altIndex2] = newInfo; }
+        if(_score > 10){infoListGlob[altIndex] = newInfo;} 
+        else if(_score > 25){infoListGlob[altIndex] = newInfo; infoListGlob[altIndex2] = newInfo; }
         else if(_score > 50){
-            infoList[altIndex] = newInfo; 
-            infoList[altIndex2] = newInfo; 
-            infoList[altIndex3] = newInfo;
-            infoList[altIndex4] = newInfo;
+            infoListGlob[altIndex] = newInfo; 
+            infoListGlob[altIndex2] = newInfo; 
+            infoListGlob[altIndex3] = newInfo;
+            infoListGlob[altIndex4] = newInfo;
             }
         else if(_score > 75){
-            infoList[altIndex] = newInfo; 
-            infoList[altIndex2] = newInfo; 
-            infoList[altIndex3] = newInfo;
-            infoList[altIndex4] = newInfo;
-            infoList[altIndex5] = newInfo;
+            infoListGlob[altIndex] = newInfo; 
+            infoListGlob[altIndex2] = newInfo; 
+            infoListGlob[altIndex3] = newInfo;
+            infoListGlob[altIndex4] = newInfo;
+            infoListGlob[altIndex5] = newInfo;
             }
     }
 
     function seeAlphaMsgs(uint8 index) public view returns(string memory, uint256, uint8) {
-        require(index < infoList.length, "no list element");
-        info memory alphaInfo = infoList[index];
+        require(index < infoListGlob.length, "no list element");
+        info memory alphaInfo = infoListGlob[index];
         return(alphaInfo.infoMsg, alphaInfo.postDate, alphaInfo.infoType);
         //add times called require
     }
 
     function getLength() public view returns(uint){
-        return(infoList.length);
+        return(infoListGlob.length);
     }
 
     address[] public validators;
@@ -110,9 +110,9 @@ contract alphaHubV3 {
     }
 
     function getAddressFromId(uint _id) public view returns(address){
-        for(uint i = 0; i < infoList.length; i++){
-            if(_id == infoList[i].id){
-                return(infoList[i].alpha);
+        for(uint i = 0; i < infoListGlob.length; i++){
+            if(_id == infoListGlob[i].id){
+                return(infoListGlob[i].alpha);
             }
         }
         revert("Not Found");
