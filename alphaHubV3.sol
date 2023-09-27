@@ -23,8 +23,6 @@ contract alphaHubV3 {
 
     mapping(address => info[]) public alphaInfoFromAddress;
 
-    uint public alphaScore;
-
     mapping(address => uint) seeAlphaScore;
     uint16 public maxLength = 100;
 
@@ -40,21 +38,22 @@ contract alphaHubV3 {
         infoList.push(newInfo);
         alphaInfoFromAddress[msg.sender] = infoList;
         infoListGlob.push(newInfo);
+        uint perAccuracy =  accuracyPercentage(msg.sender);
         uint _score = seeAlphaScore[msg.sender];
         uint altIndex = 50 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 50;
         uint altIndex2 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
         uint altIndex3 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
         uint altIndex4 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
         uint altIndex5 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
-        if(_score > 10){infoListGlob[altIndex] = newInfo;} 
-        else if(_score > 25){infoListGlob[altIndex] = newInfo; infoListGlob[altIndex2] = newInfo; }
-        else if(_score > 50){
+        if(_score > 10 && perAccuracy > 50){infoListGlob[altIndex] = newInfo;} 
+        else if(_score > 25 && perAccuracy > 50){infoListGlob[altIndex] = newInfo; infoListGlob[altIndex2] = newInfo; }
+        else if(_score > 50 && perAccuracy > 50){
             infoListGlob[altIndex] = newInfo; 
             infoListGlob[altIndex2] = newInfo; 
             infoListGlob[altIndex3] = newInfo;
             infoListGlob[altIndex4] = newInfo;
             }
-        else if(_score > 75){
+        else if(_score > 75 && perAccuracy > 50){
             infoListGlob[altIndex] = newInfo; 
             infoListGlob[altIndex2] = newInfo; 
             infoListGlob[altIndex3] = newInfo;
@@ -67,7 +66,7 @@ contract alphaHubV3 {
         require(index < infoListGlob.length, "no list element");
         info memory alphaInfo = infoListGlob[index];
         return(alphaInfo.infoMsg, alphaInfo.postDate, alphaInfo.infoType);
-        //add times called require
+        
     }
 
     function getLength() public view returns(uint){
@@ -87,7 +86,7 @@ contract alphaHubV3 {
     }
 
     modifier onlyValidators(){
-        require(isValidator[msg.sender]==true, "Not validator yet");
+        require(isValidator[msg.sender] == true, "Not validator yet");
         _;
     }
 
