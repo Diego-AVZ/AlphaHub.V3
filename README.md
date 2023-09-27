@@ -16,7 +16,7 @@ We use Solidity as the backend language for this decentralized application. The 
 
 ---
 
-##How it Works?
+## How it Works?
 
 `struct info` is the data structure for the info provided by the AlphaProv:
 
@@ -29,5 +29,15 @@ struct info {
         address alpha;     //Address of the owner of this info
     }
 ```
+
+Then we found two arrays: 
+
+·`infoListGlob` -> To register the posted info structures of all the AlphaProv.
+
+·`infoList` -> To register the posted info structures of an AlphaProv. One `infoList` for each AlphaProv.
+
+ 
+
+
 
 
