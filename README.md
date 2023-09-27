@@ -10,3 +10,6 @@ AlphaProvs, short for "Alpha Info Providers," are highly qualified users who pro
 
 ## Validators
 Validators are qualified users responsible for verifying and rating the information shared by AlphaProvs. Through an algorithm, AlphaProvs build a decentralized digital reputation that aids in their platform advancement. A better reputation results in more frequent appearances in the information signal list, increased visibility of their orders, and higher rewards.
+
+## Solidity Backend
+We use Solidity as the backend language for this decentralized application. The Solidity smart contract manages data related to shared information, the AlphaProv algorithm, and the economic aspects of the platform.
