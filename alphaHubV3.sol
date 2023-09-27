@@ -91,14 +91,20 @@ contract alphaHubV3 {
         _;
     }
 
+    mapping(address => uint) addrPosNum;
+    mapping(address => uint) addrTotValNum; // para obtener % de accierto
+
     function validate(address clickAddress, uint points, uint posNeg) public onlyValidators {
         require(points <= 2);
         require(seeAlphaScore[clickAddress] <= 100);
         uint score = seeAlphaScore[clickAddress];
         if(posNeg == 0){
             score = score + points;
+            addrPosNum[clickAddress]++;
+            addrTotValNum[clickAddress]++;
         } else if(posNeg == 1){
             score = score - points;
+            addrTotValNum[clickAddress]++;
         }
         seeAlphaScore[clickAddress] = score;
     }
@@ -115,6 +121,15 @@ contract alphaHubV3 {
     //Está función será llamada desde js con un click en la info del frontend.
     //al hacer ".createElement" se creará un elemento <div onclick="funcionJS_para_llamar_a_"getAddressFromId()"> 
     //la funcion "getAddressFromId()" devuelve la address y se establece como variable en js para validar con la funcion validate()
+
+    mapping(address => uint) accuracyPer;
+    
+    function accuracyPercentage(address addr) public returns(uint){
+       require(addrTotValNum[addr] > 0);
+       accuracyPer[addr] = (addrPosNum[addr]*100) / addrTotValNum[addr];
+       uint per = accuracyPer[addr];
+       return(per);
+    }
 
     //PAYMENT
 
