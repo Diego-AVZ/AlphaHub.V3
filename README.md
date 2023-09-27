@@ -2,7 +2,7 @@
 
 AlphaHub V3 is the third version of AlphaHub, a SocialFi dApp that establishes a decentralized relationship and economy among users, AlphaProvs, and validators.
 
-## User Access
+## Users
 Users pay for access to the platform, enabling them to access valuable information.
 
 ## AlphaProvs
