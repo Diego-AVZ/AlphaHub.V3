@@ -13,3 +13,21 @@ Validators are qualified users responsible for verifying and rating the informat
 
 ## Solidity Backend
 We use Solidity as the backend language for this decentralized application. The Solidity smart contract manages data related to shared information, the AlphaProv algorithm, and the economic aspects of the platform.
+
+---
+
+##How it Works?
+
+`struct info` is the data structure for the info provided by the AlphaProv:
+
+```solidity
+struct info {
+        string infoMsg;    //info text
+        uint256 postDate;  // Timestamp
+        uint8 infoType;    //onchain signal, DeFi signal, trading signal...
+        uint id;           //identifier of the info
+        address alpha;     //Address of the owner of this info
+    }
+```
+
+
