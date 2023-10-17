@@ -26,7 +26,7 @@ contract alphaHubV3 {
     mapping(address => uint) seeAlphaScore;
     uint16 public maxLength = 100;
 
-    function provideInfo(string memory _msg, uint8 _type) public {
+    function provideInfo(string memory _msg, uint8 _type) public { // to global List (all sectors)
         if(infoListGlob.length > maxLength) {
             for (uint256 i = 0; i < infoListGlob.length - 1; i++) {
                 infoListGlob[i] = infoListGlob[i + 1];
@@ -60,6 +60,26 @@ contract alphaHubV3 {
             infoListGlob[altIndex4] = newInfo;
             infoListGlob[altIndex5] = newInfo;
             }
+    }
+
+    struct traSignal {
+        string _msg;
+        uint256 priceEntry;
+        uint256 stopLoss;
+        uint256 takeProfit; 
+        uint8 direction;
+        uint16 traSignalId;
+    }
+
+    uint16 traSignalNum;
+    traSignal [] traSignals;
+
+    function addTraSignal(string memory _msg, uint256 _priceEntry, uint256 _stopLoss, uint256 _takeProfit, uint8 _direction, uint16 _traSignalId) public {
+        provideInfo(_msg, 0);
+        traSignalNum++;
+        _traSignalId  =  traSignalNum +1;
+        traSignal memory newtraSignal = traSignal(_msg, _priceEntry, _stopLoss, _takeProfit, _direction, _traSignalId);
+        traSignals.push(newtraSignal);
     }
 
     function seeAlphaMsgs(uint8 index) public view returns(string memory, uint256, uint8) {
