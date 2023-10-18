@@ -33,7 +33,7 @@ body{
 #wallet {
     position: absolute;
     color: white;
-    background: linear-gradient(90deg, rgb(29, 78, 168), rgb(0, 41, 191), rgba(2, 0, 24, 0.541));
+    background: linear-gradient(112deg, rgb(13 44 101), rgb(0, 41, 191), rgb(46 128 255), rgb(0, 41, 191), rgb(10 2 95), rgba(2, 0, 24, 0.541));
     left: 87vw;
     top: 2vw;
     border-style: none;
@@ -51,10 +51,10 @@ body{
 #msg1 {
     position: absolute;
     display: flex;
-    color: rgba(255, 255, 255, 0.902);
+    color: rgb(255 255 255 / 90%);
     font-family: sans-serif;
-    font-size: 2vw;
-    background-color: rgba(0, 0, 83, 0.631);
+    font-size: 1.4vw;
+    background: linear-gradient(39deg, rgba(13, 44, 101, 0.50), rgb(0, 41, 191, 0.50), rgb(46, 128, 255, 0.50), rgb(0, 41, 191, 0.50), rgb(10, 2, 95, 0.50), rgba(2, 0, 24, 0.5));
     text-align: center;
     justify-content: center;
     align-items: center;
@@ -67,7 +67,7 @@ body{
     text-shadow: 0vw 0vw 1vw rgb(0, 0, 0);
     letter-spacing: 2px;
     box-shadow: 0vw 0vw 1vw rgba(0, 0, 83, 0.731);
-
+    z-index: 3;
 }
 
 #msg2 {
@@ -91,6 +91,7 @@ body{
     padding: 1vw;
     padding-top: 2vw;
     padding-bottom: 3vw;
+    z-index: 3;
 
 }
 
@@ -113,6 +114,107 @@ body{
 
 } #toForm:hover{ cursor: pointer; transition: ease-in, 0.4s; letter-spacing: 1px; opacity:0.9; width: 20.5vw; background: linear-gradient(136deg, black, #546ea1, black);}
 
+#aphaZoneDiv {
+    position: absolute;
+    width: 96vw;
+    height: 80vh;
+    bottom: 1vw;
+    color: rgb(140, 140, 140);
+    background-color: #080808;
+    transform: translateX(-50%);
+    left: 50%;
+    box-shadow: 0vw 0vw 1vw rgb(76 76 76 / 69%);
+    border-radius: 1vw;
+    padding: 1vw;
+    z-index: 2;
+    font-size: 1.3vw;
+}
+
+#address{
+    position: absolute;
+    color: rgb(230, 230, 230);
+    font-size: 1.2vw;
+    margin-top: 2vh;
+    margin-left: 1vw;
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 2px;
+    text-shadow: 0vw 0vw 0.5vw rgb(0, 168, 194);
+} #address:hover{color:white;}
+
+#name{
+    position: absolute;
+    color: rgb(140, 140, 140);
+    font-size: 1.3vw;
+    margin-top: 2vh;
+    margin-left: 14vw;
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 2px;
+    text-shadow: 0vw 0vw 0.1vw rgb(255, 255, 255);
+}
+
+#numSig{
+    position: absolute;
+    color: rgb(230, 230, 230);
+    font-size: 1.3vw;
+    margin-top: 10vh;
+    margin-left: 14vw;
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 2px;
+    text-shadow: 0vw 0vw 1vw rgb(0, 168, 194);
+}
+
+#posi{
+    position: absolute;
+    color: rgb(230, 230, 230);
+    font-size: 1.3vw;
+    margin-top: 15vh;
+    margin-left: 14vw;
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 2px;
+    text-shadow: 0vw 0vw 1vw rgb(0, 168, 194);
+}
+
+#score{
+    position: absolute;
+    color: rgb(230, 230, 230);
+    font-size: 1.3vw;
+    margin-top: 20vh;
+    margin-left: 14vw;
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 2px;
+    text-shadow: 0vw 0vw 1vw rgb(0, 168, 194);
+}
+
+#alphaTrad{
+    margin-left: 1vw;
+}
+
+#alphaLows{
+    margin-left: 12vw;
+}
+
+#alphaOnchain{
+    margin-left: 23vw;
+}
+
+#alphaICO{
+    margin-left: 34vw;
+}
+
+.butAlpha {
+    position: absolute;
+    bottom: 0.5vh;
+    width: 10vw;
+    height: 6vh;
+    background: linear-gradient(0deg, rgb(13 44 101), rgb(0, 41, 191), rgb(46, 81, 255), rgb(0, 41, 191), rgb(10 2 95), rgba(2, 0, 24, 0.541));
+    color: white;
+    font-size: 1.5vw;
+    font-weight: 600;
+    border-radius: 1vw;
+    border-style: none;
+    box-shadow: inset 0vw 0vw 1vw rgb(0, 0, 0);
+    text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
+}
 
 
 
