@@ -16,6 +16,7 @@ walletBut.addEventListener("click", async()=>{
         walletBut.style.paddingLeft = "3vw";
         walletBut.style.background ="linear-gradient(90deg, rgb(14 116 18), rgb(2, 165, 45), rgba(0, 24, 2, 0.541))";
         msg1.style.display = "none";
+        showEthAddress();
         seeIfIsAlpha();
       } catch (error) {
         console.log("ERROR al Conectar MTMSK");
@@ -25,6 +26,13 @@ walletBut.addEventListener("click", async()=>{
     }
 });
 
+function showEthAddress() {
+  var start = connectedAddress.slice(0, 6);
+  var end = connectedAddress.slice(-4);
+
+  document.getElementById("address").innerText = `${start}...${end}`;
+}
+
 
 //CONNECT CONTRACT
 const conAddress = "0x77F5D9d255053262e2C97A837fb70dC6cEF4F0B2";
@@ -33,6 +41,8 @@ const ABI = [ ];
 const web3Instance = new Web3(window.ethereum);
 
 const contract = new web3Instance.eth.Contract(ABI, conAddress);
+
+var alphaZone = document.getElementById("aphaZoneDiv");
 
 const seeIfIsAlpha = async () => {
     try {
