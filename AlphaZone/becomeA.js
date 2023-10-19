@@ -99,21 +99,21 @@ document.getElementById("next").addEventListener("click", function(){
         questList[i].style.display= "block";
         
         ans1[a].addEventListener("click", function () {
-          ans1[a].style.backgroundColor = "blue";
-          ans2[a].style.backgroundColor = "black";
-          ans3[a].style.backgroundColor = "black";
+          ans1[a].style.background = "linear-gradient(136deg, black, #304061, black)";
+          ans2[a].style.background = "black";
+          ans3[a].style.background = "black";
           
         });
         ans2[a].addEventListener("click", function () {
-          ans2[a].style.backgroundColor = "blue";
-          ans1[a].style.backgroundColor = "black";
-          ans3[a].style.backgroundColor = "black";
+          ans2[a].style.background = "linear-gradient(136deg, black, #304061, black)";
+          ans1[a].style.background = "black";
+          ans3[a].style.background = "black";
           if(a == 1) {pointsB = 1}
         });
         ans3[a].addEventListener("click", function () {
-          ans3[a].style.backgroundColor = "blue";
-          ans2[a].style.backgroundColor = "black";
-          ans1[a].style.backgroundColor = "black";
+          ans3[a].style.background = "linear-gradient(136deg, black, #304061, black)";
+          ans2[a].style.background = "black";
+          ans1[a].style.background = "black";
           if(a == 2) {pointsC = 1}
         });
     }
@@ -141,19 +141,19 @@ document.getElementById("back").addEventListener("click", function () {
         questList[i].style.display = "block";
 
         ans1[a].addEventListener("click", function () {
-          ans1[a].style.backgroundColor = "blue";
-          ans2[a].style.backgroundColor = "black";
-          ans3[a].style.backgroundColor = "black";
+          ans1[a].style.background = "linear-gradient(136deg, black, #304061, black)";
+          ans2[a].style.background = "black";
+          ans3[a].style.background = "black";
         });
         ans2[a].addEventListener("click", function () {
-          ans2[a].style.backgroundColor = "blue";
-          ans1[a].style.backgroundColor = "black";
-          ans3[a].style.backgroundColor = "black";
+          ans2[a].style.background = "linear-gradient(136deg, black, #304061, black)";
+          ans1[a].style.background = "black";
+          ans3[a].style.background = "black";
         });
         ans3[a].addEventListener("click", function () {
-          ans3[a].style.backgroundColor = "blue";
-          ans2[a].style.backgroundColor = "black";
-          ans1[a].style.backgroundColor = "black";
+          ans3[a].style.background = "linear-gradient(136deg, black, #304061, black)";
+          ans2[a].style.background = "black";
+          ans1[a].style.background = "black";
         });
     }
     if (i == 0) {
@@ -170,22 +170,22 @@ var pointsC = 0;
 
 ans1[0].addEventListener("click", function () {
   document.getElementById("next").style.display = "block";
-  ans1[0].style.backgroundColor = "blue";
-  ans2[0].style.backgroundColor = "black";
-  ans3[0].style.backgroundColor = "black";
+  ans1[0].style.background = "linear-gradient(136deg, black, #304061, black)";
+  ans2[0].style.background = "black";
+  ans3[0].style.background = "black";
 });
 
 ans2[0].addEventListener("click", function () {
     document.getElementById("next").style.display = "block";
-  ans2[0].style.backgroundColor = "blue";
-  ans1[0].style.backgroundColor = "black";
-  ans3[0].style.backgroundColor = "black";
+  ans2[0].style.background = "linear-gradient(136deg, black, #304061, black)";
+  ans1[0].style.background = "black";
+  ans3[0].style.background = "black";
 });
 ans3[0].addEventListener("click", function () {
     document.getElementById("next").style.display = "block";
-  ans3[0].style.backgroundColor = "blue";
-  ans2[0].style.backgroundColor = "black";
-  ans1[0].style.backgroundColor = "black";
+  ans3[0].style.background = "linear-gradient(136deg, black, #304061, black)";
+  ans2[0].style.background = "black";
+  ans1[0].style.background = "black";
   pointsA = 1;
 });
 
