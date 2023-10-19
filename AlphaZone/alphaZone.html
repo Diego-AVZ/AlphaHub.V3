@@ -15,7 +15,11 @@
         <button id="wallet">Connect Wallet</button>
     </div>
 
-    <div id="msg1">Please Connect Wallet</div>
+    <div id="cover" style="position: absolute; display:block; width: 101vw; height: 90vh; background-color: rgba(0, 0, 0, 0.774); z-index: 5; margin-top: 10vh;">
+        <div id="msg1">
+            Please Connect Wallet
+        </div>
+    </div>
 
     <div id="msg2">
         <p style="width: 27vw;">You are not an <b>AlphaProv</b> yet, <br>please click bellow and get the rol in 3 minutes!</p>
@@ -25,7 +29,12 @@
 
     <div id="aphaZoneDiv">
         <p id="address"></p>
-        <p id="name">Ericonomic</p>
+        <p id="name">Your Name</p>
+        <div id="setName">
+            <input type="text" id="changeName" placeholder="Write your Name">
+            <button id="changeNameBut">Write</button>
+        </div>
+        <img src="settings2.png" id="set1">
         <p style="position: absolute; margin-top: 10vh; margin-left: 1vw;">Number of signals:</p><p id="numSig">17</p>
         <p style="position: absolute; margin-top: 15vh; margin-left: 1vw;">Success:</p><p id="posi">14</p>
         <p style="position: absolute; margin-top: 20vh; margin-left: 1vw;">Alpha Score:</p><p id="score">12</p>
@@ -34,7 +43,75 @@
         <button class="butAlpha" id="alphaOnchain">Onchain</button>
         <button class="butAlpha" id="alphaICO">Presales</button>
         <button class="butAlpha" id="alphaLows">LowCaps</button>
+
+        <div id="newSig">
+            <p id="titAdd">Add Signals</p>
+
+            <div id="addTradingSignals">
+                <input type="text" id="addAsset" class="input" placeholder="Asset to trade">
+                <input type="text" id="addEntry" class="input" placeholder="Entry Price">
+                <input type="text" id="addSl" class="input" placeholder="StopLoss Price">
+                <input type="text" id="addTp" class="input" placeholder="TakeProfit Price">
+                <button id="long">Long</button>
+                <button id="short">Short</button>
+                <input type="text" id="addMsg" class="input" placeholder="msg">
+                <button id="AddBut">Add Signal</button>
+            </div>
+
+            <div id="addOnchainSignals">
+                <input type="text" id="addAsset" class="input" placeholder="Asset">
+                <input type="text" id="addEntry" class="input" placeholder="what Happened?">
+                <input type="text" id="addSl" class="input" placeholder="StopLoss Price">
+                <input type="text" id="addTp" class="input" placeholder="TakeProfit Price">
+                <button id="long">Long</button>
+                <button id="short">Short</button>
+                <input type="text" id="addMsg" class="input" placeholder="msg">
+                <button id="AddBut">Add Signal</button>
+            </div>
+
+            <div id="addLowsSignals">
+                <input type="text" id="addAsset" class="input" placeholder="Asset">
+                <input type="text" id="addEntry" class="input" placeholder="Entry Price">
+                <input type="text" id="addSl" class="input" placeholder="StopLoss Price">
+                <input type="text" id="addTp" class="input" placeholder="TakeProfit Price">
+                <button id="long">Long</button>
+                <button id="short">Short</button>
+                <input type="text" id="addMsg" class="input" placeholder="msg">
+                <button id="AddBut">Add Signal</button>
+            </div>
+
+            <div id="addIcoSignals">
+                <input type="text" id="addAsset" class="input" placeholder="Asset">
+                <input type="text" id="addEntry" class="input" placeholder="what Blockchain?">
+                <input type="text" id="addSl" class="input" placeholder="Entry Price">
+                <input type="text" id="addTp" class="input" placeholder="TakeProfit Price">
+                <button id="long">Long</button>
+                <button id="short">Short</button>
+                <input type="text" id="addMsg" class="input" placeholder="msg">
+                <button id="AddBut">Add Signal</button>
+            </div>
+
+        
+        </div>
+
+        <div id="tradingSigList" class="list">
+            trading
+        </div>
+
+        <div id="onchainSigList" class="list">
+            onchain
+        </div>
+
+        <div id="LowSigList" class="list">
+            Lows
+        </div>
+
+        <div id="icoSigList" class="list">
+            ico
+        </div>
     </div>
+
+    
 
     
 
