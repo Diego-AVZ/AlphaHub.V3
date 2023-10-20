@@ -603,6 +603,16 @@ body{
     right: 0.9vw;
 }
 
+#windowTool3{
+    position: absolute;
+    margin-left: -2vw;
+    margin-top: 1vh;
+    overflow-x: hidden;
+    width: 35vw; 
+    height: 45vh;
+
+}
+
 .windowTool{
     position: absolute;
     width: 33vw;
