@@ -28,12 +28,13 @@ contract alphaHubV3 {
 
     struct traSignal {
         string _msg;
-        uint256 priceEntry;
+        uint256 priceEntry; // STRINGSSSSS
         uint256 stopLoss;
         uint256 takeProfit; 
         uint8 direction;
         uint16 traSignalId;
         uint256 postDate;
+        //FALTA ASSET TO TRADE
     }
 
     uint16 public maxLengthTrad = 100;
