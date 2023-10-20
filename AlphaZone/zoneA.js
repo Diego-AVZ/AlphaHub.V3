@@ -33,6 +33,37 @@ walletBut.addEventListener("click", async () => {
   }
 });
 
+async function connect() {
+  if (typeof window.ethereum !== "undefined") {
+    try {
+      const Accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      console.log("MTMSK Connected");
+      connectedAddress = Accounts[0];
+      console.log(connectedAddress);
+      walletBut.innerText = "Connected";
+      walletBut.style.paddingLeft = "3vw";
+      walletBut.style.background =
+        "linear-gradient(90deg, rgb(14 116 18), rgb(2, 165, 45), rgba(0, 24, 2, 0.541))";
+      msg1.style.display = "none";
+      cover.style.display = "none";
+      showEthAddress();
+      seeName();
+      getAlphaScore();
+      getSignalsNum();
+      seeTraSig2();
+      /*seeIfIsAlpha();*/
+    } catch (error) {
+      console.log("ERROR al Conectar MTMSK");
+    }
+  } else {
+    console.log("MTMSK Not Detected");
+  }
+}
+
+connect();
+
 function showEthAddress() {
   var start = connectedAddress.slice(0, 6);
   var end = connectedAddress.slice(-4);
@@ -800,13 +831,24 @@ new TradingView.widget({
 
 var tw1 = document.getElementById("windowTool1");
 var tw2 = document.getElementById("windowTool2");
+var tw3 = document.getElementById("windowTool3");
 
 function cmc() {
   tw1.style.display = "none";
   tw2.style.display = "block";
+  tw3.style.display = "none";
 }
 
 function tv() {
   tw1.style.display = "block";
   tw2.style.display = "none";
+  tw3.style.display = "none";
+
+}
+
+function uni() {
+  tw1.style.display = "none";
+  tw2.style.display = "none";
+  tw3.style.display = "block";
+
 }
