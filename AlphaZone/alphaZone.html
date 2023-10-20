@@ -29,13 +29,13 @@
 
     <div id="aphaZoneDiv">
         <p id="address"></p>
-        <p id="name">Your Name</p>
+        <p id="name"> <-write your name </p>
         <div id="setName">
             <input type="text" id="changeName" placeholder="Write your Name">
             <button id="changeNameBut">Write</button>
         </div>
         <img src="settings2.png" id="set1">
-        <p style="position: absolute; margin-top: 10vh; margin-left: 1vw;">Number of signals:</p><p id="numSig">17</p>
+        <p style="position: absolute; margin-top: 10vh; margin-left: 1vw;">Number of signals:</p><p id="numSig">0</p>
         <p style="position: absolute; margin-top: 15vh; margin-left: 1vw;">Success:</p><p id="posi">14</p>
         <p style="position: absolute; margin-top: 20vh; margin-left: 1vw;">Alpha Score:</p><p id="score">12</p>
         
@@ -55,7 +55,7 @@
                 <button id="long">Long</button>
                 <button id="short">Short</button>
                 <input type="text" id="addMsg" class="input" placeholder="msg">
-                <button id="AddBut">Add Signal</button>
+                <button id="addTradBut">Add Signal</button>
             </div>
 
             <div id="addOnchainSignals">
@@ -93,10 +93,11 @@
 
         
         </div>
-
+        
         <div id="tradingSigList" class="list">
-            trading
+    
         </div>
+        
 
         <div id="onchainSigList" class="list">
             onchain
@@ -109,12 +110,35 @@
         <div id="icoSigList" class="list">
             ico
         </div>
+
+        <div id="tools">
+            <p style="rotate:90deg;">TOOLS</p>
+            <img class="toolsImg" src="https://avatars.githubusercontent.com/u/7644688?s=280&v=4" title="TradingView" onclick="tv()">
+            <img class="toolsImg" src="https://seeklogo.com/images/C/coinmarketcap-logo-064D167A0E-seeklogo.com.png" title="CoinMarketCap" onclick="cmc()">
+            <img class="toolsImg" src="https://seeklogo.com/images/B/binance-coin-bnb-logo-CD94CC6D31-seeklogo.com.png" title="Binance">
+            <img class="toolsImg" src="https://cryptologos.cc/logos/uniswap-uni-logo.png" title="Uniswap">
+            <img class="toolsImg" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9_ULrNHpmMkne1N93s6N_4ZDM8-QT1TcnomfzuxHUhjoLbWR113K7UWS3F5XQuGE5U9Q&usqp=CAU" title="Etherscan">
+            
+        </div>
+
+        <div id="tradData">
+            <p>DATA</p>
+        </div>
+        <div id="toolsWindow">
+            <div class="windowTool" id="windowTool1">               
+            </div>
+            <div id="windowTool2" class="windowTool" style="display: none; margin-top: 10vh; right: 1vw;">
+                <div id="coinmarketcap-widget-coin-price-block" coins="1,1027,1839,6636,5426,1975" currency="USD" theme="dark" transparent="true" show-symbol-logo="true"></div>
+            </div>
+            <div id="windowTool3" class="windowTool" style="display: block; margin-top: 10vh; right: 1vw;">
+                
+            </div>
+        </div>
+
     </div>
 
-    
-
-    
-
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script type="text/javascript" src="https://files.coinmarketcap.com/static/widget/coinPriceBlock.js"></script>
 
 
     <script src="zoneA.js"></script>
