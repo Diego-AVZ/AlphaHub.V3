@@ -1,3 +1,24 @@
+/* Estilos para la barra de desplazamiento */
+::-webkit-scrollbar {
+  width: 0.65vw; 
+}
+
+/* Estilos para el riel de la barra */
+::-webkit-scrollbar-track {
+  background-color: hwb(0 0% 100% / 0); /* Color de fondo del riel */
+}
+
+/* Estilos para el pulgar de la barra */
+::-webkit-scrollbar-thumb {
+  background-color: #636363b2; /* Color del pulgar */
+  border-radius: 1vw; /* Borde redondeado del pulgar */
+}
+
+/* Estilos para el pulgar cuando se desplaza */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #696968b2; /* Color del pulgar al pasar el cursor */
+}
+
 @media (max-width: 1800px) {
 body{
     overflow: hidden;
@@ -380,7 +401,7 @@ body{
     margin-left: 11.3vw;
 } #short:hover{cursor: pointer; box-shadow: 0vw 0vw 0.5vw rgb(212, 9, 9); background-color: #b30404;}
 
-#AddBut {
+#addTradBut {
     position: absolute;
     background: linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));
     border-style: none;
@@ -396,7 +417,7 @@ body{
     left: 50%;
     transform: translateX(-50%);
     box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
-} #AddBut:hover{cursor: pointer; box-shadow: inset 0vw 0vw 1.3vw rgb(39 115 253); background: linear-gradient(0deg, rgb(0, 41, 191, 0.6), rgb(46, 81, 255, 0.6), rgb(0, 41, 191, 0.6), rgb(10, 2, 95, 0.6));}
+} #addTradBut:hover{cursor: pointer; box-shadow: inset 0vw 0vw 1.3vw rgb(39 115 253); background: linear-gradient(0deg, rgb(0, 41, 191, 0.6), rgb(46, 81, 255, 0.6), rgb(0, 41, 191, 0.6), rgb(10, 2, 95, 0.6));}
 
 #setName{
     position: absolute;
@@ -446,7 +467,7 @@ body{
 
 .list {
     position: absolute;
-    width: 73vw;
+    width: 33vw;
     height: 74vh;
     margin-top: 0vh;
     margin-left: 23vw;
@@ -458,6 +479,8 @@ body{
 
 #tradingSigList {
     display: block;
+    overflow-y: scroll;
+    direction: ltr;
 }
 
 #onchainSigList {
@@ -472,5 +495,124 @@ body{
     display: none;
 }
 
+.signalTrad{
+    background-color: #131313;
+    box-shadow: inset 0vw 0vw 0.5vw rgb(83 83 83);
+    width: 30vw;
+    height: 15vh;
+    border-radius: 0.5vw;
+    margin-left: 1vw;
+    margin-top: 1vh;
+    
+} .signalTrad:hover{margin-left: 1.3vw; transition: ease, 1s; box-shadow: inset 0vw 0vw 0.5vw rgb(143, 142, 142);}
+
+.assetS{
+    position: absolute;
+    margin-top: 3vh;
+    margin-left: 4vw;
+    color:#ffffff;
+    font-size: 1vw;
+    
+}
+
+.entryS{
+    position: absolute;
+    margin-top: 5vh;
+    margin-left: 10vw;
+    color:#ffffff;
+    font-size: 1vw;
+    
+}
+.slS{
+    position: absolute;
+    margin-top: 5vh;
+    margin-left: 15vw;
+    color:#d26500;
+    font-size: 1vw;
+}
+.tpS{
+    position: absolute;
+    margin-top: 5vh;
+    margin-left: 20vw;
+    color:#0c8d00;
+    font-size: 1vw;
+    
+}
+
+.dirS{
+    position: absolute;
+    margin-top: 6.5vh;
+    margin-left: 4vw;
+    color:#ffffff;
+    font-size: 1vw;
+    
+}
+
+.assetImg{
+    position: absolute;
+    width: 2vw;
+    margin-top: 2vh;
+    margin-left: 1.5vw;
+}
+
+#tools {
+    position: absolute;
+    width: 3vw;
+    height: 74vh;
+    margin-top: 0vh;
+    right: 1vw;
+    background-color: #2d2d2e3d;
+    border-radius: 0.5vw;
+    z-index: 2;
+    color: white;
+}
+
+#tradData{
+    position: absolute;
+    width: 35vw;
+    height: 23vh;
+    margin-top: 0vh;
+    right: 5vw;
+    background-color: #2d2d2e3d;
+    border-radius: 0.5vw;
+    z-index: 2;
+    color: white;
+}
+
+.toolsImg{
+    width: 2vw;
+    margin-top: 3vh;
+    margin-left: 0.4vw;
+    border-radius: 1vw;
+    box-shadow: 0vw 0vw 0.5vw rgb(0, 0, 0);
+} .toolsImg:hover{cursor: pointer; box-shadow: 0vw 0vw 0.2vw rgb(74, 74, 74);}
+
+#toolsWindow{
+    position: absolute;
+    width: 35vw;
+    height: 49vh;
+    margin-top: 25vh;
+    right: 5vw;
+    background-color: #2d2d2e3d;
+    border-radius: 0.5vw;
+    z-index: 2;
+    color: white;
+}
+
+#windowTool1{
+    right: 0.9vw;
+}
+
+.windowTool{
+    position: absolute;
+    width: 33vw;
+    height: 32vh;
+    margin-top: 1vh;
+    right: 0vw;
+    background-color: #1616aa00;
+    border-radius: 0.5vw;
+    z-index: 0;
+    color: white;
+}
 
 }
