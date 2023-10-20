@@ -8,58 +8,20 @@ pragma solidity ^0.8.0;
 
 contract alphaHubV3 {
 
-    struct info {
-        string infoMsg;
-        uint256 postDate;
-        uint8 infoType;
-        uint id;
-        address alpha;
+    //AlphaProv
+    mapping (address => string) name;
+    function setName(string memory _name) public {
+        name[msg.sender] = _name;
     }
 
-    uint idCount;
-
-    info[] public infoListGlob; //Lista global
-    info[] infoList;       //Lista Personal del AlphaProv
-
-    mapping(address => info[]) public alphaInfoFromAddress;
+    function seeName(address alpha) public view returns(string memory){
+       return(name[alpha]);
+    }
 
     mapping(address => uint) seeAlphaScore;
-    uint16 public maxLength = 100;
 
-    function provideInfo(string memory _msg, uint8 _type) public { // to global List (all sectors)
-        if(infoListGlob.length == maxLength) {
-            for (uint256 i = 0; i < infoListGlob.length - 1; i++) {
-                infoListGlob[i] = infoListGlob[i + 1];
-            }
-            infoListGlob.pop();
-        }
-        idCount = idCount + 1;
-        info memory newInfo = info(_msg, block.timestamp, _type, idCount, msg.sender);
-        infoList.push(newInfo);
-        alphaInfoFromAddress[msg.sender] = infoList;
-        infoListGlob.push(newInfo);
-        uint perAccuracy =  accuracyPercentage(msg.sender);
-        uint _score = seeAlphaScore[msg.sender];
-        uint altIndex = 50 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 50;
-        uint altIndex2 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
-        uint altIndex3 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
-        uint altIndex4 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
-        uint altIndex5 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
-        if(_score > 10 && perAccuracy > 50){infoListGlob[altIndex] = newInfo;} 
-        else if(_score > 25 && perAccuracy > 50){infoListGlob[altIndex] = newInfo; infoListGlob[altIndex2] = newInfo; }
-        else if(_score > 50 && perAccuracy > 50){
-            infoListGlob[altIndex] = newInfo; 
-            infoListGlob[altIndex2] = newInfo; 
-            infoListGlob[altIndex3] = newInfo;
-            infoListGlob[altIndex4] = newInfo;
-            }
-        else if(_score > 75 && perAccuracy > 50){
-            infoListGlob[altIndex] = newInfo; 
-            infoListGlob[altIndex2] = newInfo; 
-            infoListGlob[altIndex3] = newInfo;
-            infoListGlob[altIndex4] = newInfo;
-            infoListGlob[altIndex5] = newInfo;
-            }
+    function getAlphaScore(address alpha) public view returns(uint){
+        return(seeAlphaScore[alpha]);
     }
 
     //TRADING
@@ -80,20 +42,19 @@ contract alphaHubV3 {
     traSignal [] traSignalsGlob;
     mapping(address => traSignal[]) public alphaTradInfoFromAddress;
 
-    function addTraSignal(string memory _msg, uint256 _priceEntry, uint256 _stopLoss, uint256 _takeProfit, uint8 _direction, uint16 _traSignalId, uint256 _date) public {
+    function addTraSignal(string memory _msg, uint256 _priceEntry, uint256 _stopLoss, uint256 _takeProfit, uint8 _direction) public {
         if(traSignalsGlob.length == maxLengthTrad){
             for (uint32 i = 0; i <= traSignalsGlob.length - 1; i++) {
                 traSignalsGlob[i] = traSignalsGlob[i + 1];
             }
             traSignalsGlob.pop();
         }
-        _date = block.timestamp;
         traSignalNum++;
-        _traSignalId  =  traSignalNum;
-        traSignal memory newtraSignal = traSignal(_msg, _priceEntry, _stopLoss, _takeProfit, _direction, _traSignalId, _date);
-        traSignals.push(newtraSignal);
-        traSignalsGlob.push(newtraSignal);
-        alphaTradInfoFromAddress[msg.sender] = traSignals;
+        uint16 _traSignalId  =  traSignalNum;
+        traSignal memory newTraSignal = traSignal(_msg, _priceEntry, _stopLoss, _takeProfit, _direction, _traSignalId, block.timestamp);
+        traSignals.push(newTraSignal);
+        traSignalsGlob.push(newTraSignal);
+        alphaTradInfoFromAddress[msg.sender].push(newTraSignal);
 
         uint perAccuracy =  accuracyPercentage(msg.sender);
         uint _score = seeAlphaScore[msg.sender];
@@ -103,29 +64,51 @@ contract alphaHubV3 {
         uint altIndex4 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
         uint altIndex5 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
 
-        if(_score > 10 && perAccuracy > 50){traSignalsGlob[altIndex] = newtraSignal;} 
-        else if(_score > 25 && perAccuracy > 50){traSignalsGlob[altIndex] = newtraSignal; traSignalsGlob[altIndex2] = newtraSignal; }
+        if(_score > 10 && perAccuracy > 50){traSignalsGlob[altIndex] = newTraSignal;} 
+        else if(_score > 25 && perAccuracy > 50){traSignalsGlob[altIndex] = newTraSignal; traSignalsGlob[altIndex2] = newTraSignal; }
         else if(_score > 50 && perAccuracy > 50){
-            traSignalsGlob[altIndex] = newtraSignal; 
-            traSignalsGlob[altIndex2] = newtraSignal; 
-            traSignalsGlob[altIndex3] = newtraSignal;
-            traSignalsGlob[altIndex4] = newtraSignal;
+            traSignalsGlob[altIndex] = newTraSignal; 
+            traSignalsGlob[altIndex2] = newTraSignal; 
+            traSignalsGlob[altIndex3] = newTraSignal;
+            traSignalsGlob[altIndex4] = newTraSignal;
             }
         else if(_score > 75 && perAccuracy > 50){
-            traSignalsGlob[altIndex] = newtraSignal; 
-            traSignalsGlob[altIndex2] = newtraSignal; 
-            traSignalsGlob[altIndex3] = newtraSignal;
-            traSignalsGlob[altIndex4] = newtraSignal;
-            traSignalsGlob[altIndex5] = newtraSignal;
+            traSignalsGlob[altIndex] = newTraSignal; 
+            traSignalsGlob[altIndex2] = newTraSignal; 
+            traSignalsGlob[altIndex3] = newTraSignal;
+            traSignalsGlob[altIndex4] = newTraSignal;
+            traSignalsGlob[altIndex5] = newTraSignal;
             }
     }
 
-    function seeTraSig(uint8 index) public view returns(string memory, uint256, uint256, uint256, uint8, uint16, uint256) {
+
+    //Function to see the global Trading List
+    function seeTraSig(uint16 index) public view returns(string memory, uint256, uint256, uint256, uint8, uint16, uint256) {
         require(index < traSignalsGlob.length, "no list element");
-        traSignal memory traSigAlpha = traSignalsGlob[index];
-        return(traSigAlpha._msg, traSigAlpha.priceEntry, traSigAlpha.stopLoss, traSigAlpha.takeProfit, traSigAlpha.direction, traSigAlpha.traSignalId, traSigAlpha.postDate);
+        require(hasPay);
+        uint lastPayDate = seeLastPay(msg.sender);
+        uint actualDate = block.timestamp;
+        if(monAnnu[msg.sender] == 1){
+            require((actualDate - lastPayDate) <= 30 days );
+        } else {require((actualDate - lastPayDate) <= 364 days );}
+        traSignal memory traSigAlphaGlob = traSignalsGlob[index];
+        return(traSigAlphaGlob._msg, traSigAlphaGlob.priceEntry, traSigAlphaGlob.stopLoss, traSigAlphaGlob.takeProfit, traSigAlphaGlob.direction, traSigAlphaGlob.traSignalId, traSigAlphaGlob.postDate);
         
     }
+
+    // Function to see alphaProv trading list
+    function seeTraSig2(uint16 i, address alpha) public view returns(string memory, uint256, uint256, uint256, uint8, uint16, uint256){
+        traSignal[] memory traSignalAlpha = alphaTradInfoFromAddress[alpha];
+        require(i <= traSignalAlpha.length);
+        traSignal memory indexTraSig = traSignalAlpha[i];
+        return(indexTraSig._msg, indexTraSig.priceEntry, indexTraSig.stopLoss, indexTraSig.takeProfit, indexTraSig.direction, indexTraSig.traSignalId, indexTraSig.postDate);
+    }
+
+    function getNumSignals(address alpha) public view returns(uint){
+        return(alphaTradInfoFromAddress[alpha].length);
+    }
+
+
 
     //___________________________
     // LOW CAPS - ONCHAIN 
@@ -134,9 +117,9 @@ contract alphaHubV3 {
         string _msg;
         string tokenName;
         address tokenAddress;
-        uint256 priceEntry;
-        uint256 stopLoss;
-        uint256 potTakeProfit; 
+        string priceEntry;
+        string stopLoss;
+        string potTakeProfit; 
         uint16 traSignalId;
         uint256 postDate;
     }
@@ -151,26 +134,25 @@ contract alphaHubV3 {
         string memory _msg,
         string memory tokenName,
         address token,
-        uint256 entry,
-        uint256 sl,
-        uint256 tp,
-        uint16 id,
-        uint256 date
+        string memory entry,
+        string memory sl,
+        string memory tp
         ) public {
             
             if (lowCapSigGlob.length == maxLengthLows){
-                for(uint16 i = 0; i <= lowCapSigGlob.length; i++ ){
+                for(uint16 i = 0; i < lowCapSigGlob.length; i++ ){
                     lowCapSigGlob[i] = lowCapSigGlob[i + 1];
                 }
                 lowCapSigGlob.pop();
             }
 
             lowCapsNum++;
-            id = lowCapsNum;
+            uint16 id = lowCapsNum;
+            uint date = block.timestamp;
             lowCaps memory newLowCaps = lowCaps(_msg, tokenName, token, entry, sl, tp, id, date);
             lowCapSig.push(newLowCaps);
             lowCapSigGlob.push(newLowCaps);
-            alphaLowCapsSig[msg.sender] = lowCapSig;
+            alphaLowCapsSig[msg.sender].push(newLowCaps);
 
             uint perAccuracy =  accuracyPercentage(msg.sender);
             uint _score = seeAlphaScore[msg.sender];
@@ -201,9 +183,17 @@ contract alphaHubV3 {
 
     //___________________________
 
-    function getLength() public view returns(uint){
-        return(infoListGlob.length);
+    function getTradGlobLength() public view returns(uint){
+        return(traSignalsGlob.length);
     }
+
+    function genNumIndex(address user) public view returns(uint){
+        return(uint(keccak256(abi.encodePacked(seeLastPay(user), user)))% traSignalsGlob.length);
+    }
+
+    //genera un número con la dirección del usuario y la ultima vez que pagó
+
+    //___________________________
 
     address[] public validators;
     mapping(address => bool) isValidator;
@@ -241,6 +231,7 @@ contract alphaHubV3 {
         seeAlphaScore[clickAddress] = score;
     }
 
+    /*
     function getAddressFromId(uint _id) public view returns(address){
         for(uint i = 0; i < infoListGlob.length; i++){
             if(_id == infoListGlob[i].id){
@@ -249,6 +240,7 @@ contract alphaHubV3 {
         }
         revert("Not Found");
     }
+    */
 
     //Está función será llamada desde js con un click en la info del frontend.
     //al hacer ".createElement" se creará un elemento <div onclick="funcionJS_para_llamar_a_"getAddressFromId()"> 
@@ -257,15 +249,41 @@ contract alphaHubV3 {
     mapping(address => uint) accuracyPer;
     
     function accuracyPercentage(address addr) public returns(uint){
-       require(addrTotValNum[addr] > 0);
+       if(addrTotValNum[addr] > 0){
        accuracyPer[addr] = (addrPosNum[addr]*100) / addrTotValNum[addr];
        uint per = accuracyPer[addr];
        return(per);
+       } else {return(0);}
     }
 
     //PAYMENT
 
-    //función de deposito en el contrato para tener acceso
+    uint simplePlanMon = 1 ether;
+    uint simplePlanAnnu = 10 ether;
+
+    mapping(address => uint) lastPay;
+    mapping(address => uint) monAnnu; // 1 -> monthly
+                                      // 2 -> Annual
+
+    bool hasPay;
+
+    function paySimpleMonth() public payable {
+        require(msg.value == simplePlanMon);
+        lastPay[msg.sender] = block.timestamp;
+        monAnnu[msg.sender] = 1; 
+        hasPay = true;
+    }
+
+    function paySimpleAnnual() public payable {
+        require(msg.value == simplePlanAnnu);
+        lastPay[msg.sender] = block.timestamp;
+        monAnnu[msg.sender] = 2; 
+        hasPay = true;
+    }
+
+    function seeLastPay(address user) public view returns(uint){
+        return(lastPay[user]);
+    }
 
 
 }
