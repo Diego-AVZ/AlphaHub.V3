@@ -403,7 +403,8 @@ body{
 
 #addTradBut {
     position: absolute;
-    background: linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));
+    /*background: linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));*/
+    background-color: rgb(13 13 113);
     border-style: none;
     color: white;
     border-radius: 0.5vw;
@@ -417,7 +418,7 @@ body{
     left: 50%;
     transform: translateX(-50%);
     box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
-} #addTradBut:hover{cursor: pointer; box-shadow: inset 0vw 0vw 1.3vw rgb(39 115 253); background: linear-gradient(0deg, rgb(0, 41, 191, 0.6), rgb(46, 81, 255, 0.6), rgb(0, 41, 191, 0.6), rgb(10, 2, 95, 0.6));}
+} #addTradBut:hover{cursor: pointer; box-shadow: inset 0vw 0vw 1.3vw rgb(39 115 253); background-color: rgba(13, 13, 113, 0.583);/* background: linear-gradient(0deg, rgb(0, 41, 191, 0.6), rgb(46, 81, 255, 0.6), rgb(0, 41, 191, 0.6), rgb(10, 2, 95, 0.6));*/ }
 
 #setName{
     position: absolute;
@@ -499,7 +500,7 @@ body{
     background-color: #131313;
     box-shadow: inset 0vw 0vw 0.5vw rgb(83 83 83);
     width: 30vw;
-    height: 15vh;
+    height: 18.5vh;
     border-radius: 0.5vw;
     margin-left: 1vw;
     margin-top: 1vh;
@@ -517,35 +518,123 @@ body{
 
 .entryS{
     position: absolute;
-    margin-top: 5vh;
-    margin-left: 10vw;
-    color:#ffffff;
+    margin-top: 7vh;
+    margin-left: 8vw;
+    color:#c5c4c4;
     font-size: 1vw;
+    background-color: #0000006c;
+    width: auto;
+    text-align: center;
+    padding: 0.5vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    border-radius: 1vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgb(84, 182, 224);
+    text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
+    max-width: 4.5vw;
     
 }
-.slS{
+.slSlong{
     position: absolute;
-    margin-top: 5vh;
-    margin-left: 15vw;
-    color:#d26500;
+    margin-top: 12vh;
+    margin-left: 8vw;
+    color:#ffffffd7;
     font-size: 1vw;
+    background-color: #0000006c;
+    width: auto;
+    text-align: center;
+    padding: 0.5vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    border-radius: 1vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgb(155, 33, 33);
+    max-width: 4.5vw;
 }
-.tpS{
+.slSshort{
     position: absolute;
-    margin-top: 5vh;
-    margin-left: 20vw;
-    color:#0c8d00;
+    margin-top: 2vh;
+    margin-left: 8vw;
+    color:#ffffffd7;
     font-size: 1vw;
-    
+    background-color: #0000006c;
+    width: auto;
+    text-align: center;
+    padding: 0.5vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    border-radius: 1vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgb(155, 33, 33);
+    max-width: 4.5vw;
+}
+.tpSlong{
+    position: absolute;
+    margin-top: 2vh;
+    margin-left: 8vw;
+    color:#ffffffdb;
+    font-size: 1vw;
+    background-color: #0000006c;
+    width: auto;
+    text-align: center;
+    padding: 0.5vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    border-radius: 1vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgb(14, 113, 5);
+    max-width: 4.5vw;
+}
+.tpSshort{
+    position: absolute;
+    margin-top: 12vh;
+    margin-left: 8vw;
+    color:#ffffffdb;
+    font-size: 1vw;
+    background-color: #0000006c;
+    width: auto;
+    text-align: center;
+    padding: 0.5vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    border-radius: 1vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgb(14, 113, 5);
+    max-width: 4.5vw;
 }
 
 .dirS{
     position: absolute;
-    margin-top: 6.5vh;
-    margin-left: 4vw;
-    color:#ffffff;
+    margin-top: 6.8vh;
+    margin-left: 1.8vw;
+    color:#ffffffea;
     font-size: 1vw;
+    text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
     
+}
+
+.dolp1{
+    position: absolute;
+    margin-top: 3vh;
+    margin-left: 15vw;
+    color:#ffffffea;
+    font-size: 1vw;
+    text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
+    z-index: 2;
+}
+.dolp2{
+   position: absolute;
+    margin-top: 8vh;
+    margin-left:15vw;
+    color:#ffffffea;
+    font-size: 1vw;
+    text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
+    z-index: 2;
+}
+.dolp3{
+   position: absolute;
+    margin-top: 13vh;
+    margin-left: 15vw;
+    color:#ffffffea;
+    font-size: 1vw;
+    text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
+    z-index: 2;
 }
 
 .assetImg{
@@ -553,6 +642,17 @@ body{
     width: 2vw;
     margin-top: 2vh;
     margin-left: 1.5vw;
+}
+
+.date {
+    position: absolute;
+    margin-top: 16vh;
+    margin-left: 22.5vw;
+    color:#b5b5b5ea;
+    font-size: 0.7vw;
+    text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
+    z-index: 2;
+    letter-spacing: 0.1vw;
 }
 
 #tools {
@@ -565,7 +665,7 @@ body{
     border-radius: 0.5vw;
     z-index: 2;
     color: white;
-}
+} #tools:hover{background-color: rgba(91, 91, 92, 0.239); box-shadow: inset 0vw 0vw 0.5vw rgb(83 83 83);}
 
 #tradData{
     position: absolute;
@@ -595,34 +695,47 @@ body{
     right: 5vw;
     background-color: #2d2d2e3d;
     border-radius: 0.5vw;
-    z-index: 2;
     color: white;
+
+}
+
+#toolsWindowText{
+    position: absolute;
+    display: block;
+    font-size: 3vw;
+    font-weight: 700;
 }
 
 #windowTool1{
     right: 0.9vw;
+    z-index: 200;
+
+
 }
 
 #windowTool3{
     position: absolute;
     margin-left: -2vw;
-    margin-top: 1vh;
+    margin-top: -1vh;
     overflow-x: hidden;
     width: 35vw; 
-    height: 45vh;
+    height: 49vh;
+    z-index: 200;
+
 
 }
 
-.windowTool{
+#windowTool4{
     position: absolute;
-    width: 33vw;
-    height: 32vh;
-    margin-top: 1vh;
-    right: 0vw;
-    background-color: #1616aa00;
-    border-radius: 0.5vw;
-    z-index: 0;
-    color: white;
+    margin-left: -2vw;
+    margin-top: -1vh;
+    overflow-x: hidden;
+    width: 35vw; 
+    height: 49vh;
+    z-index: 200;
+
 }
+
+
 
 }
