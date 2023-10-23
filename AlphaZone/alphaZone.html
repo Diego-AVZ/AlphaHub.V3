@@ -115,17 +115,23 @@
             <p style="rotate:90deg;">TOOLS</p>
             <img class="toolsImg" src="https://avatars.githubusercontent.com/u/7644688?s=280&v=4" title="TradingView" onclick="tv()">
             <img class="toolsImg" src="https://seeklogo.com/images/C/coinmarketcap-logo-064D167A0E-seeklogo.com.png" title="CoinMarketCap" onclick="cmc()">
-            <img class="toolsImg" src="https://seeklogo.com/images/B/binance-coin-bnb-logo-CD94CC6D31-seeklogo.com.png" title="Binance">
+            <img class="toolsImg" src="https://media.licdn.com/dms/image/C4D0BAQFqz5c0l6oFVA/company-logo_200_200/0/1677857096090?e=2147483647&v=beta&t=nHTM0osFds9sH2tf5AIz9PP6HrUDr1hSgd-7mc3kAH8" title="Metary" onclick="mtry()">
             <img class="toolsImg" src="https://cryptologos.cc/logos/uniswap-uni-logo.png" title="Uniswap" onclick="uni()">
             <img class="toolsImg" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9_ULrNHpmMkne1N93s6N_4ZDM8-QT1TcnomfzuxHUhjoLbWR113K7UWS3F5XQuGE5U9Q&usqp=CAU" title="Etherscan">
+            <img class="toolsImg" src="https://img.api.cryptorank.io/coins/arkham1688987999264.png" title="Arkham" onclick="ark()">
+
+
             
         </div>
 
         <div id="tradData">
             <p>DATA</p>
         </div>
+
         <div id="toolsWindow">
-            <div class="windowTool" id="windowTool1">               
+
+            <p id="toolsWindowText">TOOLS</p>
+            <div class="windowTool" id="windowTool1"  style="display: none;">               
             </div>
             <div id="windowTool2" class="windowTool" style="display: none; margin-top: 10vh; right: 1vw;">
                 <div id="coinmarketcap-widget-coin-price-block" coins="1,1027,1839,6636,5426,1975" currency="USD" theme="dark" transparent="true" show-symbol-logo="true"></div>
@@ -133,6 +139,10 @@
             <div class="windowTool">
                 <iframe style="display: none;" src="https://app.uniswap.org/" id="windowTool3" frameborder="0"></iframe>
             </div>
+            <div class="windowTool">
+                <iframe style="display: none;" src="https://metary.org/" id="windowTool4" frameborder="0"></iframe>
+            </div>
+            
         </div>
 
     </div>
