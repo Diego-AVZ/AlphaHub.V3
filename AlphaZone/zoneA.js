@@ -117,61 +117,178 @@ async function getSignalsNum() {
   document.getElementById("numSig").innerHTML = `${hisSignals}`;
 }
 
+var valueId;
+
 async function seeTraSig2() {
   var tradingSigList = document.getElementById("tradingSigList");
-  var numSignals = await contract.methods
-    .getNumSignals(connectedAddress)
-    .call();
-  for (let i = numSignals - 1; i >= 0; i--) {
-    var traSignal = await contract.methods
-      .seeTraSig2(i, connectedAddress)
-      .call();
-    console.log(traSignal);
-    var signalDiv = document.createElement("div");
-    signalDiv.classList.add("signalTrad");
-    var assetP = document.createElement("p");
-    assetP.innerText = `${traSignal[0]}`;
-    assetP.classList.add("assetS");
+  var numSignals = await contract.methods.getNumSignals(connectedAddress).call();
 
-    if (`${traSignal[0]}` == "BTC" || `${traSignal[0]}` == "btc") {
-      var btcImg = document.createElement("img");
-      btcImg.src = "btc.png";
-      btcImg.classList.add("assetImg");
-      signalDiv.appendChild(btcImg);
-    } else if (`${traSignal[0]}` == "ETH" || `${traSignal[0]}` == "eth") {
-      var ethImg = document.createElement("img");
-      ethImg.src = "eth.png";
-      ethImg.classList.add("assetImg");
-      signalDiv.appendChild(ethImg);
-    }
+  if(numSignals < 50){
 
-    var entryP = document.createElement("p");
-    entryP.innerText = `${traSignal[1]}`;
-    entryP.classList.add("entryS");
-    var slP = document.createElement("p");
-    slP.innerText = `${traSignal[2]}`;
-    slP.classList.add("slS");
-    var tpP = document.createElement("p");
-    tpP.innerText = `${traSignal[3]}`;
-    tpP.classList.add("tpS");
-    var dirP = document.createElement("p");
-    var LoS = "";
-    if (traSignal[4] == 1) {
-      LoS = "Long";
-    } else {
-      LoS = "Short";
-    }
-    dirP.innerText = `${LoS}`;
-    dirP.classList.add("dirS");
+      for (let i = numSignals - 1; i >= 0; i--) {
+        var traSignal = await contract.methods.seeTraSig2(i, connectedAddress).call();
+        
+        var signalDiv = document.createElement("div");
+        signalDiv.classList.add("signalTrad");
+        var assetP = document.createElement("p");
+        assetP.innerText = `${traSignal[0]}`;
+        assetP.classList.add("assetS");
 
-    signalDiv.appendChild(entryP);
-    signalDiv.appendChild(assetP);
-    signalDiv.appendChild(slP);
-    signalDiv.appendChild(tpP);
-    signalDiv.appendChild(dirP);
-    tradingSigList.appendChild(signalDiv);
-  }
+        if (`${traSignal[0]}` == "BTC" || `${traSignal[0]}` == "btc") {
+          var btcImg = document.createElement("img");
+          btcImg.src = "btc.png";
+          btcImg.classList.add("assetImg");
+          signalDiv.appendChild(btcImg);
+        } else if (`${traSignal[0]}` == "ETH" || `${traSignal[0]}` == "eth") {
+          var ethImg = document.createElement("img");
+          ethImg.src = "eth.png";
+          ethImg.classList.add("assetImg");
+          signalDiv.appendChild(ethImg);
+        } else {
+          var elseImg = document.createElement("img");
+          elseImg.src =
+            "https://image.spreadshirtmedia.net/image-server/v1/compositions/T56A2PA4115PT17X0Y67D157542882W24948H18711/views/1,width=550,height=550,appearanceId=2,backgroundColor=000000,noPt=true/signo-de-interrogacion-planeado-hae-simbolo-signo-regalo-bolsa-de-tela.jpg";
+          elseImg.classList.add("assetImg");
+          signalDiv.appendChild(elseImg);
+          elseImg.style.borderRadius ="2vw"
+        }
+
+        var entryP = document.createElement("p");
+        entryP.innerText = `${traSignal[1]}`;
+        entryP.classList.add("entryS");
+        var slP = document.createElement("p");
+        slP.innerText = `${traSignal[2]}`;
+        if (traSignal[4] == 1) {
+          slP.classList.add("slSlong");
+        } else {
+          slP.classList.add("slSshort");
+        }
+        var tpP = document.createElement("p");
+        tpP.innerText = `${traSignal[3]}`;
+        if (traSignal[4] == 1) {
+          tpP.classList.add("tpSlong");
+        } else {
+          tpP.classList.add("tpSshort");
+        }
+        var dirP = document.createElement("p");
+        var LoS = "";
+        if (traSignal[4] == 1) {
+          LoS = "🟢Long";
+        } else {
+          LoS = "🔴Short";
+        }
+        dirP.innerText = `${LoS}`;
+        dirP.classList.add("dirS");
+
+        signalDiv.appendChild(entryP);
+        signalDiv.appendChild(assetP);
+        signalDiv.appendChild(slP);
+        signalDiv.appendChild(tpP);
+        signalDiv.appendChild(dirP);
+        tradingSigList.appendChild(signalDiv);
+      }
+    } else{
+        for (let i = numSignals - 1; i >= numSignals-50; i--) { // solo salen las 50 primeras señales de trading
+          var traSignal = await contract.methods.seeTraSig2(i, connectedAddress).call();
+          
+          var signalDiv = document.createElement("div");
+          signalDiv.classList.add("signalTrad");
+          signalDiv.setAttribute("data-valor", `${traSignal[0]}`);
+
+          (function (signal) {
+            // ESTA FUNCION PERMITE VALIDAR Y CALIFICAR LAS SEÑALES CON UN CLICK, CLICKANDO. CAMBIA `${traSignal[0]}` por EL ID de la señal o la address del Alpha
+            signal.addEventListener("click", function () {
+              console.log(signal.getAttribute("data-valor"));
+            });
+          })(signalDiv);
+
+          var assetP = document.createElement("p");
+          assetP.innerText = `${traSignal[0]}`;
+          assetP.classList.add("assetS");
+
+          if (`${traSignal[0]}` == "BTC" || `${traSignal[0]}` == "btc") {
+            var btcImg = document.createElement("img");
+            btcImg.src = "btc.png";
+            btcImg.classList.add("assetImg");
+            signalDiv.appendChild(btcImg);
+          } else if (`${traSignal[0]}` == "ETH" || `${traSignal[0]}` == "eth") {
+            var ethImg = document.createElement("img");
+            ethImg.src = "eth.png";
+            ethImg.classList.add("assetImg");
+            signalDiv.appendChild(ethImg);
+          } else {
+            var elseImg = document.createElement("img");
+            elseImg.src =
+              "https://image.spreadshirtmedia.net/image-server/v1/compositions/T56A2PA4115PT17X0Y67D157542882W24948H18711/views/1,width=550,height=550,appearanceId=2,backgroundColor=000000,noPt=true/signo-de-interrogacion-planeado-hae-simbolo-signo-regalo-bolsa-de-tela.jpg";
+            elseImg.classList.add("assetImg");
+            signalDiv.appendChild(elseImg);
+            elseImg.style.borderRadius ="2vw"
+          }
+
+          var entryP = document.createElement("p");
+          entryP.innerText = `$ ${traSignal[1]}`;
+          entryP.classList.add("entryS");
+          var slP = document.createElement("p");
+          slP.innerText = `$ ${traSignal[2]}`;
+          if (traSignal[4] == 1) {
+            slP.classList.add("slSlong");
+          } else {
+            slP.classList.add("slSshort");
+          }
+          var tpP = document.createElement("p");
+          tpP.innerText = `$ ${traSignal[3]}`;
+          if (traSignal[4] == 1) {
+            tpP.classList.add("tpSlong");
+          } else {
+            tpP.classList.add("tpSshort");
+          }
+          var dirP = document.createElement("p");
+          var LoS = "";
+          if (traSignal[4] == 1) {
+            LoS = "🟢Long";
+          } else {
+            LoS = "🔴Short";
+          }
+          dirP.innerText = `${LoS}`;
+          dirP.classList.add("dirS");
+
+          var date = document.createElement("p");
+          date.classList.add("date");
+          var postBlock = `${traSignal[6]}`;
+          var transDate = new Date(postBlock * 1000);
+          var y = transDate.getFullYear();
+          var m = transDate.getMonth() +1;
+          var d = transDate.getDate();
+          var h = transDate.getHours();
+          var mi = transDate.getMinutes();
+          var postDate = `${y}/${m}/${d}  ${h}:${mi}`;
+          date.innerHTML = postDate;
+
+          var dolp1 = document.createElement("p");
+          dolp1.classList.add("dolp1");
+          dolp1.innerText = "Take Profit";
+          var dolp2 = document.createElement("p");
+          dolp2.classList.add("dolp2");
+          dolp2.innerText = "Entry";
+          var dolp3 = document.createElement("p");
+          dolp3.classList.add("dolp3");
+          dolp3.innerText = "Stop Loss";
+
+          signalDiv.appendChild(dolp1);
+          signalDiv.appendChild(dolp2);
+          signalDiv.appendChild(dolp3);
+          signalDiv.appendChild(entryP);
+          signalDiv.appendChild(assetP);
+          signalDiv.appendChild(slP);
+          signalDiv.appendChild(tpP);
+          signalDiv.appendChild(dirP);
+          signalDiv.appendChild(date);
+          tradingSigList.appendChild(signalDiv);
+
+      }
 }
+}
+
 
 //AddSignalTrading
 
@@ -183,13 +300,55 @@ var E1 = document.getElementById("addEntry");
 var addTradBut = document.getElementById("addTradBut");
 // long & short
 
+
+const botToken = "6973037553:AAHE61fhxhbxF2tZgjcmHi1zZot4pGypqxU";
+const chatId = "-4046315950"; // El ID del chat 
+
+const telegramApiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
 addTradBut.addEventListener("click", async () => {
+  
   try {
+    
     await contract.methods
       .addTraSignal(A1.value, E1.value, B1.value, C1.value, directionValue)
-      .send({ from: connectedAddress });
-    addTradBut.style.background =
-      "linear-gradient(0deg, rgb(80 80 80), rgb(255 255 255 / 30%), rgb(163 169 192 / 90%), rgb(248 248 255 / 30%))";
+      .send({
+        from: connectedAddress,
+        gasPrice: "481878",
+      });
+      addTradBut.style.opacity = "20%";
+      var dir;
+    if (directionValue==1){
+      dir = "📈 LONG";
+    } else {dir = "📉 SHORT";}
+      var message = `📊 New Trading Signal - AlphaHub  
+                                                                                                              🔷 Asset: ${A1.value}
+                                                                                                              ${dir}
+                                                                                                               ✴️ Entry: $${E1.value}
+                                                                                                              ✅ Take Profit: $${C1.value}
+                                                                                                              🔴 Stop Loss $${B1.value}`; 
+      
+
+      const messageData = {
+        chat_id: chatId,
+        text: message,
+      };
+
+      fetch(telegramApiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(messageData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Mensaje enviado con éxito:", data);
+        })
+        .catch((error) => {
+          console.error("Error al enviar el mensaje:", error);
+        });
+
 
     A1.value = "";
     B1.value = "";
@@ -205,8 +364,8 @@ addTradBut.addEventListener("click", async () => {
       element.parentElement.removeChild(element);
     });
     seeTraSig2();
-    addTradBut.style.background =
-      "background: linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3))";
+    addTradBut.style.opacity = "100%";
+    
   } catch (error) {
     console.log(error);
   }
@@ -810,7 +969,7 @@ const ABI = [
 
 const contract = new web3Instance.eth.Contract(ABI, conAddress);
 
-var varWidth = 500;
+var varWidth = "30vw";
 var varHeight = 350;
 
 new TradingView.widget({
@@ -829,26 +988,88 @@ new TradingView.widget({
   container_id: "windowTool1",
 });
 
+
+var tw = document.getElementById("toolsWindowText");
 var tw1 = document.getElementById("windowTool1");
 var tw2 = document.getElementById("windowTool2");
 var tw3 = document.getElementById("windowTool3");
+var tw4 = document.getElementById("windowTool4");
+var tw5 = document.getElementById("windowTool5");
+
+
 
 function cmc() {
+  tw.innerText = "";
   tw1.style.display = "none";
   tw2.style.display = "block";
   tw3.style.display = "none";
+  tw4.style.display = "none";
+  tw5.style.display = "none";
+
 }
 
 function tv() {
+  tw.innerText = "";
   tw1.style.display = "block";
   tw2.style.display = "none";
   tw3.style.display = "none";
+  tw4.style.display = "none";
+  tw5.style.display = "none";
 
 }
 
 function uni() {
+  tw.innerText = "";
   tw1.style.display = "none";
   tw2.style.display = "none";
   tw3.style.display = "block";
+  tw4.style.display = "none";
+  tw5.style.display = "none";
 
 }
+
+function mtry() {
+  tw.innerText = "";
+  tw1.style.display = "none";
+  tw2.style.display = "none";
+  tw3.style.display = "none";
+  tw4.style.display = "block";
+  tw5.style.display = "none";
+}
+
+
+
+//__________________________________________________________________________________________________________
+
+// TELEGRAM BOT
+/*
+const botToken = "6973037553:AAHE61fhxhbxF2tZgjcmHi1zZot4pGypqxU";
+const chatId = "-4046315950"; // El ID del chat al que deseas enviar el mensaje.
+
+var message;
+
+const telegramApiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`; 
+
+const messageData = {
+  chat_id: chatId,
+  text: message,
+};
+function botSendMessage(){
+  console.log("entrando en la Funcion de BOT")
+  fetch(telegramApiUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(messageData),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Mensaje enviado con éxito:", data);
+    })
+    .catch((error) => {
+      console.error("Error al enviar el mensaje:", error);
+    });
+
+}
+*/
