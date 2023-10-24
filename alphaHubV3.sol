@@ -9,14 +9,43 @@ pragma solidity ^0.8.0;
 contract alphaHubV3 {
 
     //AlphaProv
+
+    address[] alphasList;
+    mapping(address => uint) alphaJoinDate;
+    uint16 alphaCount;
+    
+    function becomeAlpha() public {
+        alphasList.push(msg.sender);
+        alphaJoinDate[msg.sender] = block.timestamp;
+        alphaCount++;
+    }
+
     mapping (address => string) name;
+    mapping (string => address) nameToAddress;
+    string[] nameList;
+
     function setName(string memory _name) public {
+        require(checkNameList(_name) == false);
         name[msg.sender] = _name;
+        nameList.push(_name);
+    }
+
+    function checkNameList(string memory _name) public view returns(bool){
+        for(uint32 i=0; i < nameList.length; i++){
+            if(keccak256(abi.encodePacked(_name)) == keccak256(abi.encodePacked(nameList[i]))){
+                return(true);
+            } 
+        }
+        return(false);
     }
 
     function seeName(address alpha) public view returns(string memory){
        return(name[alpha]);
     }
+
+    function searchName(string memory _name) public view returns(address){
+        return(nameToAddress[_name]);
+    } 
 
     mapping(address => uint) seeAlphaScore;
 
@@ -27,14 +56,14 @@ contract alphaHubV3 {
     //TRADING
 
     struct traSignal {
-        string _msg;
+        string asset;
         uint256 priceEntry; // STRINGSSSSS
         uint256 stopLoss;
         uint256 takeProfit; 
         uint8 direction;
         uint16 traSignalId;
         uint256 postDate;
-        //FALTA ASSET TO TRADE
+        address alpha;
     }
 
     uint16 public maxLengthTrad = 100;
@@ -42,8 +71,9 @@ contract alphaHubV3 {
     traSignal [] traSignals;
     traSignal [] traSignalsGlob;
     mapping(address => traSignal[]) public alphaTradInfoFromAddress;
+    mapping(address => uint16) alphaAmountTotalSignals;
 
-    function addTraSignal(string memory _msg, uint256 _priceEntry, uint256 _stopLoss, uint256 _takeProfit, uint8 _direction) public {
+    function addTraSignal(string memory asset, uint256 _priceEntry, uint256 _stopLoss, uint256 _takeProfit, uint8 _direction) public {
         if(traSignalsGlob.length == maxLengthTrad){
             for (uint32 i = 0; i <= traSignalsGlob.length - 1; i++) {
                 traSignalsGlob[i] = traSignalsGlob[i + 1];
@@ -52,11 +82,12 @@ contract alphaHubV3 {
         }
         traSignalNum++;
         uint16 _traSignalId  =  traSignalNum;
-        traSignal memory newTraSignal = traSignal(_msg, _priceEntry, _stopLoss, _takeProfit, _direction, _traSignalId, block.timestamp);
+        traSignal memory newTraSignal = traSignal(asset, _priceEntry, _stopLoss, _takeProfit, _direction, _traSignalId, block.timestamp, msg.sender);
         traSignals.push(newTraSignal);
         traSignalsGlob.push(newTraSignal);
         alphaTradInfoFromAddress[msg.sender].push(newTraSignal);
-
+        alphaAmountTotalSignals[msg.sender]++;
+        
         uint perAccuracy =  accuracyPercentage(msg.sender);
         uint _score = seeAlphaScore[msg.sender];
         uint altIndex = 50 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 50;
@@ -93,7 +124,7 @@ contract alphaHubV3 {
             require((actualDate - lastPayDate) <= 30 days );
         } else {require((actualDate - lastPayDate) <= 364 days );}
         traSignal memory traSigAlphaGlob = traSignalsGlob[index];
-        return(traSigAlphaGlob._msg, traSigAlphaGlob.priceEntry, traSigAlphaGlob.stopLoss, traSigAlphaGlob.takeProfit, traSigAlphaGlob.direction, traSigAlphaGlob.traSignalId, traSigAlphaGlob.postDate);
+        return(traSigAlphaGlob.asset, traSigAlphaGlob.priceEntry, traSigAlphaGlob.stopLoss, traSigAlphaGlob.takeProfit, traSigAlphaGlob.direction, traSigAlphaGlob.traSignalId, traSigAlphaGlob.postDate);
         
     }
 
@@ -102,14 +133,16 @@ contract alphaHubV3 {
         traSignal[] memory traSignalAlpha = alphaTradInfoFromAddress[alpha];
         require(i <= traSignalAlpha.length);
         traSignal memory indexTraSig = traSignalAlpha[i];
-        return(indexTraSig._msg, indexTraSig.priceEntry, indexTraSig.stopLoss, indexTraSig.takeProfit, indexTraSig.direction, indexTraSig.traSignalId, indexTraSig.postDate);
+        return(indexTraSig.asset, indexTraSig.priceEntry, indexTraSig.stopLoss, indexTraSig.takeProfit, indexTraSig.direction, indexTraSig.traSignalId, indexTraSig.postDate);
     }
 
-    function getNumSignals(address alpha) public view returns(uint){
+    function getNumTraSignals(address alpha) public view returns(uint){
         return(alphaTradInfoFromAddress[alpha].length);
     }
 
-
+    function getNumSignals(address alpha) public view returns(uint){
+        return(alphaAmountTotalSignals[alpha]);
+    }
 
     //___________________________
     // LOW CAPS - ONCHAIN 
@@ -154,6 +187,7 @@ contract alphaHubV3 {
             lowCapSig.push(newLowCaps);
             lowCapSigGlob.push(newLowCaps);
             alphaLowCapsSig[msg.sender].push(newLowCaps);
+            alphaAmountTotalSignals[msg.sender]++;
 
             uint perAccuracy =  accuracyPercentage(msg.sender);
             uint _score = seeAlphaScore[msg.sender];
@@ -196,17 +230,7 @@ contract alphaHubV3 {
 
     //___________________________
 
-    address[] public validators;
     mapping(address => bool) isValidator;
-    uint validatorRollPrice = 1 ether;
-    mapping(address => uint) validatorLevel;
-
-    function beValidator() public payable{
-        require(msg.value == validatorRollPrice);
-        validators.push(msg.sender);
-        isValidator[msg.sender] = true;
-        validatorLevel[msg.sender] = 1;
-    }
 
     modifier onlyValidators(){
         require(isValidator[msg.sender] == true, "Not validator yet");
@@ -232,21 +256,6 @@ contract alphaHubV3 {
         seeAlphaScore[clickAddress] = score;
     }
 
-    /*
-    function getAddressFromId(uint _id) public view returns(address){
-        for(uint i = 0; i < infoListGlob.length; i++){
-            if(_id == infoListGlob[i].id){
-                return(infoListGlob[i].alpha);
-            }
-        }
-        revert("Not Found");
-    }
-    */
-
-    //Está función será llamada desde js con un click en la info del frontend.
-    //al hacer ".createElement" se creará un elemento <div onclick="funcionJS_para_llamar_a_"getAddressFromId()"> 
-    //la funcion "getAddressFromId()" devuelve la address y se establece como variable en js para validar con la funcion validate()
-
     mapping(address => uint) accuracyPer;
     
     function accuracyPercentage(address addr) public returns(uint){
@@ -261,6 +270,7 @@ contract alphaHubV3 {
 
     uint simplePlanMon = 1 ether;
     uint simplePlanAnnu = 10 ether;
+    bool canValidate; // Solo si es usuario y ha pagado puede validar
 
     mapping(address => uint) lastPay;
     mapping(address => uint) monAnnu; // 1 -> monthly
@@ -273,6 +283,7 @@ contract alphaHubV3 {
         lastPay[msg.sender] = block.timestamp;
         monAnnu[msg.sender] = 1; 
         hasPay = true;
+        canValidate = true;
     }
 
     function paySimpleAnnual() public payable {
@@ -280,11 +291,59 @@ contract alphaHubV3 {
         lastPay[msg.sender] = block.timestamp;
         monAnnu[msg.sender] = 2; 
         hasPay = true;
+        canValidate = true;
     }
 
     function seeLastPay(address user) public view returns(uint){
         return(lastPay[user]);
     }
+
+    //MyAlpha Payment Plans
+
+    struct followerS{
+        address follower;
+        uint lastAlphaPay;
+        uint8 planPaid;
+    } 
+
+    followerS[] followerList;
+    mapping(address => followerS[]) followers;
+    mapping(address => uint) alphaAnnualPrice;
+    mapping(address => uint) alphaMonthlyPrice; 
+    mapping(address => address[]) imFollowing;
+
+    function payAlpha(address alpha, uint8 plan) public payable{
+        if(plan == 1){
+            require(msg.value == alphaMonthlyPrice[alpha]);
+        } else {
+            require(msg.value == alphaAnnualPrice[alpha]); 
+        }
+        followerS memory newFollower = followerS(msg.sender, block.timestamp, plan);
+        followers[alpha].push(newFollower);
+            //Plan: // 1 -> monthly
+                    // 2 -> Annual
+        uint fee = msg.value/20;
+        payable(alpha).transfer(msg.value-fee);
+        imFollowing[msg.sender].push(alpha);
+        isValidator[msg.sender] = true;
+    }
+
+    function canSeeThisAlpha(address user, address alpha) public view returns(bool){
+        for(uint16 i = 0; i < followers[alpha].length; i++){
+            if(user == followers[alpha][i].follower){
+                if(followers[alpha][i].planPaid == 1){
+                    if(block.timestamp > followers[alpha][i].lastAlphaPay + 30 days){
+                        return(true);
+                    } else {return(false);}
+                } else {
+                    if(block.timestamp > followers[alpha][i].lastAlphaPay + 364 days){
+                        return(true);
+                    } else {return(false);}
+                }
+            } 
+        }
+        return(false);
+    } 
 
 
 }
