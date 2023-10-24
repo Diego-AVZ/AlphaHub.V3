@@ -57,9 +57,9 @@ contract alphaHubV3 {
 
     struct traSignal {
         string asset;
-        uint256 priceEntry; // STRINGSSSSS
-        uint256 stopLoss;
-        uint256 takeProfit; 
+        string priceEntry; // STRINGSSSSS
+        string stopLoss;
+        string takeProfit; 
         uint8 direction;
         uint16 traSignalId;
         uint256 postDate;
@@ -73,7 +73,7 @@ contract alphaHubV3 {
     mapping(address => traSignal[]) public alphaTradInfoFromAddress;
     mapping(address => uint16) alphaAmountTotalSignals;
 
-    function addTraSignal(string memory asset, uint256 _priceEntry, uint256 _stopLoss, uint256 _takeProfit, uint8 _direction) public {
+    function addTraSignal(string memory asset, string memory _priceEntry, string memory _stopLoss, string memory _takeProfit, uint8 _direction) public {
         if(traSignalsGlob.length == maxLengthTrad){
             for (uint32 i = 0; i <= traSignalsGlob.length - 1; i++) {
                 traSignalsGlob[i] = traSignalsGlob[i + 1];
@@ -115,7 +115,7 @@ contract alphaHubV3 {
 
 
     //Function to see the global Trading List
-    function seeTraSig(uint16 index) public view returns(string memory, uint256, uint256, uint256, uint8, uint16, uint256) {
+    function seeTraSig(uint16 index) public view returns(string memory, string memory, string memory, string memory, uint8, uint16, uint256) {
         require(index < traSignalsGlob.length, "no list element");
         require(hasPay);
         uint lastPayDate = seeLastPay(msg.sender);
@@ -129,11 +129,11 @@ contract alphaHubV3 {
     }
 
     // Function to see alphaProv trading list
-    function seeTraSig2(uint16 i, address alpha) public view returns(string memory, uint256, uint256, uint256, uint8, uint16, uint256){
+    function seeTraSig2(uint16 i, address alpha) public view returns(string memory, string memory, string memory, string memory, uint8, uint16, uint256, address){
         traSignal[] memory traSignalAlpha = alphaTradInfoFromAddress[alpha];
         require(i <= traSignalAlpha.length);
         traSignal memory indexTraSig = traSignalAlpha[i];
-        return(indexTraSig.asset, indexTraSig.priceEntry, indexTraSig.stopLoss, indexTraSig.takeProfit, indexTraSig.direction, indexTraSig.traSignalId, indexTraSig.postDate);
+        return(indexTraSig.asset, indexTraSig.priceEntry, indexTraSig.stopLoss, indexTraSig.takeProfit, indexTraSig.direction, indexTraSig.traSignalId, indexTraSig.postDate, indexTraSig.alpha);
     }
 
     function getNumTraSignals(address alpha) public view returns(uint){
