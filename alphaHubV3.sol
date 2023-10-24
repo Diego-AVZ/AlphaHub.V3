@@ -312,6 +312,8 @@ contract alphaHubV3 {
     mapping(address => uint) alphaMonthlyPrice; 
     mapping(address => address[]) imFollowing;
 
+    address AlphaHub = 0x8DE959Dc78ed8948851af6a5453c01fD8AEDA8E0;
+
     function payAlpha(address alpha, uint8 plan) public payable{
         if(plan == 1){
             require(msg.value == alphaMonthlyPrice[alpha]);
@@ -324,8 +326,19 @@ contract alphaHubV3 {
                     // 2 -> Annual
         uint fee = msg.value/20;
         payable(alpha).transfer(msg.value-fee);
+        payable(AlphaHub).transfer(fee);
         imFollowing[msg.sender].push(alpha);
         isValidator[msg.sender] = true;
+    }
+
+    function setPriceAlphaPlans(uint plan, uint price) public {
+        if(plan == 1){
+            //monthly
+            alphaMonthlyPrice[msg.sender] = price;
+        } else {
+            //Annual
+            alphaAnnualPrice[msg.sender] = price;
+        }
     }
 
     function canSeeThisAlpha(address user, address alpha) public view returns(bool){
