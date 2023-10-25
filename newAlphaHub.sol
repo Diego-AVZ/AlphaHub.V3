@@ -18,11 +18,15 @@ contract A {
         return(chatId[alpha]);
     }
 
-    address public BC;
+    address public b;
+    address public c;
+
 
     function createContracts() public {
         B newB = new B(address(this));
-        BC = address(newB);
+        b = address(newB);
+        C newC = new C(address(this));
+        c = address(newC);
     }
 
     //AlphaProv
@@ -75,80 +79,7 @@ contract A {
         return(seeAlphaScore[alpha]);
     }
 
-
-    //___________________________
-    // LOW CAPS - ONCHAIN 
-/*
-    struct lowCaps {
-        string _msg;
-        string tokenName;
-        address tokenAddress;
-        string priceEntry;
-        string stopLoss;
-        string potTakeProfit; 
-        uint16 traSignalId;
-        uint256 postDate;
-    }
-
-    uint16 lowCapsNum;
-    lowCaps[] lowCapSig;
-    lowCaps[] lowCapSigGlob;
-    mapping(address => lowCaps[]) alphaLowCapsSig;
-    uint16 public maxLengthLows  = 100;
-
-    function addLowCapsSignal(
-        string memory _msg,
-        string memory tokenName,
-        address token,
-        string memory entry,
-        string memory sl,
-        string memory tp
-        ) public {
-            
-            if (lowCapSigGlob.length == maxLengthLows){
-                for(uint16 i = 0; i < lowCapSigGlob.length; i++ ){
-                    lowCapSigGlob[i] = lowCapSigGlob[i + 1];
-                }
-                lowCapSigGlob.pop();
-            }
-
-            lowCapsNum++;
-            uint16 id = lowCapsNum;
-            uint date = block.timestamp;
-            lowCaps memory newLowCaps = lowCaps(_msg, tokenName, token, entry, sl, tp, id, date);
-            lowCapSig.push(newLowCaps);
-            lowCapSigGlob.push(newLowCaps);
-            alphaLowCapsSig[msg.sender].push(newLowCaps);
-            alphaAmountTotalSignals[msg.sender]++;
-
-            uint perAccuracy =  accuracyPercentage(msg.sender);
-            uint _score = seeAlphaScore[msg.sender];
-            uint altIndex = 50 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 50;
-            uint altIndex2 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
-            uint altIndex3 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
-            uint altIndex4 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
-            uint altIndex5 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
-
-            if(_score > 10 && perAccuracy > 50){lowCapSigGlob[altIndex] = newLowCaps;} 
-            else if(_score > 25 && perAccuracy > 50){lowCapSigGlob[altIndex] = newLowCaps; lowCapSigGlob[altIndex2] = newLowCaps; }
-            else if(_score > 50 && perAccuracy > 50){
-                lowCapSigGlob[altIndex] = newLowCaps; 
-                lowCapSigGlob[altIndex2] = newLowCaps; 
-                lowCapSigGlob[altIndex3] = newLowCaps;
-                lowCapSigGlob[altIndex4] = newLowCaps;
-                }
-            else if(_score > 75 && perAccuracy > 50){
-                lowCapSigGlob[altIndex] = newLowCaps; 
-                lowCapSigGlob[altIndex2] = newLowCaps; 
-                lowCapSigGlob[altIndex3] = newLowCaps;
-                lowCapSigGlob[altIndex4] = newLowCaps;
-                lowCapSigGlob[altIndex5] = newLowCaps;
-                }
-
-        }
-
-*/
-    //___________________________
+     //___________________________
 
 
     //___________________________
@@ -305,7 +236,7 @@ contract B{
 
     struct traSignal {
         string asset;
-        string priceEntry; // STRINGSSSSS
+        string priceEntry;
         string stopLoss;
         string takeProfit; 
         uint8 direction;
@@ -393,5 +324,88 @@ contract B{
     function genNumIndex(address user) public view returns(uint){
         return(uint(keccak256(abi.encodePacked(a.seeLastPay(user), user)))% traSignalsGlob.length);
     }
+
+}
+
+contract C{
+
+    // LOW CAPS - ONCHAIN 
+
+    address public aAddress;
+    A public a;
+
+    constructor(address add) {
+        aAddress = add;
+        a = A(add);
+    }
+
+    struct lowCaps {
+        string _msg;
+        string tokenName;
+        address tokenAddress;
+        string priceEntry;
+        string stopLoss;
+        string potTakeProfit; 
+        uint32 lowsId;
+        uint256 postDate;
+
+    }
+
+    uint16 lowCapsNum;
+    lowCaps[] lowCapSig;
+    lowCaps[] lowCapSigGlob;
+    mapping(address => lowCaps[]) alphaLowCapsSig;
+    uint16 public maxLengthLows  = 100;
+
+    function addLowCapsSignal(
+        string memory _msg,
+        string memory tokenName,
+        address token,
+        string memory entry,
+        string memory sl,
+        string memory tp
+        ) public {
+            
+            if (lowCapSigGlob.length == maxLengthLows){
+                for(uint16 i = 0; i < lowCapSigGlob.length; i++ ){
+                    lowCapSigGlob[i] = lowCapSigGlob[i + 1];
+                }
+                lowCapSigGlob.pop();
+            }
+
+            lowCapsNum++;
+            uint16 id = lowCapsNum;
+            uint date = block.timestamp;
+            lowCaps memory newLowCaps = lowCaps(_msg, tokenName, token, entry, sl, tp, id, date);
+            lowCapSig.push(newLowCaps);
+            lowCapSigGlob.push(newLowCaps);
+            alphaLowCapsSig[msg.sender].push(newLowCaps);
+            a.add1ToTotalSig(msg.sender);
+
+            uint perAccuracy =  a.accuracyPercentage(msg.sender);
+            uint _score = a.getAlphaScore(msg.sender);
+            uint altIndex = 50 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 50;
+            uint altIndex2 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
+            uint altIndex3 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
+            uint altIndex4 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
+            uint altIndex5 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
+
+            if(_score > 10 && perAccuracy > 50){lowCapSigGlob[altIndex] = newLowCaps;} 
+            else if(_score > 25 && perAccuracy > 50){lowCapSigGlob[altIndex] = newLowCaps; lowCapSigGlob[altIndex2] = newLowCaps; }
+            else if(_score > 50 && perAccuracy > 50){
+                lowCapSigGlob[altIndex] = newLowCaps; 
+                lowCapSigGlob[altIndex2] = newLowCaps; 
+                lowCapSigGlob[altIndex3] = newLowCaps;
+                lowCapSigGlob[altIndex4] = newLowCaps;
+                }
+            else if(_score > 75 && perAccuracy > 50){
+                lowCapSigGlob[altIndex] = newLowCaps; 
+                lowCapSigGlob[altIndex2] = newLowCaps; 
+                lowCapSigGlob[altIndex3] = newLowCaps;
+                lowCapSigGlob[altIndex4] = newLowCaps;
+                lowCapSigGlob[altIndex5] = newLowCaps;
+                }
+
+        }
 
 }
