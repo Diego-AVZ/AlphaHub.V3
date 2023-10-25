@@ -280,3 +280,106 @@ contract A {
     
 }
 
+contract B{
+
+    address aAdd;
+
+    constructor (address add){
+        aAdd = add;
+    }
+
+    A a = A(aAdd);
+
+    struct traSignal {
+        string asset;
+        string priceEntry; // STRINGSSSSS
+        string stopLoss;
+        string takeProfit; 
+        uint8 direction;
+        uint16 traSignalId;
+        uint256 postDate;
+        address alpha;
+    }
+
+    uint16 public maxLengthTrad = 100;
+    uint16 traSignalNum;
+    traSignal [] traSignals;
+    traSignal [] traSignalsGlob;
+    mapping(address => traSignal[]) public alphaTradInfoFromAddress;
+
+    function addTraSignal(string memory asset, string memory _priceEntry, string memory _stopLoss, string memory _takeProfit, uint8 _direction) public {
+        if(traSignalsGlob.length == maxLengthTrad){
+            for (uint32 i = 0; i <= traSignalsGlob.length - 1; i++) {
+                traSignalsGlob[i] = traSignalsGlob[i + 1];
+            }
+            traSignalsGlob.pop();
+        }
+        traSignalNum++;
+        uint16 _traSignalId  =  traSignalNum;
+        traSignal memory newTraSignal = traSignal(asset, _priceEntry, _stopLoss, _takeProfit, _direction, _traSignalId, block.timestamp, msg.sender);
+        traSignals.push(newTraSignal);
+        traSignalsGlob.push(newTraSignal);
+        alphaTradInfoFromAddress[msg.sender].push(newTraSignal);
+        a.add1ToTotalSig(msg.sender);
+        
+        uint perAccuracy =  a.accuracyPercentage(msg.sender);
+        uint _score = a.getAlphaScore(msg.sender);
+        uint altIndex = 50 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 50;
+        uint altIndex2 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
+        uint altIndex3 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
+        uint altIndex4 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
+        uint altIndex5 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
+
+        if(_score > 10 && perAccuracy > 50){traSignalsGlob[altIndex] = newTraSignal;} 
+        else if(_score > 25 && perAccuracy > 50){traSignalsGlob[altIndex] = newTraSignal; traSignalsGlob[altIndex2] = newTraSignal; }
+        else if(_score > 50 && perAccuracy > 50){
+            traSignalsGlob[altIndex] = newTraSignal; 
+            traSignalsGlob[altIndex2] = newTraSignal; 
+            traSignalsGlob[altIndex3] = newTraSignal;
+            traSignalsGlob[altIndex4] = newTraSignal;
+            }
+        else if(_score > 75 && perAccuracy > 50){
+            traSignalsGlob[altIndex] = newTraSignal; 
+            traSignalsGlob[altIndex2] = newTraSignal; 
+            traSignalsGlob[altIndex3] = newTraSignal;
+            traSignalsGlob[altIndex4] = newTraSignal;
+            traSignalsGlob[altIndex5] = newTraSignal;
+            }
+    }
+
+
+    //Function to see the global Trading List
+    function seeTraSig(uint16 index, address user) public view returns(string memory, string memory, string memory, string memory, uint8, uint16, uint256) {
+        require(index < traSignalsGlob.length, "no list element");
+        require(a.hasPaid(user));
+        uint lastPayDate = a.seeLastPay(msg.sender);
+        uint actualDate = block.timestamp;
+        if(a.seeMonAnn(user) == 1){
+            require((actualDate - lastPayDate) <= 30 days );
+        } else {require((actualDate - lastPayDate) <= 364 days );}
+        traSignal memory traSigAlphaGlob = traSignalsGlob[index];
+        return(traSigAlphaGlob.asset, traSigAlphaGlob.priceEntry, traSigAlphaGlob.stopLoss, traSigAlphaGlob.takeProfit, traSigAlphaGlob.direction, traSigAlphaGlob.traSignalId, traSigAlphaGlob.postDate);
+        
+    }
+
+    // Function to see alphaProv trading list
+    function seeTraSig2(uint16 i, address alpha) public view returns(string memory, string memory, string memory, string memory, uint8, uint16, uint256, address){
+        traSignal[] memory traSignalAlpha = alphaTradInfoFromAddress[alpha];
+        require(i <= traSignalAlpha.length);
+        traSignal memory indexTraSig = traSignalAlpha[i];
+        return(indexTraSig.asset, indexTraSig.priceEntry, indexTraSig.stopLoss, indexTraSig.takeProfit, indexTraSig.direction, indexTraSig.traSignalId, indexTraSig.postDate, indexTraSig.alpha);
+    }
+
+    function getNumTraSignals(address alpha) public view returns(uint){
+        return(alphaTradInfoFromAddress[alpha].length);
+    }
+
+    function getTradGlobLength() public view returns(uint){
+        return(traSignalsGlob.length);
+    }
+
+    function genNumIndex(address user) public view returns(uint){
+        return(uint(keccak256(abi.encodePacked(a.seeLastPay(user), user)))% traSignalsGlob.length);
+    }
+}
+
