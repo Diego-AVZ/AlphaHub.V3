@@ -8,6 +8,16 @@ pragma solidity ^0.8.0;
 
 contract A {
 
+    mapping(address => string) chatId;
+
+    function setAlphaHubBot(string memory _chatId) public {
+        chatId[msg.sender] = _chatId;
+    } 
+
+    function getChatId(address alpha) public view returns(string memory){
+        return(chatId[alpha]);
+    }
+
     address public BC;
 
     function createContracts() public {
