@@ -8,8 +8,11 @@ pragma solidity ^0.8.0;
 
 contract A {
 
-    function createContracts() public{
-        new B(address(this));
+    address public BC;
+
+    function createContracts() public {
+        B newB = new B(address(this));
+        BC = address(newB);
     }
 
     //AlphaProv
@@ -282,13 +285,13 @@ contract A {
 
 contract B{
 
-    address aAdd;
+    address public aAdd;
+    A public a;
 
-    constructor (address add){
+    constructor(address add) {
         aAdd = add;
+        a = A(add);
     }
-
-    A a = A(aAdd);
 
     struct traSignal {
         string asset;
@@ -347,7 +350,6 @@ contract B{
             }
     }
 
-
     //Function to see the global Trading List
     function seeTraSig(uint16 index, address user) public view returns(string memory, string memory, string memory, string memory, uint8, uint16, uint256) {
         require(index < traSignalsGlob.length, "no list element");
@@ -381,5 +383,5 @@ contract B{
     function genNumIndex(address user) public view returns(uint){
         return(uint(keccak256(abi.encodePacked(a.seeLastPay(user), user)))% traSignalsGlob.length);
     }
-}
 
+}
