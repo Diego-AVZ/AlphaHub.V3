@@ -21,6 +21,8 @@
         </div>
     </div>
 
+    <div id="cover2" style="position: absolute; display:block; width: 30vw; height: 10vh; background-color: rgba(0, 0, 0, 0.774); z-index: 5; margin-top: 0vh; margin-left: 23vw;"></div>
+
     <div id="msg2">
         <p style="width: 27vw;">You are not an <b>AlphaProv</b> yet, <br>please click bellow and get the rol in 3 minutes!</p>
         <a href="http://127.0.0.1:5500/Alpha%20info%20web/AlphaHub%20V3/alphaZone/becomeA.html"><button id="toForm">Become AlphaProvider</button></a>
@@ -43,6 +45,8 @@
         <button class="butAlpha" id="alphaOnchain">Onchain</button>
         <button class="butAlpha" id="alphaICO">Presales</button>
         <button class="butAlpha" id="alphaLows">LowCaps</button>
+        <button class="butAlpha" id="econ">Your Economics</button>
+        <button class="butAlpha" id="bot">AlphaHub <b>Bot</b></button>
 
         <div id="newSig">
             <p id="titAdd">Add Signals</p>
@@ -95,7 +99,7 @@
         </div>
         
         <div id="tradingSigList" class="list">
-    
+            0 Trading Signals
         </div>
         
 
@@ -125,7 +129,7 @@
         </div>
 
         <div id="tradData">
-            <p>DATA</p>
+            <p id="numTradSig"></p>
         </div>
 
         <div id="toolsWindow">
@@ -143,6 +147,27 @@
                 <iframe style="display: none;" src="https://metary.org/" id="windowTool4" frameborder="0"></iframe>
             </div>
             
+        </div>
+
+        <div id="econW">
+            Economics
+
+            <input type="text" id="monPrice" class="input" placeholder="Set Monthly plan Price in ETH">
+            <input type="text" id="anPrice" class="input" placeholder="Set Annual plan Price in ETH">
+            <button id="setPrice">Set Prices</button>
+            <p id="earn">You Earned:</p>
+            <p id="followers">Followers:</p>
+        </div>
+
+        <div id="botW">
+            Telegram Bot <br><br>
+
+            <p style="font-weight: 300; font-size: 1vw;"><b>1.</b> Find Your ChatID</p>
+            <button id="how">See How</button>
+            <input type="text" id="addChatId" class="input" placeholder="2. write Chat Id">
+            <button id="addChat">Add ChatId</button>
+            <p style="position: absolute; font-weight: 300; font-size: 1vw; margin-top: 19vh; left:50%; transform: translateX(-50%); width: 18vw;"><b>3.</b> Add <b>@AlphaHubBot</b> <br> to your Telegram Group</p>
+            <p style="position: absolute;font-size: 0.8vw; width: 18vw; margin-top: 27vh; left:50%; transform: translateX(-50%); ">Post your signals on AlphaHub and will be instantly sent to your Telegram group</p>
         </div>
 
     </div>
