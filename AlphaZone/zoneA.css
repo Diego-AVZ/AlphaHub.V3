@@ -23,6 +23,7 @@
 body{
     overflow: hidden;
     background-color: black;
+    
 }
 
 #header {
@@ -39,15 +40,15 @@ body{
     position: absolute;
     margin-left: 0.4vw;
     margin-top: 0.3vw;
-    width: 7vw;
+    width: 6vw;
     
 }
 
 #title {
     position: absolute;
-    margin-left: 6.2vw;
-    margin-top: 2.3vw;
-    font-size: 1.7vw;
+    margin-left: 6vw;
+    margin-top: 2.1vw;
+    font-size: 1.5vw;
     font-family: sans-serif;
 }
 
@@ -230,6 +231,21 @@ body{
 
 } #alphaICO:hover{background: linear-gradient(0deg, rgb(0, 41, 191, 0.6), rgb(46, 81, 255, 0.6), rgb(0, 41, 191, 0.6), rgb(10, 2, 95, 0.6)); height: 7vh; transition: ease, 0.5s;}
 
+#econ{
+    margin-left: 23.3vw;
+    
+    width: 12vw;
+    top: -6vh;
+} #econ:hover{background: linear-gradient(0deg, rgb(0, 41, 191, 0.6), rgb(46, 81, 255, 0.6), rgb(0, 41, 191, 0.6), rgb(10, 2, 95, 0.6)); height: 7vh; top: -7vh;; transition: ease, 0.5s;}
+
+#bot{
+    margin-left: 36vw;
+    
+    width: 12vw;
+    top: -6vh;
+} #bot:hover{background: linear-gradient(0deg, rgb(0, 41, 191, 0.6), rgb(46, 81, 255, 0.6), rgb(0, 41, 191, 0.6), rgb(10, 2, 95, 0.6)); height: 7vh; top: -7vh;; transition: ease, 0.5s;}
+
+
 .butAlpha {
     position: absolute;
     bottom: 0.5vh;
@@ -263,6 +279,7 @@ body{
     margin-left: 1vw;
     background-color: #2d2d2e3d;
     border-radius: 0.5vw;
+    box-shadow: inset 0vw 0vw 1vw 0px rgba(139, 139, 139, 0.44);
 }
 
 #titAdd {
@@ -287,6 +304,7 @@ body{
     transform: translateX(-50%);
     background-color: #8b8baa00;
     border-radius: 0.5vw;
+    
 }
 
 #addOnchainSignals{
@@ -715,7 +733,7 @@ body{
 
 #windowTool3{
     position: absolute;
-    margin-left: -2vw;
+    margin-left: 0vw;
     margin-top: -1vh;
     overflow-x: hidden;
     width: 35vw; 
@@ -727,7 +745,7 @@ body{
 
 #windowTool4{
     position: absolute;
-    margin-left: -2vw;
+    margin-left: 0vw;
     margin-top: -1vh;
     overflow-x: hidden;
     width: 35vw; 
@@ -736,6 +754,142 @@ body{
 
 }
 
+/*TRADING DATA*/
+#numTradSig {
+    position: absolute;
+    margin-left: 2vw;
+    margin-top: 2vh;
+}
+
+/*BOT window*/
+
+#botW{
+    position: absolute;
+    display: none;
+    width: 20vw;
+    height: 47vh;
+    margin-top: 25vh;
+    right: 12vw;
+    background-color: #2d2d2e3d;
+    border-radius: 0.5vw;
+    color: white;
+    text-align: center;
+    padding-top: 1vw;
+    font-weight: 700;
+    box-shadow: inset 0vw 0vw 1vw 0px rgba(139, 139, 139, 0.44);
+
+}
+
+#econW{
+    position: absolute;
+    display: none;
+    width: 35vw;
+    height: 47vh;
+    margin-top: 25vh;
+    right: 5vw;
+    background-color: #2d2d2e3d;
+    border-radius: 0.5vw;
+    color: rgba(255, 255, 255, 0.83);
+    text-align: center;
+    padding-top: 1vw;
+    font-weight: 700;
+    font-size: 1.3vw;
+    letter-spacing: 0.1vw;
+    box-shadow: inset 0vw 0vw 1vw 0px rgba(139, 139, 139, 0.44);
+}
+
+#addChatId{
+    margin-top: 7.3vh;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    
+}
+
+#how {
+    position: absolute;
+    background: linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));
+    border-style: none;
+    color: white;
+    border-radius: 1vw;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 1vw;
+    width: 6vw;
+    height: 3.4vh;
+    margin-top: 0vh;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
+    z-index: 3;
+}
+
+#addChat {
+    position: absolute;
+    background: linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));
+    border-style: none;
+    color: white;
+    border-radius: 1vw;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 1vw;
+    width: 7vw;
+    height: 3.4vh;
+    margin-top: 12vh;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
+    z-index: 3;
+}
+
+#monPrice{
+    margin-top: 7.3vh;
+    width: 15vw;
+    height: 3vh;
+    border-radius: 1vw 0vw 0vw 1vw;
+    left: 45%;
+    transform: translateX(-50%);
+}
+
+#anPrice{
+    margin-top: 12vh;
+    width: 15vw;
+    height: 3vh;
+    border-radius: 1vw 0vw 0vw 1vw;
+
+    left: 45%;
+    transform: translateX(-50%);
+}
+
+#setPrice{
+    position: absolute;
+    background: linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));
+    border-style: none;
+    color: white;
+    border-radius: 1vw;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 1vw;
+    width: 4vw;
+    height: 9vh;
+    border-radius: 0vw 1vw 1vw 0vw;
+    margin-top: 7.25vh;
+    margin-left: 2.2vw;
+    box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
+}
+
+#earn{
+    position: absolute;
+    margin-top: 18vh;
+    margin-left: 8vw;
+
+}
+
+#followers{
+    position: absolute;
+    margin-top: 22vh;
+    margin-left: 8vw;
+}
 
 
 }
