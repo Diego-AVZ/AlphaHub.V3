@@ -3,6 +3,7 @@ var connectedAddress;
 var msg1 = document.getElementById("msg1");
 var msg2 = document.getElementById("msg2");
 var cover = document.getElementById("cover");
+var cover2 = document.getElementById("cover2");
 
 walletBut.addEventListener("click", async () => {
   if (typeof window.ethereum !== "undefined") {
@@ -19,11 +20,13 @@ walletBut.addEventListener("click", async () => {
         "linear-gradient(90deg, rgb(14 116 18), rgb(2, 165, 45), rgba(0, 24, 2, 0.541))";
       msg1.style.display = "none";
       cover.style.display = "none";
+      cover2.style.display = "none";
       showEthAddress();
       seeName();
       getAlphaScore();
       getSignalsNum();
       seeTraSig2();
+      getTradSignalsNum();
       /*seeIfIsAlpha();*/
     } catch (error) {
       console.log("ERROR al Conectar MTMSK");
@@ -48,11 +51,13 @@ async function connect() {
         "linear-gradient(90deg, rgb(14 116 18), rgb(2, 165, 45), rgba(0, 24, 2, 0.541))";
       msg1.style.display = "none";
       cover.style.display = "none";
+      cover2.style.display = "none";
       showEthAddress();
       seeName();
       getAlphaScore();
       getSignalsNum();
       seeTraSig2();
+      getTradSignalsNum();
       /*seeIfIsAlpha();*/
     } catch (error) {
       console.log("ERROR al Conectar MTMSK");
@@ -72,7 +77,7 @@ function showEthAddress() {
 }
 
 //CONNECT CONTRACT
-const conAddress = "0xa93a715247E8BFF4b0bDc56a286CcdFed8CB3fEa";
+const conAddress = "0x6672de6eC8A12Ab34cE152dc330e014324652F96";
 
 const web3Instance = new Web3(window.ethereum);
 
@@ -117,6 +122,11 @@ async function getSignalsNum() {
   document.getElementById("numSig").innerHTML = `${hisSignals}`;
 }
 
+async function getTradSignalsNum() {
+  var hisTraSignals = await contract.methods.getNumTraSignals(connectedAddress).call();
+  document.getElementById("numTradSig").innerHTML = `${hisTraSignals}`;
+}
+
 var valueId;
 
 async function seeTraSig2() {
@@ -124,12 +134,23 @@ async function seeTraSig2() {
   var numSignals = await contract.methods.getNumSignals(connectedAddress).call();
 
   if(numSignals < 50){
-
+      tradingSigList.innerText = "";
       for (let i = numSignals - 1; i >= 0; i--) {
         var traSignal = await contract.methods.seeTraSig2(i, connectedAddress).call();
         
         var signalDiv = document.createElement("div");
         signalDiv.classList.add("signalTrad");
+
+        signalDiv.setAttribute("data-valor", `${traSignal[2]}`);
+
+        (function (signal) {
+          // ESTA FUNCION PERMITE VALIDAR Y CALIFICAR LAS SEÑALES CON UN CLICK, CLICKANDO. CAMBIA `${traSignal[0]}` por EL ID de la señal o la address del Alpha
+          signal.addEventListener("click", function () {
+            console.log(signal.getAttribute("data-valor"));
+          });
+        })(signalDiv);
+
+
         var assetP = document.createElement("p");
         assetP.innerText = `${traSignal[0]}`;
         assetP.classList.add("assetS");
@@ -150,21 +171,21 @@ async function seeTraSig2() {
             "https://image.spreadshirtmedia.net/image-server/v1/compositions/T56A2PA4115PT17X0Y67D157542882W24948H18711/views/1,width=550,height=550,appearanceId=2,backgroundColor=000000,noPt=true/signo-de-interrogacion-planeado-hae-simbolo-signo-regalo-bolsa-de-tela.jpg";
           elseImg.classList.add("assetImg");
           signalDiv.appendChild(elseImg);
-          elseImg.style.borderRadius ="2vw"
+          elseImg.style.borderRadius ="2vw";
         }
 
         var entryP = document.createElement("p");
-        entryP.innerText = `${traSignal[1]}`;
+        entryP.innerText = `$ ${traSignal[1]}`;
         entryP.classList.add("entryS");
         var slP = document.createElement("p");
-        slP.innerText = `${traSignal[2]}`;
+        slP.innerText = `$ ${traSignal[2]}`;
         if (traSignal[4] == 1) {
           slP.classList.add("slSlong");
         } else {
           slP.classList.add("slSshort");
         }
         var tpP = document.createElement("p");
-        tpP.innerText = `${traSignal[3]}`;
+        tpP.innerText = `$ ${traSignal[3]}`;
         if (traSignal[4] == 1) {
           tpP.classList.add("tpSlong");
         } else {
@@ -180,12 +201,52 @@ async function seeTraSig2() {
         dirP.innerText = `${LoS}`;
         dirP.classList.add("dirS");
 
+        var date = document.createElement("p");
+        date.classList.add("date");
+        var postBlock = `${traSignal[6]}`;
+        var transDate = new Date(postBlock * 1000);
+        var y = transDate.getFullYear();
+        var m = transDate.getMonth() + 1;
+        var d = transDate.getDate();
+        var h = transDate.getHours();
+        var mi = transDate.getMinutes();
+        var postDate = `${y}/${m}/${d}  ${h}:${mi}`;
+        date.innerHTML = postDate;
+
+        if (traSignal[4] == 1) {
+          var dolp1 = document.createElement("p");
+          dolp1.classList.add("dolp1");
+          dolp1.innerText = "Take Profit";
+          var dolp2 = document.createElement("p");
+          dolp2.classList.add("dolp2");
+          dolp2.innerText = "Entry";
+          var dolp3 = document.createElement("p");
+          dolp3.classList.add("dolp3");
+          dolp3.innerText = "Stop Loss";
+        } else {
+          var dolp1 = document.createElement("p");
+          dolp1.classList.add("dolp3");
+          dolp1.innerText = "Take Profit";
+          var dolp2 = document.createElement("p");
+          dolp2.classList.add("dolp2");
+          dolp2.innerText = "Entry";
+          var dolp3 = document.createElement("p");
+          dolp3.classList.add("dolp1");
+          dolp3.innerText = "Stop Loss";
+        }
+        
+
+        signalDiv.appendChild(dolp1);
+        signalDiv.appendChild(dolp2);
+        signalDiv.appendChild(dolp3);
         signalDiv.appendChild(entryP);
         signalDiv.appendChild(assetP);
         signalDiv.appendChild(slP);
         signalDiv.appendChild(tpP);
         signalDiv.appendChild(dirP);
+        signalDiv.appendChild(date);
         tradingSigList.appendChild(signalDiv);
+        
       }
     } else{
         for (let i = numSignals - 1; i >= numSignals-50; i--) { // solo salen las 50 primeras señales de trading
@@ -193,7 +254,7 @@ async function seeTraSig2() {
           
           var signalDiv = document.createElement("div");
           signalDiv.classList.add("signalTrad");
-          signalDiv.setAttribute("data-valor", `${traSignal[0]}`);
+          signalDiv.setAttribute("data-valor", `${traSignal[7]}`);
 
           (function (signal) {
             // ESTA FUNCION PERMITE VALIDAR Y CALIFICAR LAS SEÑALES CON UN CLICK, CLICKANDO. CAMBIA `${traSignal[0]}` por EL ID de la señal o la address del Alpha
@@ -506,6 +567,29 @@ set1.addEventListener("mouseout", function () {
   _name.style.color = "rgba(255, 255, 255, 0.742)";
 });
 
+
+//ECONOMICS y SETBOT
+
+var econBut = document.getElementById("econ");
+var botBut = document.getElementById("bot");
+var bot = document.getElementById("botW");
+var econ = document.getElementById("econW");
+var tw0 = document.getElementById("toolsWindow");
+
+econBut.addEventListener("click", function(){
+  tw0.style.display = "none";
+  bot.style.display = "none";
+  econ.style.display = "block"
+});
+
+botBut.addEventListener("click", function () {
+  tw0.style.display = "none";
+  bot.style.display = "block";
+  econ.style.display = "none";
+});
+
+
+
 // ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI
 const ABI = [
   {
@@ -531,7 +615,7 @@ const ABI = [
     inputs: [
       {
         internalType: "string",
-        name: "_But",
+        name: "_msg",
         type: "string",
       },
       {
@@ -569,7 +653,7 @@ const ABI = [
     inputs: [
       {
         internalType: "string",
-        name: "_msg",
+        name: "asset",
         type: "string",
       },
       {
@@ -599,63 +683,6 @@ const ABI = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "beValidator",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "paySimpleAnnual",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "paySimpleMonth",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "_name",
-        type: "string",
-      },
-    ],
-    name: "setName",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "clickAddress",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "points",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "posNeg",
-        type: "uint256",
-      },
-    ],
-    name: "validate",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [
       {
         internalType: "address",
@@ -672,7 +699,7 @@ const ABI = [
     outputs: [
       {
         internalType: "string",
-        name: "_msg",
+        name: "asset",
         type: "string",
       },
       {
@@ -704,6 +731,61 @@ const ABI = [
         internalType: "uint256",
         name: "postDate",
         type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "becomeAlpha",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+    ],
+    name: "canSeeThisAlpha",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "_name",
+        type: "string",
+      },
+    ],
+    name: "checkNameList",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
       },
     ],
     stateMutability: "view",
@@ -767,6 +849,25 @@ const ABI = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+    ],
+    name: "getNumTraSignals",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "getTradGlobLength",
     outputs: [
@@ -800,6 +901,57 @@ const ABI = [
         internalType: "uint16",
         name: "",
         type: "uint16",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+      {
+        internalType: "uint8",
+        name: "plan",
+        type: "uint8",
+      },
+    ],
+    name: "payAlpha",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "paySimpleAnnual",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "paySimpleMonth",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "_name",
+        type: "string",
+      },
+    ],
+    name: "searchName",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
       },
     ],
     stateMutability: "view",
@@ -949,20 +1101,55 @@ const ABI = [
   {
     inputs: [
       {
+        internalType: "string",
+        name: "_name",
+        type: "string",
+      },
+    ],
+    name: "setName",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "uint256",
-        name: "",
+        name: "plan",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "price",
         type: "uint256",
       },
     ],
-    name: "validators",
-    outputs: [
+    name: "setPriceAlphaPlans",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
       {
         internalType: "address",
-        name: "",
+        name: "clickAddress",
         type: "address",
       },
+      {
+        internalType: "uint256",
+        name: "points",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "posNeg",
+        type: "uint256",
+      },
     ],
-    stateMutability: "view",
+    name: "validate",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
 ];
@@ -994,7 +1181,7 @@ var tw1 = document.getElementById("windowTool1");
 var tw2 = document.getElementById("windowTool2");
 var tw3 = document.getElementById("windowTool3");
 var tw4 = document.getElementById("windowTool4");
-var tw5 = document.getElementById("windowTool5");
+
 
 
 
@@ -1004,7 +1191,10 @@ function cmc() {
   tw2.style.display = "block";
   tw3.style.display = "none";
   tw4.style.display = "none";
-  tw5.style.display = "none";
+  tw0.style.display = "block";
+  bot.style.display = "none";
+  econ.style.display = "none";
+  
 
 }
 
@@ -1014,7 +1204,9 @@ function tv() {
   tw2.style.display = "none";
   tw3.style.display = "none";
   tw4.style.display = "none";
-  tw5.style.display = "none";
+  tw0.style.display = "block";
+  bot.style.display = "none";
+  econ.style.display = "none";
 
 }
 
@@ -1024,7 +1216,9 @@ function uni() {
   tw2.style.display = "none";
   tw3.style.display = "block";
   tw4.style.display = "none";
-  tw5.style.display = "none";
+  tw0.style.display = "block";
+  bot.style.display = "none";
+  econ.style.display = "none";
 
 }
 
@@ -1034,7 +1228,9 @@ function mtry() {
   tw2.style.display = "none";
   tw3.style.display = "none";
   tw4.style.display = "block";
-  tw5.style.display = "none";
+  tw0.style.display = "block";
+  bot.style.display = "none";
+  econ.style.display = "none";
 }
 
 
