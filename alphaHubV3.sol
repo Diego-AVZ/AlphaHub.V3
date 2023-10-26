@@ -8,11 +8,37 @@ pragma solidity ^0.8.0;
 
 contract alphaHubV3 {
 
+    mapping(address => string) chatId;
+
+    function setAlphaHubBot(string memory _chatId) public {
+        chatId[msg.sender] = _chatId;
+    } 
+
+    function getChatId(address alpha) public view returns(string memory){
+        return(chatId[alpha]);
+    }
+
+    address public b;
+    address public c;
+
+
+    function createContracts() public {
+        B newB = new B(address(this));
+        b = address(newB);
+        C newC = new C(address(this));
+        c = address(newC);
+    }
+
     //AlphaProv
 
     address[] alphasList;
     mapping(address => uint) alphaJoinDate;
     uint16 alphaCount;
+    mapping(address => uint16) public alphaAmountTotalSignals;
+
+    function add1ToTotalSig(address alpha) public {
+        alphaAmountTotalSignals[alpha]++;
+    }
     
     function becomeAlpha() public {
         alphasList.push(msg.sender);
@@ -360,3 +386,4 @@ contract alphaHubV3 {
 
 
 }
+
