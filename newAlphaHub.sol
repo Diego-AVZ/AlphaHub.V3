@@ -6,8 +6,6 @@ pragma solidity ^0.8.0;
 //______________26/09/2023, Author: DiegoAVZ___
 //______________________________________________
 
-import "./B.sol";
-
 contract A {
 
     mapping(address => string) chatId;
@@ -20,19 +18,7 @@ contract A {
         return(chatId[alpha]);
     }
 
-    address public b;
-    //address public c;
-
-    function setB(address _b)public{
-        b = _b;
-    }
-
-    /*function createContracts() public {
-        B newB = new B(address(this));
-        b = address(newB);
-        // C newC = new C(address(this));
-        // c = address(newC);
-    }*/
+    address public b = 0x99669c81BE93c45FB74E4e1e00513c1BA532Bf21;
 
     //AlphaProv
 
@@ -59,6 +45,7 @@ contract A {
         require(checkNameList(_name) == false);
         name[msg.sender] = _name;
         nameList.push(_name);
+        nameToAddress[_name] = msg.sender;
     }
 
     function checkNameList(string memory _name) public view returns(bool){
@@ -131,6 +118,11 @@ contract A {
 
     //genera un número con la dirección del usuario y la ultima vez que pagó
 
+
+//_________________________
+    function deposit() public payable{
+
+    }
     //___________________________
 
     mapping(address => bool) isValidator;
@@ -171,9 +163,14 @@ contract A {
 
     //PAYMENT
 
-    uint simplePlanMon = 1 ether;
-    uint simplePlanAnnu = 10 ether;
+    uint simplePlanMon;
+    uint simplePlanAnnu;
     bool canValidate; // Solo si es usuario y ha pagado puede validar
+
+    function setSimplePrices(uint mon, uint ann) public {
+        simplePlanMon = mon * 1 ether;
+        simplePlanAnnu = ann * 1 ether;
+    }
 
     mapping(address => uint) lastPay;
     mapping(address => uint) monAnnu; // 1 -> monthly
@@ -244,9 +241,9 @@ contract A {
         }
     }
 
-function seeAlphaPrices(address alpha)public view returns(uint, uint){
-    return(alphaMonthlyPrice[alpha], alphaAnnualPrice[alpha]);
-}
+    function seeAlphaPrices(address alpha)public view returns(uint, uint){
+        return(alphaMonthlyPrice[alpha], alphaAnnualPrice[alpha]);
+    }
 
     function canSeeThisAlpha(address user, address alpha) public view returns(bool){
         for(uint16 i = 0; i < followers[alpha].length; i++){
@@ -268,18 +265,13 @@ function seeAlphaPrices(address alpha)public view returns(uint, uint){
 }
 
 
-___________________________________________________________________________________
-_______________________Trading Contract____________________________________
-___________________________________________________________________________________
+//___________________________________________________________________________________
+//_______________________Trading Contract____________________________________
+//___________________________________________________________________________________
 
-
-//SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
-
-import "./A.sol";
 
 contract B {
-
+/*
     address public aAdd;
     A public a;
 
@@ -287,7 +279,7 @@ contract B {
         aAdd = add;
         a = A(add);
     }
-
+*/
      struct traSignal {
         string asset;
         string priceEntry;
@@ -405,5 +397,7 @@ contract B {
     function traSignalAlphaLength(address alpha) public view returns(uint16){
         return(uint16(alphaTradInfoFromAddress[alpha].length));
     }
+
+    function deposit() public payable{}
     
 }
