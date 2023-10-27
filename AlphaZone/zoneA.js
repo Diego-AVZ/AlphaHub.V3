@@ -77,7 +77,8 @@ function showEthAddress() {
 }
 
 //CONNECT CONTRACT
-const conAddress = "0x6672de6eC8A12Ab34cE152dc330e014324652F96";
+const conAddress = "0xF9b637Aff040A5b7b95161792D6Dc565C49DBCAB";
+const conAddress2 = "0x99669c81BE93c45FB74E4e1e00513c1BA532Bf21";
 
 const web3Instance = new Web3(window.ethereum);
 
@@ -123,20 +124,22 @@ async function getSignalsNum() {
 }
 
 async function getTradSignalsNum() {
-  var hisTraSignals = await contract.methods.getNumTraSignals(connectedAddress).call();
-  document.getElementById("numTradSig").innerHTML = `${hisTraSignals}`;
+  try{
+    var hisTraSignals = await contract.methods.getNumTraSignals(connectedAddress).call();
+    document.getElementById("numTradSig").innerHTML = `${hisTraSignals}`;
+  } catch(error){console.log("getTradSignalsNum() ERROR" + error);}
 }
 
 var valueId;
 
 async function seeTraSig2() {
   var tradingSigList = document.getElementById("tradingSigList");
-  var numSignals = await contract.methods.getNumSignals(connectedAddress).call();
+  var numSignals = await contract.methods.getNumTraSignals(connectedAddress).call();
 
   if(numSignals < 50){
       tradingSigList.innerText = "";
       for (let i = numSignals - 1; i >= 0; i--) {
-        var traSignal = await contract.methods.seeTraSig2(i, connectedAddress).call();
+        var traSignal = await contract.methods.seeTraSig2(i, connectedAddress, connectedAddress).call();
         
         var signalDiv = document.createElement("div");
         signalDiv.classList.add("signalTrad");
@@ -367,16 +370,17 @@ const chatId = "-4046315950"; // El ID del chat
 
 const telegramApiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
+//CODIFICADOR:
+var A; //Encrypted Asset
+var B; //Encrypted Entry
+var C; //Encrypted SL
+var D; //Encrypted TP
+
 addTradBut.addEventListener("click", async () => {
   
   try {
     
-    await contract.methods
-      .addTraSignal(A1.value, E1.value, B1.value, C1.value, directionValue)
-      .send({
-        from: connectedAddress,
-        gasPrice: "481878",
-      });
+    await contract2.methods.addTraSignal(A1.value, E1.value, B1.value, C1.value, directionValue).send({ from: connectedAddress, /*gasPrice: "481878",*/ });
       addTradBut.style.opacity = "20%";
       var dir;
     if (directionValue==1){
@@ -432,6 +436,64 @@ addTradBut.addEventListener("click", async () => {
   }
 });
 
+// Codificador trading
+
+//var input = A1.value;
+/*
+function xyz(input) {
+  var abc = "ab1$cdef2-ghi.3j0kl4m9no,5pqr6stu7vwx8yz";
+  var x = "";
+
+  for (var i = 0; i < input.length; i++) {
+    
+    var a = input[i].toLowerCase();
+    
+    if (abc.includes(a)) {
+      var index = abc.indexOf(a);
+      if (index < abc.length - 1 && index > 0) {
+        x += abc[index + 1] + abc[index - 1] ;
+    
+      } else {
+        x += abc[0];
+      }
+    } else {
+      x += input[i];
+    }
+  }
+
+  return x;
+}
+
+var A1 = "y";
+var A2 = xyz(A1);
+
+// Decodificador
+
+function decodeXyz(input2) {
+  var abc = "ab1$cdef2-ghi.3j0kl4m9no,5pqr6stu7vwx8yz";
+  var x = "";
+
+  for (var i = 0; i < input2.length; i++) {
+    var a = input2[i].toLowerCase();
+
+    if (abc.includes(a)) {
+      var index = abc.indexOf(a);
+      if (index > 0) {
+        x += abc[index - 1];
+      } else {
+        x += abc[abc.length - 1];
+      }
+    } else {
+      x += input2[i];
+    }
+  }
+
+  return x;
+}
+
+var A3 = "";
+var A4 = decodeXyz(A3);
+*/
 //SIGNALS
 
 var alphaTrad = document.getElementById("alphaTrad");
@@ -614,131 +676,14 @@ const ABI = [
   {
     inputs: [
       {
-        internalType: "string",
-        name: "_msg",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "tokenName",
-        type: "string",
-      },
-      {
-        internalType: "address",
-        name: "token",
-        type: "address",
-      },
-      {
-        internalType: "string",
-        name: "entry",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "sl",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "tp",
-        type: "string",
-      },
-    ],
-    name: "addLowCapsSignal",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "asset",
-        type: "string",
-      },
-      {
-        internalType: "uint256",
-        name: "_priceEntry",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_stopLoss",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_takeProfit",
-        type: "uint256",
-      },
-      {
-        internalType: "uint8",
-        name: "_direction",
-        type: "uint8",
-      },
-    ],
-    name: "addTraSignal",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "alphaTradInfoFromAddress",
-    outputs: [
-      {
-        internalType: "string",
-        name: "asset",
-        type: "string",
-      },
-      {
-        internalType: "uint256",
-        name: "priceEntry",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "stopLoss",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "takeProfit",
-        type: "uint256",
-      },
-      {
-        internalType: "uint8",
-        name: "direction",
-        type: "uint8",
-      },
-      {
-        internalType: "uint16",
-        name: "traSignalId",
-        type: "uint16",
-      },
-      {
-        internalType: "uint256",
-        name: "postDate",
-        type: "uint256",
-      },
-      {
         internalType: "address",
         name: "alpha",
         type: "address",
       },
     ],
-    stateMutability: "view",
+    name: "add1ToTotalSig",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -746,6 +691,175 @@ const ABI = [
     name: "becomeAlpha",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+    ],
+    name: "countAllAlphaSignals",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "deposit",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+      {
+        internalType: "uint8",
+        name: "plan",
+        type: "uint8",
+      },
+    ],
+    name: "payAlpha",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "paySimpleAnnual",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "paySimpleMonth",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "_chatId",
+        type: "string",
+      },
+    ],
+    name: "setAlphaHubBot",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "_name",
+        type: "string",
+      },
+    ],
+    name: "setName",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "plan",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "price",
+        type: "uint256",
+      },
+    ],
+    name: "setPriceAlphaPlans",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "mon",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "ann",
+        type: "uint256",
+      },
+    ],
+    name: "setSimplePrices",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "clickAddress",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "points",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "posNeg",
+        type: "uint256",
+      },
+    ],
+    name: "validate",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "alphaAmountTotalSignals",
+    outputs: [
+      {
+        internalType: "uint16",
+        name: "",
+        type: "uint16",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "b",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -837,6 +951,25 @@ const ABI = [
         type: "address",
       },
     ],
+    name: "getChatId",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+    ],
     name: "getNumSignals",
     outputs: [
       {
@@ -859,83 +992,12 @@ const ABI = [
     name: "getNumTraSignals",
     outputs: [
       {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getTradGlobLength",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "maxLengthLows",
-    outputs: [
-      {
         internalType: "uint16",
         name: "",
         type: "uint16",
       },
     ],
     stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "maxLengthTrad",
-    outputs: [
-      {
-        internalType: "uint16",
-        name: "",
-        type: "uint16",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-      {
-        internalType: "uint8",
-        name: "plan",
-        type: "uint8",
-      },
-    ],
-    name: "payAlpha",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "paySimpleAnnual",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "paySimpleMonth",
-    outputs: [],
-    stateMutability: "payable",
     type: "function",
   },
   {
@@ -952,6 +1014,30 @@ const ABI = [
         internalType: "address",
         name: "",
         type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+    ],
+    name: "seeAlphaPrices",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -1011,19 +1097,19 @@ const ABI = [
         type: "string",
       },
       {
-        internalType: "uint256",
+        internalType: "string",
         name: "",
-        type: "uint256",
+        type: "string",
       },
       {
-        internalType: "uint256",
+        internalType: "string",
         name: "",
-        type: "uint256",
+        type: "string",
       },
       {
-        internalType: "uint256",
+        internalType: "string",
         name: "",
-        type: "uint256",
+        type: "string",
       },
       {
         internalType: "uint8",
@@ -1056,6 +1142,11 @@ const ABI = [
         name: "alpha",
         type: "address",
       },
+      {
+        internalType: "address",
+        name: "reader",
+        type: "address",
+      },
     ],
     name: "seeTraSig2",
     outputs: [
@@ -1065,19 +1156,19 @@ const ABI = [
         type: "string",
       },
       {
-        internalType: "uint256",
+        internalType: "string",
         name: "",
-        type: "uint256",
+        type: "string",
       },
       {
-        internalType: "uint256",
+        internalType: "string",
         name: "",
-        type: "uint256",
+        type: "string",
       },
       {
-        internalType: "uint256",
+        internalType: "string",
         name: "",
-        type: "uint256",
+        type: "string",
       },
       {
         internalType: "uint8",
@@ -1094,6 +1185,153 @@ const ABI = [
         name: "",
         type: "uint256",
       },
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+];
+
+const contract = new web3Instance.eth.Contract(ABI, conAddress);
+
+const ABI2 = [
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "addr",
+        type: "address",
+      },
+    ],
+    name: "accuracyPercentage",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "asset",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "_priceEntry",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "_stopLoss",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "_takeProfit",
+        type: "string",
+      },
+      {
+        internalType: "uint8",
+        name: "_direction",
+        type: "uint8",
+      },
+    ],
+    name: "addTraSignal",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "alphaTradInfoFromAddress",
+    outputs: [
+      {
+        internalType: "string",
+        name: "asset",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "priceEntry",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "stopLoss",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "takeProfit",
+        type: "string",
+      },
+      {
+        internalType: "uint8",
+        name: "direction",
+        type: "uint8",
+      },
+      {
+        internalType: "uint16",
+        name: "traSignalId",
+        type: "uint16",
+      },
+      {
+        internalType: "uint256",
+        name: "postDate",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "deposit",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+    ],
+    name: "getAlphaScore",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
     ],
     stateMutability: "view",
     type: "function",
@@ -1101,32 +1339,227 @@ const ABI = [
   {
     inputs: [
       {
-        internalType: "string",
-        name: "_name",
-        type: "string",
+        internalType: "uint16",
+        name: "index",
+        type: "uint16",
+      },
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
       },
     ],
-    name: "setName",
-    outputs: [],
-    stateMutability: "nonpayable",
+    name: "getTraSignal",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "asset",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "priceEntry",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "stopLoss",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "takeProfit",
+            type: "string",
+          },
+          {
+            internalType: "uint8",
+            name: "direction",
+            type: "uint8",
+          },
+          {
+            internalType: "uint16",
+            name: "traSignalId",
+            type: "uint16",
+          },
+          {
+            internalType: "uint256",
+            name: "postDate",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "alpha",
+            type: "address",
+          },
+        ],
+        internalType: "struct B.traSignal",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint16",
+        name: "index",
+        type: "uint16",
+      },
+    ],
+    name: "getTraSignalGlob",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "asset",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "priceEntry",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "stopLoss",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "takeProfit",
+            type: "string",
+          },
+          {
+            internalType: "uint8",
+            name: "direction",
+            type: "uint8",
+          },
+          {
+            internalType: "uint16",
+            name: "traSignalId",
+            type: "uint16",
+          },
+          {
+            internalType: "uint256",
+            name: "postDate",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "alpha",
+            type: "address",
+          },
+        ],
+        internalType: "struct B.traSignal",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getTradGlobLength",
+    outputs: [
+      {
+        internalType: "uint16",
+        name: "",
+        type: "uint16",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "maxLengthTrad",
+    outputs: [
+      {
+        internalType: "uint16",
+        name: "",
+        type: "uint16",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+    ],
+    name: "traSignalAlphaLength",
+    outputs: [
+      {
+        internalType: "uint16",
+        name: "",
+        type: "uint16",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
     inputs: [
       {
         internalType: "uint256",
-        name: "plan",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "price",
+        name: "",
         type: "uint256",
       },
     ],
-    name: "setPriceAlphaPlans",
-    outputs: [],
-    stateMutability: "nonpayable",
+    name: "traSignalsGlob",
+    outputs: [
+      {
+        internalType: "string",
+        name: "asset",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "priceEntry",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "stopLoss",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "takeProfit",
+        type: "string",
+      },
+      {
+        internalType: "uint8",
+        name: "direction",
+        type: "uint8",
+      },
+      {
+        internalType: "uint16",
+        name: "traSignalId",
+        type: "uint16",
+      },
+      {
+        internalType: "uint256",
+        name: "postDate",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -1154,7 +1587,7 @@ const ABI = [
   },
 ];
 
-const contract = new web3Instance.eth.Contract(ABI, conAddress);
+const contract2 = new web3Instance.eth.Contract(ABI2, conAddress2);
 
 var varWidth = "30vw";
 var varHeight = 350;
