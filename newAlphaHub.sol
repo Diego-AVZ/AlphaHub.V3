@@ -244,6 +244,10 @@ contract A {
         }
     }
 
+function seeAlphaPrices(address alpha)public view returns(uint, uint){
+    return(alphaMonthlyPrice[alpha], alphaAnnualPrice[alpha]);
+}
+
     function canSeeThisAlpha(address user, address alpha) public view returns(bool){
         for(uint16 i = 0; i < followers[alpha].length; i++){
             if(user == followers[alpha][i].follower){
