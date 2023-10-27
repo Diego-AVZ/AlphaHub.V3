@@ -62,12 +62,12 @@ body{
     color: rgb(255 255 255 / 90%);
     font-family: sans-serif;
     font-size: 1.4vw;
-    background: linear-gradient(39deg, rgba(13, 44, 101, 0.50), rgb(0, 41, 191, 0.50), rgb(46, 128, 255, 0.50), rgb(0, 41, 191, 0.50), rgb(10, 2, 95, 0.50), rgba(2, 0, 24, 0.5));
+    background: linear-gradient(39deg, rgba(13, 44, 101, 0.9), rgb(0, 41, 191, 0.9), rgb(46, 128, 255, 0.9), rgb(0, 41, 191, 0.90), rgb(10, 2, 95, 0.90), rgba(2, 0, 24, 0.9));
     text-align: center;
     justify-content: center;
     align-items: center;
     border-radius: 1vw;
-    top: 50%;
+    top: 70%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 30vw;
@@ -188,7 +188,7 @@ body{
 }
 
 #input1 {
-    margin-top: 4vh;
+    margin-top: 10vh;
     left: 40%;
     transform: translateX(-50%);
     
@@ -205,7 +205,7 @@ body{
     font-size: 1.3vw;
     width: 6vw;
     height: 4vh;
-    margin-top: 4vh;
+    margin-top: 10vh;
     margin-left: 21.7vw;
     transform: translateX(-50%);
     box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
@@ -217,7 +217,7 @@ body{
     font-size: 1.2vw;
     font-family: sans-serif;
     margin-top: 6vh;
-    margin-left: 3.5vw;
+    margin-left: 3vw;
     color:rgb(255, 255, 255);
     text-shadow: 0vw 0vw 0.2vw rgb(77, 141, 237);
 }
@@ -343,6 +343,8 @@ body{
    border-style: none;
    border-radius: 0vw 1vw 1vw 0vw;
    box-shadow: inset 0vw 0vw 1vw rgb(0,0,0);
+   font-size: 1.2vw;
+   font-weight: 200;
 } #B:hover{cursor: pointer; width: 6vw; transition: ease, 0.5s;}
 
 #S{
@@ -357,6 +359,8 @@ body{
    border-style: none;
    border-radius: 0vw 1vw 1vw 0vw;
    box-shadow: inset 0vw 0vw 1vw rgb(0,0,0);
+   font-size: 1.2vw;
+   font-weight: 200;
 } #S:hover{cursor: pointer; width: 6.5vw; transition: ease, 0.5s;}
 
 #G{
@@ -371,6 +375,8 @@ body{
    border-style: none;
    border-radius: 0vw 1vw 1vw 0vw;
    box-shadow: inset 0vw 0vw 1vw rgb(0,0,0);
+   font-size: 1.2vw;
+   font-weight: 200;
 } #G:hover{cursor: pointer; width: 7vw; transition: ease, 0.5s;}
 
 #L{
@@ -385,6 +391,8 @@ body{
    border-style: none;
    border-radius: 0vw 1vw 1vw 0vw;
    box-shadow: inset 0vw 0vw 0.2vw rgb(0,0,0);
+   font-size: 1.2vw;
+   font-weight: 200;
 
 }#L:hover{cursor: pointer; width: 7.5vw; transition: ease, 0.5s;}
 
@@ -416,4 +424,85 @@ body{
    border-radius: 2vw;
    box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
    font-size: 1.3vw;
-}#buyB:hover{cursor: pointer; margin-top: 29vh; transition: ease, 0.5s;}
+}#buyB:hover{cursor: pointer; margin-top: 28vh; transition: ease, 0.5s;}
+
+#alphaName {
+    position: absolute;
+    margin-top: 9.5vh;
+    margin-left: 4vw;
+    letter-spacing: 0.1vw;
+    color: rgb(255, 255, 255);
+}
+
+#followers {
+    position: absolute;
+    margin-top: 9.5vh;
+    margin-left: 16vw;
+    color:white;
+}
+
+#signals {
+    position: absolute;
+    margin-top: 9.5vh;
+    margin-left: 23vw;
+    color:white;
+}
+
+#s {
+    position: absolute;
+    margin-top: 13vh;
+    margin-left: 22.3vw;
+    font-size: 1vw;
+}
+
+#f {
+    position: absolute;
+    margin-top: 13vh;
+    margin-left: 14.8vw;
+    font-size: 1vw;
+}
+
+#alphaMonPrice {
+    position: absolute;
+    margin-top: 19vh;
+    margin-left: 5vw;
+    width: 8vw;
+   height: 4vh; 
+   color: white;
+   text-shadow: 0vw 0vw 0.4vw rgb(0,0,0);
+   background: linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgba(22, 99, 200, 0.3), rgb(10, 2, 95, 0.3));
+   border-style: none;
+   border-radius: 2vw;
+   box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
+   font-size: 1.2vw;
+
+}
+#alphaAnnPrice {
+    position: absolute;
+    margin-top: 19vh;
+    margin-left: 14vw;
+    width: 8vw;
+   height: 4vh; 
+   color: white;
+   text-shadow: 0vw 0vw 0.4vw rgb(0,0,0);
+   background: linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgba(22, 99, 200, 0.3), rgb(10, 2, 95, 0.3));
+   border-style: none;
+   border-radius: 2vw;
+   box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
+   font-size: 1.2vw;
+}
+
+#a {
+    position: absolute;
+    margin-top: 23.5vh;
+    margin-left: 16.5vw;
+    font-size: 1vw;
+}
+
+#m {
+    position: absolute;
+    margin-top: 23.5vh;
+    margin-left: 7.5vw;
+    font-size: 1vw;
+}
+
