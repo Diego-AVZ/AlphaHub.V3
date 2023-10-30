@@ -647,3 +647,85 @@ namBut.addEventListener("click", async()=>{
         divAS.style.display = "block";
     } catch(error){console.log("error searching name" + error)}
 })
+
+var zoneBut = document.getElementById("zoneBut");
+var plans = document.getElementById("plans");
+var beta = document.getElementById("beta");
+var alpha = document.getElementById("alpha");
+var myZone = document.getElementById("myZone");
+var search = document.getElementById("search");
+var tools = document.getElementById("tools");
+var wt = document.getElementById("toolsWindow");
+var tw = document.getElementById("toolsWindowText");
+var tw1 = document.getElementById("windowTool1");
+var tw2 = document.getElementById("windowTool2");
+var tw3 = document.getElementById("windowTool3");
+var tw4 = document.getElementById("windowTool4");
+var tw0 = document.getElementById("toolsWindow");
+
+zoneBut.addEventListener("click", function(){
+  plans.style.display = "none";
+  beta.style.display = "none";
+  alpha.style.display = "none";
+  myZone.style.display = "none";
+  tools.style.display = "block";
+  wt.style.display = "block";
+  search.style.marginTop = "15vh";
+  search.style.marginLeft = "5vw";
+
+})
+
+var varWidth = "30vw";
+var varHeight = 350;
+
+new TradingView.widget({
+  width: varWidth,
+  height: varHeight,
+  symbol: "BINANCE:BTCUSDT",
+  interval: "D",
+  timezone: "Etc/UTC",
+  theme: "dark",
+  style: "1",
+  locale: "en",
+  toolbar_bg: "#f1f3f6",
+  enable_publishing: false,
+  hide_top_toolbar: false,
+  save_image: false,
+  container_id: "windowTool1",
+});
+
+function cmc() {
+  tw.innerText = "";
+  tw1.style.display = "none";
+  tw2.style.display = "block";
+  tw3.style.display = "none";
+  tw4.style.display = "none";
+  tw0.style.display = "block";
+}
+
+function tv() {
+  tw.innerText = "";
+  tw1.style.display = "block";
+  tw2.style.display = "none";
+  tw3.style.display = "none";
+  tw4.style.display = "none";
+  tw0.style.display = "block";
+}
+
+function uni() {
+  tw.innerText = "";
+  tw1.style.display = "none";
+  tw2.style.display = "none";
+  tw3.style.display = "block";
+  tw4.style.display = "none";
+  tw0.style.display = "block";
+}
+
+function mtry() {
+  tw.innerText = "";
+  tw1.style.display = "none";
+  tw2.style.display = "none";
+  tw3.style.display = "none";
+  tw4.style.display = "block";
+  tw0.style.display = "block";
+}
