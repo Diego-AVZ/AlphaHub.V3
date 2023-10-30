@@ -277,6 +277,15 @@ contract A {
         return(alphaMonthlyPrice[alpha], alphaAnnualPrice[alpha]);
     }
 
+    function seeAlphasFollowing(address user, uint i) public view returns(address[] memory){
+        require(i < imFollowing[user].lenght);
+        return(imFollowing[user][i]);
+    }
+
+    function seeImFollowingListLen(address user) public view returns(uint){
+        return(imFollowing[user].lenght);
+    }
+
     function canSeeThisAlpha(address user, address alpha) public view returns(bool){
         for(uint16 i = 0; i < followers[alpha].length; i++){
             if(user == followers[alpha][i].follower){
