@@ -194,7 +194,7 @@ contract A {
         monAnnu[msg.sender] = 1; 
         hasPay = true;
         canValidate = true;
-        referrer.transfer(msg.value/33);
+        payable(referrer).transfer(msg.value/33);
     }
 
     function paySimpleAnnual() public payable {
@@ -205,7 +205,7 @@ contract A {
         canValidate = true;
     }
 
-    uint discountSimpleAnn = simplePlanAnn/20;
+    uint discountSimpleAnn = simplePlanAnnu/20;
 
     function paySimpleAnnualRefDiscount(address referrer) public payable {
         require(msg.value == simplePlanAnnu - discountSimpleAnn);
@@ -213,14 +213,14 @@ contract A {
         monAnnu[msg.sender] = 2; 
         hasPay = true;
         canValidate = true;
-        referrer.transfer(msg.value/33);
+        payable(referrer).transfer(msg.value/33);
     }
 
-    function seePrices() public returns(uint, uint){
+    function seePrices() public view returns(uint, uint){
         return(simplePlanMon, simplePlanAnnu);
     }
 
-    function seeDiscPrices() public returns(uint, uint){
+    function seeDiscPrices() public view returns(uint, uint){
         uint discPriceMon = simplePlanMon - discountSimpleMon;
         uint discPriceAnn = simplePlanMon - discountSimpleMon;
         return(discPriceMon, discPriceAnn);
@@ -277,13 +277,13 @@ contract A {
         return(alphaMonthlyPrice[alpha], alphaAnnualPrice[alpha]);
     }
 
-    function seeAlphasFollowing(address user, uint i) public view returns(address[] memory){
-        require(i < imFollowing[user].lenght);
+    function seeAlphasFollowing(address user, uint i) public view returns(address){
+        require(i < imFollowing[user].length);
         return(imFollowing[user][i]);
     }
 
     function seeImFollowingListLen(address user) public view returns(uint){
-        return(imFollowing[user].lenght);
+        return(imFollowing[user].length);
     }
 
     function canSeeThisAlpha(address user, address alpha) public view returns(bool){
