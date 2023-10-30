@@ -117,7 +117,7 @@ body{
 #beta {
     position: absolute;
     width: 28vw;
-    height: 30vh;
+    height: 16vh;
     margin-top: 16vh;
     margin-left: 2.5vw;
     color: rgb(140, 140, 140);
@@ -132,8 +132,8 @@ body{
 #plans {
     position: absolute;
     width: 28vw;
-    height: 35vh;
-    margin-top: 54vh;
+    height: 48vh;
+    margin-top: 40vh;
     margin-left: 2.5vw;
     color: rgb(140, 140, 140);
     background-color: #14141440;
@@ -359,64 +359,64 @@ body{
    height: 5vh; 
    color: white;
    text-shadow: 0vw 0vw 0.4vw rgb(0,0,0);
-   margin-top: 4.5vh;
-   left: 0;
+   top: 0;
+   margin-left: 3.5vw;
    background: linear-gradient(20deg, rgb(7, 49, 100), rgb(117, 107, 211), rgb(34, 32, 60),rgb(80, 82, 165));
    border-style: none;
-   border-radius: 0vw 1vw 1vw 0vw;
+   border-radius: 0vw 0vw 0.5vw 0.5vw;
    box-shadow: inset 0vw 0vw 1vw rgb(0,0,0);
    font-size: 1.2vw;
    font-weight: 200;
-} #B:hover{cursor: pointer; width: 6vw; transition: ease, 0.5s;}
+} #B:hover{cursor: pointer; height: 6vh; transition: ease, 0.5s;}
 
 #S{
    position: absolute;
-   width: 5.5vw;
+   width: 5vw;
    height: 5vh; 
    color: rgb(255, 255, 255);
    text-shadow: 0vw 0vw 0.2vw rgb(0, 0, 0);
-   margin-top: 11.5vh;
-   left: 0;
+   top: 0;
+   margin-left: 9vw;
    background: linear-gradient(25deg, rgb(83, 83, 83),  rgba(207, 205, 205, 0.744),rgb(51, 51, 51), rgb(79, 79, 79));
    border-style: none;
-   border-radius: 0vw 1vw 1vw 0vw;
+   border-radius: 0vw 0vw 0.5vw 0.5vw;
    box-shadow: inset 0vw 0vw 1vw rgb(0,0,0);
    font-size: 1.2vw;
    font-weight: 200;
-} #S:hover{cursor: pointer; width: 6.5vw; transition: ease, 0.5s;}
+} #S:hover{cursor: pointer;height: 6vh; transition: ease, 0.5s;}
 
 #G{
    position: absolute;
-   width: 6vw;
+   width: 5vw;
    height: 5vh; 
    color: white;
    text-shadow: 0vw 0vw 0.5vw rgb(0,0,0);
-   margin-top: 18.5vh;
-   left: 0;
+   top: 0;
+   margin-left: 14.5vw;
    background: linear-gradient(25deg, rgb(164, 110, 2), rgb(227, 164, 28), rgb(108, 72, 0), rgb(231, 177, 0));
    border-style: none;
-   border-radius: 0vw 1vw 1vw 0vw;
+   border-radius: 0vw 0vw 0.5vw 0.5vw;
    box-shadow: inset 0vw 0vw 1vw rgb(0,0,0);
    font-size: 1.2vw;
    font-weight: 200;
-} #G:hover{cursor: pointer; width: 7vw; transition: ease, 0.5s;}
+} #G:hover{cursor: pointer; height: 6vh; transition: ease, 0.5s;}
 
 #L{
    position: absolute;
-   width: 6.5vw;
-   height: 5vh; 
+   width: 5vw;
+   height: 5vh;
    color: white;
    text-shadow: 0vw 0vw 0.4vw rgb(0,0,0);
-   margin-top: 25.5vh;
-   left: 0;
+   top: 0;
+   margin-left: 20vw;
    background: linear-gradient(20deg, rgb(2, 178, 81), rgb(0, 65, 63),rgb(0,0,0), rgb(0, 69, 33));
    border-style: none;
-   border-radius: 0vw 1vw 1vw 0vw;
+   border-radius: 0vw 0vw 0.5vw 0.5vw;
    box-shadow: inset 0vw 0vw 0.2vw rgb(0,0,0);
-   font-size: 1.2vw;
+   font-size: 1.vw;
    font-weight: 200;
 
-}#L:hover{cursor: pointer; width: 7.5vw; transition: ease, 0.5s;}
+}#L:hover{cursor: pointer; height: 6vh; transition: ease, 0.5s;}
 
 #buy {
    position: absolute;
@@ -424,29 +424,31 @@ body{
    height: 5vh; 
    color: white;
    text-shadow: 0vw 0vw 0.4vw rgb(0,0,0);
-   margin-top: 29.5vh;
-   margin-left: 8.5vw;
+   margin-top: 42vh;
+   margin-left: 4vw;
    background: linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgba(22, 99, 200, 0.3), rgb(10, 2, 95, 0.3));
    border-style: none;
-   border-radius: 2vw;
+   border-radius: 0vw 0vw 0.6vw 0.6vw;
    box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
    font-size: 1.3vw;
-}#buy:hover{cursor: pointer; margin-top: 29vh; transition: ease, 0.5s;}
+   z-index: 3;
+}#buy:hover{cursor: pointer; border-radius: 0.6vw; height: 10vh; margin-top: 36vh; background: linear-gradient(0deg, rgb(0, 41, 191), rgba(7, 29, 142), rgba(2, 33, 146), rgb(10, 2, 95)); transition: ease, 0.5s;}
 
 #buyB {
    position: absolute;
    width: 9vw;
-   height: 6vh; 
+   height: 5vh; 
    color: white;
    text-shadow: 0vw 0vw 0.4vw rgb(0,0,0);
-   margin-top: 28.5vh;
-   margin-left: 18.5vw;
+   margin-top: 42vh;
+   margin-left: 14.5vw;
    background: linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgba(7, 29, 142, 0.3), rgba(2, 33, 146, 0.525), rgb(10, 2, 95, 0.3));
    border-style: none;
-   border-radius: 2vw;
+   border-radius: 0vw 0vw 0.6vw 0.6vw;
    box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
    font-size: 1.3vw;
-}#buyB:hover{cursor: pointer; margin-top: 28vh; transition: ease, 0.5s;}
+   z-index: 3;
+}#buyB:hover{cursor: pointer; border-radius: 0.6vw; height: 10vh; margin-top: 36vh; background: linear-gradient(0deg, rgb(0, 41, 191), rgba(7, 29, 142), rgba(2, 33, 146), rgb(10, 2, 95)); transition: ease, 0.5s;}
 
 #alphaName {
     position: absolute;
@@ -533,3 +535,190 @@ body{
     font-size: 1vw;
 }
 
+.planDes {
+    position: absolute;
+    text-align: center;
+    margin-top: 8vh;
+    width: 18vw;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    letter-spacing: 0.1vw;
+}
+
+#refCodeIn{
+    position: absolute;
+    margin-top: 23.7vh;
+    width: 10vw;
+    border-radius: 0.6vw 0.6vw 0vw 0vw;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.1vw;
+} #refCodeIn:focus {
+    outline: none; 
+}
+
+#apply {
+    position: absolute;
+    background: linear-gradient(0deg, rgb(0, 41, 191, 0.2), rgb(46, 81, 255, 0.2), rgb(0, 41, 191, 0.2), rgb(10, 2, 95, 0.2));
+    color: white;
+    text-shadow: 0vw 0vw 0.25vw rgb(0,0,0);
+    margin-top: 27.5vh;
+    border-style: none;
+    width: 10.2vw;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
+    border-radius: 0vw 0vw 0.6vw 0.6vw;
+} #apply:hover{cursor: pointer; letter-spacing: 0.05vw; height: 3.4vh; transition: ease, 1s; }
+
+.moreI {
+    position: absolute;
+    display: flex;
+    color: rgba(255, 255, 255, 0.707);
+    align-items: center;
+    padding-left: 0.9vw;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 17vh;
+    text-decoration: none;
+    border-color: rgba(255, 255, 255, 0.664);
+    border-style: solid;
+    height: 3.5vh;
+    width: 5vw;
+    border-radius: 1vw;
+    border-width: 0.1vw;
+    font-size: 1vw;
+} .moreI:hover{letter-spacing: 0.1vw; width: 6vw; transition: ease, 1s;}
+
+.monPrice{
+    position: absolute;
+    display: flex;
+    margin-top: 36vh;
+    margin-left: 4.05vw;
+    color: white;
+    font-family: monospace;
+    border-color: rgba(255, 255, 255, 0.664);
+    border-style: solid;
+    border-bottom-style: none;
+    width: 7.2vw;
+    height: 3vh;
+    text-align: center;
+    align-items: center;
+    padding-bottom: 2vh;
+    padding-top: 1vh;
+    padding-left: 1.65vw;
+    border-radius: 0.5vw 0.5vw 0vw 0vw;
+    border-width: 0.1vw;
+    z-index: 2;
+}
+
+.annPrice{
+    position: absolute;
+    display: flex;
+    margin-top: 36vh;
+    margin-left: 14.55vw;
+    color: white;
+    font-family: monospace;
+    border-color: rgba(255, 255, 255, 0.664);
+    border-style: solid;
+    border-bottom-style: none;
+    width: 8.75vw;
+    height: 3vh;
+    text-align: center;
+    align-items: center;
+    padding-bottom: 2vh;
+    padding-top: 1vh;
+    border-radius: 0.5vw 0.5vw 0vw 0vw;
+    border-width: 0.1vw;
+    z-index: 2;
+}
+
+#simpleMonPrice {
+    position: absolute;
+    right: 2.8vw;
+    max-width: 5.7vw;
+    overflow: hidden;
+}
+#simpleAnnPrice {
+    position: absolute;
+    right: 2.8vw;
+    max-width: 5.7vw;
+    overflow: hidden;
+}
+
+
+.eth1{
+    position: absolute;
+    right: 0.5vw;
+}
+
+#tools {
+    position: absolute;
+    display: none;
+    width: 3vw;
+    height: 80vh;
+    margin-top: 15vh;
+    left: 2vw;
+    background-color: #2d2d2e3d;
+    border-radius: 0.5vw;
+    z-index: 2;
+    color: white;
+} #tools:hover{background-color: rgba(91, 91, 92, 0.239); box-shadow: inset 0vw 0vw 0.5vw rgb(83 83 83);}
+
+.toolsImg{
+    width: 2vw;
+    margin-top: 3vh;
+    margin-left: 0.4vw;
+    border-radius: 1vw;
+    box-shadow: 0vw 0vw 0.5vw rgb(0, 0, 0);
+} .toolsImg:hover{cursor: pointer; box-shadow: 0vw 0vw 0.2vw rgb(74, 74, 74);}
+
+#toolsWindow{
+    position: absolute;
+    display: none;
+    width: 35vw;
+    height: 50vh;
+    margin-top: 45vh;
+    left: 5.5vw;
+    background-color: #19191971;
+    border-radius: 0.5vw;
+    color: white;
+    z-index: 2;
+    box-shadow: inset 0vw 0vw 0.5vw rgba(83, 83, 83, 0.818);
+}
+
+#toolsWindowText{
+    position: absolute;
+    display: block;
+    font-size: 3vw;
+    font-weight: 700;
+}
+
+#windowTool1{
+    right: 0.9vw;
+    z-index: 200;
+}
+
+#windowTool3{
+    position: absolute;
+    margin-left: 0vw;
+    margin-top: -1vh;
+    overflow-x: hidden;
+    width: 35vw; 
+    height: 49vh;
+    z-index: 200;
+
+
+}
+
+#windowTool4{
+    position: absolute;
+    margin-left: 0vw;
+    margin-top: -1vh;
+    overflow-x: hidden;
+    width: 35vw; 
+    height: 49vh;
+    z-index: 200;
+
+}
