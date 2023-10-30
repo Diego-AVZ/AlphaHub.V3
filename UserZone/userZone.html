@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AlphaHub - User Zone</title>
+    <title>AlphaBase - User Zone</title>
     <link rel="stylesheet" href="uZone.css">
     <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
 </head>
 <body>
 
     <div id="header">
-        <img src="logoAlphaHub.png" id="logo">
-        <p id="title">AlphaHub</p>
+        <img src="logoAlphaBase.png" id="logo">
+        <p id="title">AlphaBase</p>
 
         <button id="wallet">Connect Wallet</button>
     </div>
@@ -23,7 +23,6 @@
     </div>
 
     <div id="userZoneDiv">
-
     </div>
 
     <div id="beta">
@@ -31,8 +30,8 @@
     </div>
 
     <div id="alpha">
-        <img src="logoAlphaHub.png" id="logo2">
-        AlphaHub <br> Platform
+        <img src="logoAlphaBase.png" id="logo2">
+        AlphaBase <br> Platform
         <button id="launch">Launch App</button>
     </div>
 
@@ -46,13 +45,24 @@
         <button id="buyB">Buy Annual</button>
 
         <div id="simple" style="display: block;">
-            Simple
-            <p></p>
+            <p class="planDes">Daily updates in Trading, DeFi and Onchain Signals </p>
+            <input type="text" class="input" id="refCodeIn" placeholder="write referral code">
+            <button id="apply">Apply code</button>
+            <div class="monPrice">
+                <p id="simpleMonPrice" >0.05</p>
+                <p class="eth1" >ETH</p>
+            </div>
+            <div class="annPrice">
+                <p id="simpleAnnPrice" >0.5</p>
+                <p class="eth1">ETH</p>
+            </div>
+            <a href="google.es" class="moreI"><p>More Info</p></a>
         </div>
         <div id="silver" style="display: none;">
             silver
+            
         </div>
-        <div id="glod" style="display: none;">
+        <div id="gold" style="display: none;">
              golden
         </div>
         <div id="simple" style="display: none;">
@@ -91,6 +101,35 @@
         </div>
     </div>
 
+    <div id="tools">
+            <p style="rotate:90deg;">TOOLS</p>
+            <img class="toolsImg" src="https://avatars.githubusercontent.com/u/7644688?s=280&v=4" title="TradingView" onclick="tv()">
+            <img class="toolsImg" src="https://seeklogo.com/images/C/coinmarketcap-logo-064D167A0E-seeklogo.com.png" title="CoinMarketCap" onclick="cmc()">
+            <img class="toolsImg" src="https://media.licdn.com/dms/image/C4D0BAQFqz5c0l6oFVA/company-logo_200_200/0/1677857096090?e=2147483647&v=beta&t=nHTM0osFds9sH2tf5AIz9PP6HrUDr1hSgd-7mc3kAH8" title="Metary" onclick="mtry()">
+            <img class="toolsImg" src="https://cryptologos.cc/logos/uniswap-uni-logo.png" title="Uniswap" onclick="uni()">
+            <img class="toolsImg" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9_ULrNHpmMkne1N93s6N_4ZDM8-QT1TcnomfzuxHUhjoLbWR113K7UWS3F5XQuGE5U9Q&usqp=CAU" title="Etherscan">
+            <img class="toolsImg" src="https://img.api.cryptorank.io/coins/arkham1688987999264.png" title="Arkham" onclick="ark()">  
+    </div>
+
+    <div id="toolsWindow">
+
+            <p id="toolsWindowText">TOOLS</p>
+            <div class="windowTool" id="windowTool1"  style="display: none;">               
+            </div>
+            <div id="windowTool2" class="windowTool" style="display: none; margin-top: 10vh; right: 1vw;">
+                <div id="coinmarketcap-widget-coin-price-block" coins="1,1027,1839,6636,5426,1975" currency="USD" theme="dark" transparent="true" show-symbol-logo="true"></div>
+            </div>
+            <div class="windowTool">
+                <iframe style="display: none;" src="https://app.uniswap.org/" id="windowTool3" frameborder="0"></iframe>
+            </div>
+            <div class="windowTool">
+                <iframe style="display: none;" src="https://metary.org/" id="windowTool4" frameborder="0"></iframe>
+            </div> 
+            
+        </div>
+    
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script type="text/javascript" src="https://files.coinmarketcap.com/static/widget/coinPriceBlock.js"></script>
     <script src="uZone.js"></script>
     
 
