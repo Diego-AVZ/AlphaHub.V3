@@ -186,12 +186,34 @@ contract A {
         canValidate = true;
     }
 
+    uint discountSimpleMon = simplePlanMon/20;
+
+    function paySimpleMonthRefDiscount(address referrer) public payable {
+        require(msg.value == simplePlanMon - discountSimpleMon);
+        lastPay[msg.sender] = block.timestamp;
+        monAnnu[msg.sender] = 1; 
+        hasPay = true;
+        canValidate = true;
+        referrer.transfer(msg.value/33);
+    }
+
     function paySimpleAnnual() public payable {
         require(msg.value == simplePlanAnnu);
         lastPay[msg.sender] = block.timestamp;
         monAnnu[msg.sender] = 2; 
         hasPay = true;
         canValidate = true;
+    }
+
+    uint discountSimpleAnn = simplePlanAnn/20;
+
+    function paySimpleAnnualRefDiscount(address referrer) public payable {
+        require(msg.value == simplePlanAnnu - discountSimpleAnn);
+        lastPay[msg.sender] = block.timestamp;
+        monAnnu[msg.sender] = 2; 
+        hasPay = true;
+        canValidate = true;
+        referrer.transfer(msg.value/33);
     }
 
     function seeLastPay(address user) public view returns(uint){
