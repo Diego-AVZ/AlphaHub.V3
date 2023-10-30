@@ -216,6 +216,16 @@ contract A {
         referrer.transfer(msg.value/33);
     }
 
+    function seePrices() public returns(uint, uint){
+        return(simplePlanMon, simplePlanAnnu);
+    }
+
+    function seeDiscPrices() public returns(uint, uint){
+        uint discPriceMon = simplePlanMon - discountSimpleMon;
+        uint discPriceAnn = simplePlanMon - discountSimpleMon;
+        return(discPriceMon, discPriceAnn);
+    }
+
     function seeLastPay(address user) public view returns(uint){
         return(lastPay[user]);
     }
