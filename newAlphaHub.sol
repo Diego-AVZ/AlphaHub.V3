@@ -72,6 +72,7 @@ contract A {
     }
 
 
+
     /////////////
     B bC = B(b);
     function seeTraSig(uint16 index) public view returns(string memory, string memory, string memory, string memory, uint8, uint16, uint256) {
@@ -258,6 +259,10 @@ contract A {
         }
         return(false);
     } 
+
+    function seeTotalValidatorScore(address user) public view returns(uint){
+        return(bC.seeValidatorScore1(user)); //+ bC.seeValidatorScore2(user) + ... + ...
+    }
 
 }
 
