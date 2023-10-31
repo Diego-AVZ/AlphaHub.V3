@@ -67,16 +67,8 @@ contract A {
 
     mapping(address => uint) public totalAlphaScore;
 
-    /*function getTotalAlphaScore(address alpha) public{
-        totalAlphaScore[alpha] = bC.getAlphaScore1(alpha); //+ bC.getAlphaScore2(alpha) + ... + ...
-    }
-
     function seeTotalAlphaScore(address alpha) public view returns(uint){
-        return(totalAlphaScore[alpha]);
-    }*/
-
-    function seeTotalAlphaScore(address alpha) public view returns(uint){
-        return(bC.getAlphaScore1(alpha) ); //+ bC.getAlphaScore2(alpha) + ... + ...
+        return(bC.getAlphaScore1(alpha)); //+ bC.getAlphaScore2(alpha) + ... + ...
     }
 
 
