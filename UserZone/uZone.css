@@ -187,13 +187,22 @@ body{
     margin-top: 64vh;
     margin-left: 66.5vw;
     color: rgb(140, 140, 140);
-    background-color: #14141440;
-    box-shadow: inset 0vw 0vw 1vw rgb(40 40 40 / 77%);
+    background-color: #111111;
+    box-shadow: inset 0vw 0vw 0.5vw rgba(83, 83, 83, 0.818);
     border-radius: 0.5vw;
     padding: 1vw;
     z-index: 2;
     font-size: 1.3vw;
 }
+
+#out {
+    position: absolute;
+    display: none;
+    right: 0.5vw;
+    top: 1vh;
+    width: 2vw;
+    opacity: 60%;
+} #out:hover{opacity: 100%; cursor:pointer; transition: ease,0.5s;}
 
 .input {
     position: absolute;
@@ -213,7 +222,6 @@ body{
     margin-top: 10vh;
     left: 40%;
     transform: translateX(-50%);
-    
 }
 
 #searchBut{
@@ -242,6 +250,30 @@ body{
     margin-left: 3vw;
     color:rgb(255, 255, 255);
     text-shadow: 0vw 0vw 0.2vw rgb(77, 141, 237);
+}
+
+#address2 {
+    position: absolute;
+    display: none;
+    font-size: 1.2vw;
+    font-family: sans-serif;
+    margin-top: 15vh;
+    margin-left: 10vw;
+    color:rgb(255, 255, 255);
+    text-shadow: 0vw 0vw 0.2vw rgb(77, 141, 237);
+    z-index: 2;
+}
+
+#valPoints {
+    position: absolute;
+    display: block;
+    font-size: 1.2vw;
+    font-family: sans-serif;
+    margin-top: 19vh;
+    margin-left: 10vw;
+    color:rgb(255, 255, 255);
+    
+    z-index: 2;
 }
 
 #addressText {
@@ -686,6 +718,7 @@ body{
     color: white;
     z-index: 2;
     box-shadow: inset 0vw 0vw 0.5vw rgba(83, 83, 83, 0.818);
+    overflow-y: scroll;
 }
 
 #toolsWindowText{
@@ -697,6 +730,7 @@ body{
 
 #windowTool1{
     right: 0.9vw;
+    margin-top: 2vh;
     z-index: 200;
 }
 
@@ -708,8 +742,6 @@ body{
     width: 35vw; 
     height: 49vh;
     z-index: 200;
-
-
 }
 
 #windowTool4{
@@ -720,5 +752,314 @@ body{
     width: 35vw; 
     height: 49vh;
     z-index: 200;
+
+}
+
+#alphaSignals{
+    position: absolute;
+    right: 17vw;
+    margin-top: 15vh;
+    width: 42vw; 
+    height: 75vh;
+    display: none;
+    background-color: #19191971;
+    border-radius: 0.5vw;
+    color: white;
+    z-index: 2;
+    overflow-y: scroll;
+    box-shadow: inset 0vw 0vw 0.5vw rgba(83, 83, 83, 0.818);
+}
+
+#myAlphas {
+    position: absolute;
+    right: 1.5vw;
+    margin-top: 15vh;
+    width: 15vw; 
+    height: 29vh;
+    display: none;
+    background-color: #19191971;
+    border-radius: 0.5vw;
+    color: white;
+    z-index: 2;
+    box-shadow: inset 0vw 0vw 0.5vw rgba(83, 83, 83, 0.818);
+}
+
+#lupa{
+    position: absolute;
+    display: none;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 3vw;
+    filter: invert(100%);
+} #lupa:hover{cursor: pointer;}
+
+#tradingSigList {
+    display: block;
+    overflow: hidden;
+    direction: ltr;
+}
+
+.signalTrad{
+    background-color: #131313;
+    box-shadow: inset 0vw 0vw 0.5vw rgb(83 83 83);
+    width: 40vw;
+    height: 18.5vh;
+    border-radius: 0.5vw;
+    margin-left: 1vw;
+    margin-top: 1vh;
+    
+} .signalTrad:hover{transition: ease, 1s; box-shadow: inset 0vw 0vw 0.5vw rgb(143, 142, 142);}
+
+.assetS{
+    position: absolute;
+    margin-top: 3vh;
+    margin-left: 4vw;
+    color:#ffffff;
+    font-size: 1vw;
+    
+}
+
+.entryS{
+    position: absolute;
+    margin-top: 7vh;
+    margin-left: 8vw;
+    color:#c5c4c4;
+    font-size: 1vw;
+    background-color: #0000006c;
+    width: auto;
+    text-align: center;
+    padding: 0.5vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    border-radius: 1vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgb(84, 182, 224);
+    text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
+    max-width: 4.5vw;
+    
+}
+.slSlong{
+    position: absolute;
+    margin-top: 12vh;
+    margin-left: 8vw;
+    color:#ffffffd7;
+    font-size: 1vw;
+    background-color: #0000006c;
+    width: auto;
+    text-align: center;
+    padding: 0.5vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    border-radius: 1vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgb(155, 33, 33);
+    max-width: 4.5vw;
+}
+.slSshort{
+    position: absolute;
+    margin-top: 2vh;
+    margin-left: 8vw;
+    color:#ffffffd7;
+    font-size: 1vw;
+    background-color: #0000006c;
+    width: auto;
+    text-align: center;
+    padding: 0.5vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    border-radius: 1vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgb(155, 33, 33);
+    max-width: 4.5vw;
+}
+.tpSlong{
+    position: absolute;
+    margin-top: 2vh;
+    margin-left: 8vw;
+    color:#ffffffdb;
+    font-size: 1vw;
+    background-color: #0000006c;
+    width: auto;
+    text-align: center;
+    padding: 0.5vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    border-radius: 1vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgb(14, 113, 5);
+    max-width: 4.5vw;
+}
+.tpSshort{
+    position: absolute;
+    margin-top: 12vh;
+    margin-left: 8vw;
+    color:#ffffffdb;
+    font-size: 1vw;
+    background-color: #0000006c;
+    width: auto;
+    text-align: center;
+    padding: 0.5vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    border-radius: 1vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgb(14, 113, 5);
+    max-width: 4.5vw;
+}
+
+.dirS{
+    position: absolute;
+    margin-top: 6.8vh;
+    margin-left: 1.8vw;
+    color:#ffffffea;
+    font-size: 1vw;
+    text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
+    
+}
+
+.dolp1{
+    position: absolute;
+    margin-top: 3vh;
+    margin-left: 15vw;
+    color:#ffffffea;
+    font-size: 1vw;
+    text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
+    z-index: 2;
+}
+.dolp2{
+   position: absolute;
+    margin-top: 8vh;
+    margin-left:15vw;
+    color:#ffffffea;
+    font-size: 1vw;
+    text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
+    z-index: 2;
+}
+.dolp3{
+   position: absolute;
+    margin-top: 13vh;
+    margin-left: 15vw;
+    color:#ffffffea;
+    font-size: 1vw;
+    text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
+    z-index: 2;
+}
+
+.assetImg{
+    position: absolute;
+    width: 2vw;
+    margin-top: 2vh;
+    margin-left: 1.5vw;
+}
+
+.date {
+    position: absolute;
+    margin-top: 15.5vh;
+    right: 1.5vw;
+    color:#b5b5b5ea;
+    font-size: 0.8vw;
+    text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
+    z-index: 2;
+    letter-spacing: 0.1vw;
+}
+
+#validate {
+    position: absolute;
+    right: 1.5vw;
+    margin-top: 65.5vh;
+    width: 15vw; 
+    height: 23vh;
+    display: none;
+    background-color: #19191971;
+    border-radius: 0.5vw;
+    color: white;
+    z-index: 3;
+    box-shadow: inset 0vw 0vw 0.5vw rgba(83, 83, 83, 0.818);
+    text-align: center;
+    padding-top: 1.5vh;
+}
+
+#fail {
+    position: absolute;
+    left: 1.2vw;
+    margin-top: 16vh;
+    width: 6vw; 
+    height: 4vh;
+    background-color: #b20a0a71;
+    box-shadow: inset 0vw 0vw 0.5vw rgba(255, 61, 61, 0.818);
+    border-radius: 0.5vw;
+    color: white;
+    font-size: 1.1vw;
+    border-style: none;
+
+}
+
+#succ {
+    position: absolute;
+    right: 1.2vw;
+    margin-top: 16vh;
+    width: 6vw; 
+    height: 4vh;
+    background-color: #076c0071;
+    box-shadow: inset 0vw 0vw 0.5vw rgba(27, 173, 17, 0.818);
+    border-radius: 0.5vw;
+    color: white;
+    border-style: none;
+    font-size: 1.1vw;
+}
+
+#sigId {
+    position: absolute;
+    text-shadow: 0vw 0vw 0.5vw rgb(0, 0, 0);
+    left: 50%;
+    top: 35%;
+    transform: translate(-50%, -50%);
+    width: auto; 
+    height: 4vh;
+    border-style: solid;
+    border-color: #323232;
+    background-color: #1d1d1d;
+    padding-top: 0.8vh;
+    padding-left: 0.5vw;
+    padding-right: 0.5vw;
+    border-radius: 0.3vw;
+    font-size: 1.3vw;
+}
+
+.butAlpha {
+    position: absolute;
+    width: 8vw;
+    height: 6vh;
+    color: white;
+    font-size: 1.2vw;
+    font-weight: 100;
+    border-radius: 0.8vw 0.8vw 0vw 0vw;
+    border-style: none;
+    box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
+    text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
+    opacity: 100%;
+    background: linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));
+    margin-top: 90.8vh; 
+    z-index: 3;
+} .butAlpha:hover{cursor: pointer;}
+
+#alphaTrad{
+    margin-left: 40.5vw;
+    
+}#alphaTrad:hover{background: linear-gradient(0deg, rgb(0, 41, 191, 0.6), rgb(46, 81, 255, 0.6), rgb(0, 41, 191, 0.6), rgb(10, 2, 95, 0.6)); height: 6.4vh; margin-top: 90.5vh; transition: ease, 0.2s;}
+
+#alphaLows{
+    margin-left: 49vw;
+    
+
+} #alphaLows:hover{background: linear-gradient(0deg, rgb(0, 41, 191, 0.6), rgb(46, 81, 255, 0.6), rgb(0, 41, 191, 0.6), rgb(10, 2, 95, 0.6)); height: 6.4vh; margin-top: 90.5vh; transition: ease, 0.2s;}
+
+#alphaOnchain{
+    margin-left: 57.5vw;
+} #alphaOnchain:hover{background: linear-gradient(0deg, rgb(0, 41, 191, 0.6), rgb(46, 81, 255, 0.6), rgb(0, 41, 191, 0.6), rgb(10, 2, 95, 0.6)); height: 6.4vh; margin-top: 90.5vh; transition: ease, 0.2s;}
+
+#alphaICO{
+    margin-left: 66vw;
+} #alphaICO:hover{background: linear-gradient(0deg, rgb(0, 41, 191, 0.6), rgb(46, 81, 255, 0.6), rgb(0, 41, 191, 0.6), rgb(10, 2, 95, 0.6)); height: 6.4vh; margin-top: 90.5vh; transition: ease, 0.2s;}
+
+#butSign {
+    display: none;
+    position: absolute;
 
 }
