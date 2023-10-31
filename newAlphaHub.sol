@@ -65,10 +65,18 @@ contract A {
         return(nameToAddress[_name]);
     } 
 
-    mapping(address => uint) seeAlphaScore;
+    mapping(address => uint) public totalAlphaScore;
 
-    function getAlphaScore(address alpha) public view returns(uint){
-        return(seeAlphaScore[alpha]);
+    /*function getTotalAlphaScore(address alpha) public{
+        totalAlphaScore[alpha] = bC.getAlphaScore1(alpha); //+ bC.getAlphaScore2(alpha) + ... + ...
+    }
+
+    function seeTotalAlphaScore(address alpha) public view returns(uint){
+        return(totalAlphaScore[alpha]);
+    }*/
+
+    function seeTotalAlphaScore(address alpha) public view returns(uint){
+        return(bC.getAlphaScore1(alpha) ); //+ bC.getAlphaScore2(alpha) + ... + ...
     }
 
 
@@ -111,55 +119,12 @@ contract A {
         return(alphaAmountTotalSignals[alpha]);
     }
 
-
     function genNumIndex(address user) public view returns(uint){
         return(uint(keccak256(abi.encodePacked(seeLastPay(user), user)))% bC.getTradGlobLength());
     }
 
     //genera un número con la dirección del usuario y la ultima vez que pagó
 
-
-//_________________________
-    function deposit() public payable{
-
-    }
-    //___________________________
-
-    mapping(address => bool) isValidator;
-
-    modifier onlyValidators(){
-        require(isValidator[msg.sender] == true, "Not validator yet");
-        _;
-    }
-
-    mapping(address => uint) addrPosNum;        // Aciertos
-    mapping(address => uint) addrTotValNum;     // Total de señales valoradas
-                                                // para obtener % de accierto
-
-    function validate(address clickAddress, uint points, uint posNeg) public onlyValidators {
-        require(points <= 2);
-        require(seeAlphaScore[clickAddress] <= 100);
-        uint score = seeAlphaScore[clickAddress];
-        if(posNeg == 0){
-            score = score + points;
-            addrPosNum[clickAddress]++;
-            addrTotValNum[clickAddress]++;
-        } else if(posNeg == 1){
-            score = score - points;
-            addrTotValNum[clickAddress]++;
-        }
-        seeAlphaScore[clickAddress] = score;
-    }
-
-    mapping(address => uint) accuracyPer;
-    
-    function accuracyPercentage(address addr) public returns(uint){
-       if(addrTotValNum[addr] > 0){
-       accuracyPer[addr] = (addrPosNum[addr]*100) / addrTotValNum[addr];
-       uint per = accuracyPer[addr];
-       return(per);
-       } else {return(0);}
-    }
 
     //PAYMENT
 
@@ -260,7 +225,6 @@ contract A {
         payable(alpha).transfer(msg.value-fee);
         payable(AlphaHub).transfer(fee);
         imFollowing[msg.sender].push(alpha);
-        isValidator[msg.sender] = true;
     }
 
     function setPriceAlphaPlans(uint plan, uint price) public {
@@ -321,7 +285,8 @@ contract B {
         a = A(add);
     }
 */
-     struct traSignal {
+
+    struct traSignal {
         string asset;
         string priceEntry;
         string stopLoss;
@@ -330,16 +295,19 @@ contract B {
         uint16 traSignalId;
         uint256 postDate;
         address alpha;
+        string _msg;
+        int success; // if(<0) = fail
+        uint8 timesVal; //número de veces que se ha valorado
     }
 
     uint16 public maxLengthTrad = 100;
     uint16 traSignalNum;
-    traSignal [] traSignals;
+    traSignal [] public traSignals;
     traSignal [] public traSignalsGlob;
     mapping(address => traSignal[]) public alphaTradInfoFromAddress;
     mapping(address => uint16) AmountTradSignals;
 
-    function addTraSignal(string memory asset, string memory _priceEntry, string memory _stopLoss, string memory _takeProfit, uint8 _direction) public {
+    function addTraSignal(string memory asset, string memory _priceEntry, string memory _stopLoss, string memory _takeProfit, uint8 _direction, string memory _msg) public {
         if(traSignalsGlob.length == maxLengthTrad){
             for (uint32 i = 0; i <= traSignalsGlob.length - 1; i++) {
                 traSignalsGlob[i] = traSignalsGlob[i + 1];
@@ -348,7 +316,7 @@ contract B {
         }
         traSignalNum++;
         uint16 _traSignalId  =  traSignalNum;
-        traSignal memory newTraSignal = traSignal(asset, _priceEntry, _stopLoss, _takeProfit, _direction, _traSignalId, block.timestamp, msg.sender);
+        traSignal memory newTraSignal = traSignal(asset, _priceEntry, _stopLoss, _takeProfit, _direction, _traSignalId, block.timestamp, msg.sender, _msg, 0, 0);
         traSignals.push(newTraSignal);
         traSignalsGlob.push(newTraSignal);
         alphaTradInfoFromAddress[msg.sender].push(newTraSignal);
@@ -391,43 +359,87 @@ contract B {
 
     mapping(address => uint) seeAlphaTraScore;
 
-    function getAlphaScore(address alpha) public view returns(uint){
+    function getAlphaScore1(address alpha) public view returns(uint){
         return(seeAlphaTraScore[alpha]);
-    }
-
-    mapping(address => bool) isValidator;
-
-    modifier onlyValidators(){
-        require(isValidator[msg.sender] == true, "Not validator yet");
-        _;
     }
 
     mapping(address => uint) addrPosNum;        // Aciertos
     mapping(address => uint) addrTotValNum;     // Total de señales valoradas
                                                 // para obtener % de accierto
 
-    function validate(address clickAddress, uint points, uint posNeg) public onlyValidators {
-        require(points <= 2);
-        require(seeAlphaTraScore[clickAddress] <= 100);
-        uint score = seeAlphaTraScore[clickAddress];
-        if(posNeg == 0){
-            score = score + points;
-            addrPosNum[clickAddress]++;
-            addrTotValNum[clickAddress]++;
-        } else if(posNeg == 1){
-            score = score - points;
-            addrTotValNum[clickAddress]++;
+    struct valid{
+        address user;
+        uint8 val; //voto a la señal
+    }
+
+    valid[] validList;
+
+    mapping(uint16 => valid[]) tradSigIdToValid;
+
+    mapping(address => uint16) public validatorScore1;
+
+    function validate(uint16 _traSignalId, uint8 posNeg) public {
+        uint i =  findTraSignalIndex(_traSignalId);
+        traSignal storage traGlob = traSignalsGlob[i];
+        valid memory val2 = valid(msg.sender, posNeg);
+        require(traGlob.timesVal < 6 );
+        if(traGlob.timesVal < 5){
+            tradSigIdToValid[_traSignalId].push(val2);
+            if(posNeg == 0 /*good Signal*/){
+                traGlob.success++;
+            }
+            else{
+                traGlob.success--;
+            }
+        } else if(traGlob.timesVal == 5) {
+            tradSigIdToValid[_traSignalId].push(val2);
+            if(posNeg == 0){traGlob.success++;}
+            else{traGlob.success--;}
+            //
+            if(traGlob.success < 0){
+               addrTotValNum[traGlob.alpha]++;
+               seeAlphaTraScore[traGlob.alpha]--;
+               for (uint8 a; a < tradSigIdToValid[_traSignalId].length; a++){
+                    valid storage val3 = tradSigIdToValid[_traSignalId][a];
+                    if(val3.val == 0){
+                        validatorScore1[val3.user]--;
+                    } else {validatorScore1[val3.user]++;}
+                }
+            } else {
+                addrTotValNum[traGlob.alpha]++;
+                addrPosNum[traGlob.alpha]++;
+                seeAlphaTraScore[traGlob.alpha]++;
+                for (uint8 a; a < tradSigIdToValid[_traSignalId].length; a++){
+                    valid storage val3 = tradSigIdToValid[_traSignalId][a];
+                    if(val3.val == 1){
+                        validatorScore1[val3.user]--;
+                    } else {validatorScore1[val3.user]++;}
+                }
+            }
+
         }
-        seeAlphaTraScore[clickAddress] = score;
+    }
+
+    function findTraSignalIndex(uint16 traSignalId) internal view returns (uint) {
+        for (uint i = 0; i < traSignalsGlob.length; i++) {
+            if (traSignalsGlob[i].traSignalId == traSignalId) {
+                return i;
+            }
+        }
+        return traSignals.length; 
+    }
+
+    function seeValidatorScore1(address user) public view returns(uint16) {
+        return(validatorScore1[user]);
     }
 
     mapping(address => uint) accuracyPer;
     
     function accuracyPercentage(address addr) public returns(uint){
        if(addrTotValNum[addr] > 0){
-       accuracyPer[addr] = (addrPosNum[addr]*100) / addrTotValNum[addr];
-       uint per = accuracyPer[addr];
-       return(per);
+            accuracyPer[addr] = (addrPosNum[addr]*100) / addrTotValNum[addr];
+            uint per = accuracyPer[addr];
+            return(per);
        } else {return(0);}
     }
    
@@ -438,7 +450,5 @@ contract B {
     function traSignalAlphaLength(address alpha) public view returns(uint16){
         return(uint16(alphaTradInfoFromAddress[alpha].length));
     }
-
-    function deposit() public payable{}
     
 }
