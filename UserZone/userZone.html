@@ -87,7 +87,8 @@
     <div id="search">
         <input type="text" placeholder="Search an AlphaProv" class="input" id="input1">
         <button id="searchBut">Search</button>
-
+        <img src="https://static.vecteezy.com/system/resources/previews/009/589/474/original/magnifying-icon-magnifying-clipart-transparent-free-png.png" id="lupa" title="Search AlphaProvs">
+        <img src="https://static.vecteezy.com/system/resources/thumbnails/009/344/493/small/x-transparent-free-png.png" id="out">
         <div id="alphaSearch" style="display: none;">
             <p id="alphaName"></p>
             <p id="followers">12</p>
@@ -119,15 +120,42 @@
             <div id="windowTool2" class="windowTool" style="display: none; margin-top: 10vh; right: 1vw;">
                 <div id="coinmarketcap-widget-coin-price-block" coins="1,1027,1839,6636,5426,1975" currency="USD" theme="dark" transparent="true" show-symbol-logo="true"></div>
             </div>
-            <div class="windowTool">
+            <!--<div class="windowTool">
                 <iframe style="display: none;" src="https://app.uniswap.org/" id="windowTool3" frameborder="0"></iframe>
             </div>
             <div class="windowTool">
                 <iframe style="display: none;" src="https://metary.org/" id="windowTool4" frameborder="0"></iframe>
-            </div> 
+            </div> -->
             
         </div>
-    
+
+        <div id="alphaSignals">
+            <div id="tradingSigList" class="list">
+            0 Trading Signals
+            </div>
+        </div>
+
+        <div id="myAlphas">
+            Im following alphas
+        </div>
+
+        <div id="validate">
+            Validate
+            <p id="sigId">id.1234</p>
+            <button id="fail">Fail</button>
+            <button id="succ">Success</button>
+        </div>
+
+        <p id="address2"></p>
+        <p id="valPoints">Validator Points: 25</p>
+
+    <div id="butSign">
+        <button class="butAlpha" id="alphaTrad">Trading</button>
+        <button class="butAlpha" id="alphaOnchain">Onchain</button>
+        <button class="butAlpha" id="alphaICO">Presales</button>
+        <button class="butAlpha" id="alphaLows">LowCaps</button>
+    </div>
+
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <script type="text/javascript" src="https://files.coinmarketcap.com/static/widget/coinPriceBlock.js"></script>
     <script src="uZone.js"></script>
