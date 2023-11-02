@@ -124,6 +124,8 @@ contract A {
     uint simplePlanMon;
     uint simplePlanAnnu;
     bool canValidate; // Solo si es usuario y ha pagado puede validar
+    uint public volume;
+    mapping(uint => uint) ethInContractThisPeriod;
 
     function setSimplePrices(uint mon, uint ann) public {
         simplePlanMon = mon * 1 ether;
@@ -142,6 +144,7 @@ contract A {
         monAnnu[msg.sender] = 1; 
         hasPay = true;
         canValidate = true;
+        volume = volume + msg.value;
     }
 
     uint discountSimpleMon = simplePlanMon/20;
@@ -186,6 +189,28 @@ contract A {
 
     function seeLastPay(address user) public view returns(uint){
         return(lastPay[user]);
+    }
+
+    function withdrawFromAlphaBase(address alpha) public {
+        //la cantidad a retirar dependerá de:   - nº de alphas activos
+                                            //  - nº seguidores 
+                                            //  - AlphaScore
+                                            //  - Señales en los ultimos X días
+                                            //  - calidad/precisión en las señales 
+                                            //  - lo generado en el último periodo "ethInContractThisPeriod"
+                                            // EL ALPHApROV DEBE COBRAR SI HA SIDO ACTIVO EN LOS ULTIMOS 10 DIAS Y SI ES PRECISO Y COMPARTE VALOR.
+        require(isActiveAlpha(alpha));
+        uint amountToSend;
+        uint score = seeTotalAlphaScore(alpha);
+        uint accuTra = bC.accuracyPercentage(alpha);
+
+        // payable(alpha).transfer(amountToSend);
+
+
+    }
+
+    function isActiveAlpha(address alpha) public view returns(bool){
+        if(block.timestamp <= bC.lastPostTra + 10 days && ){}
     }
 
     //MyAlpha Payment Plans
@@ -273,15 +298,24 @@ contract A {
 
 
 contract B {
-/*
-    address public aAdd;
-    A public a;
 
-    constructor(address add) {
-        aAdd = add;
-        a = A(add);
+    constructor(){
+        actualPeriod = block.timestamp;
+        periodNum = 1;
     }
-*/
+
+    uint period = 10 days;
+    uint actualPeriod;
+    uint32 periodNum;
+
+    function seePeriod() public {
+        uint actualDay = block.timestamp;
+        if(actualPeriod + 10days > actualDay) { //Dentro del period
+
+        } else { //actualDay fuera del periodo actual
+            actualPeriod = actualPeriod + 10days;
+        }
+    }
 
     struct traSignal {
         string asset;
@@ -303,6 +337,7 @@ contract B {
     traSignal [] public traSignalsGlob;
     mapping(address => traSignal[]) public alphaTradInfoFromAddress;
     mapping(address => uint16) AmountTradSignals;
+    mapping(address => uint) public lastPostTra;
 
     function addTraSignal(string memory asset, string memory _priceEntry, string memory _stopLoss, string memory _takeProfit, uint8 _direction, string memory _msg) public {
         if(traSignalsGlob.length == maxLengthTrad){
@@ -311,12 +346,15 @@ contract B {
             }
             traSignalsGlob.pop();
         }
+
+        seePeriod()
         traSignalNum++;
         uint16 _traSignalId  =  traSignalNum;
         traSignal memory newTraSignal = traSignal(asset, _priceEntry, _stopLoss, _takeProfit, _direction, _traSignalId, block.timestamp, msg.sender, _msg, 0, 0);
-        traSignals.push(newTraSignal);
+        traSignals.push(newTraSignal); //NOT NECESARY
         traSignalsGlob.push(newTraSignal);
         alphaTradInfoFromAddress[msg.sender].push(newTraSignal);
+        // actualPeriodTraSig[msg.sender].push(newTraSignal);
         AmountTradSignals[msg.sender]++;
         
         uint perAccuracy =  accuracyPercentage(msg.sender);
