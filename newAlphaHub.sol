@@ -18,7 +18,7 @@ contract A {
         return(chatId[alpha]);
     }
 
-    address public b = 0x99669c81BE93c45FB74E4e1e00513c1BA532Bf21;
+    address public b = 0x0fC5025C764cE34df352757e82f7B5c4Df39A836;
 
     //AlphaProv
 
@@ -95,7 +95,7 @@ contract A {
         if (reader == alpha){
             return(traSignalAlpha.asset, traSignalAlpha.priceEntry, traSignalAlpha.stopLoss, traSignalAlpha.takeProfit, traSignalAlpha.direction, traSignalAlpha.traSignalId, traSignalAlpha.postDate, traSignalAlpha.alpha);
         } else {
-            require(canSeeThisAlpha(reader, alpha));
+            require(canSeeThisAlpha(reader, alpha) == true);
             return(traSignalAlpha.asset, traSignalAlpha.priceEntry, traSignalAlpha.stopLoss, traSignalAlpha.takeProfit, traSignalAlpha.direction, traSignalAlpha.traSignalId, traSignalAlpha.postDate, traSignalAlpha.alpha);
         }
     }
@@ -247,11 +247,11 @@ contract A {
         for(uint16 i = 0; i < followers[alpha].length; i++){
             if(user == followers[alpha][i].follower){
                 if(followers[alpha][i].planPaid == 1){
-                    if(block.timestamp > followers[alpha][i].lastAlphaPay + 30 days){
+                    if(block.timestamp < followers[alpha][i].lastAlphaPay + 30 days){
                         return(true);
                     } else {return(false);}
                 } else {
-                    if(block.timestamp > followers[alpha][i].lastAlphaPay + 364 days){
+                    if(block.timestamp < followers[alpha][i].lastAlphaPay + 364 days){
                         return(true);
                     } else {return(false);}
                 }
