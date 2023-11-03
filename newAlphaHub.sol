@@ -198,8 +198,9 @@ contract A {
     }
 
     uint32 constant points = 10000;
-
-    function withdrawFromAlphaBase(address alpha) public {
+    uint timesPaid;
+    function withdrawFromAlphaBase() public{
+        timesPaid++;
         //la cantidad a retirar dependerá de:   - nº de alphas activos
                                             //  - nº seguidores 
                                             //  - AlphaScore
@@ -215,20 +216,26 @@ contract A {
         // payable(alpha).transfer(amountToSend);
 
         uint total = ethInContractThisPeriod[actualPeriod];
+        seeAllActiveAlpha().length;
         uint32 pointsA = points * 70/100; 
         uint32 pointsB = points * 20/100;
         uint32 pointsC = points * 10/100;
 
         uint ethPerPoint = total / points;
 
-        //for(uint16 i = 0; )
+        uint myAlphaScore = seeTotalAlphaScore(msg.sender);
 
-        // activeAlphaProvsThisPeriod
+        uint myPerAlphaScore = myAlphaScore/addAllAlphaScores();
+
+        uint amountA = pointsA * myPerAlphaScore * ethPerPoint;
 
 
+        uint ethToSend = amountA; // +B+C
+        address alpha = msg.sender;
+        payable(alpha).transfer(ethToSend);
     }
 
-    function seeAllActiveAlphaScores() public view returns(address[] memory){
+    function seeAllActiveAlpha() public view returns(address[] memory){
         
         uint lenTra = bC.getActiveAlphaTraLen(); 
         // uint lenLow = aC.getActiveAlphaLowLen(); 
@@ -260,6 +267,21 @@ contract A {
         }*/
 
         return(combined);
+    }
+
+    function seeActiveAlphaScore(uint t) public view returns(uint) {
+        address[] memory activeAlphaAddresses = seeAllActiveAlpha();
+        require(t < activeAlphaAddresses.length);
+        return(seeTotalAlphaScore(activeAlphaAddresses[t]));
+    }
+
+    function addAllAlphaScores() public view returns(uint){
+        address[] memory activeAlphaAddresses = seeAllActiveAlpha();
+        uint totalAlphaActiveScore;
+        for(uint64 i = 0; i < activeAlphaAddresses.length; i++){
+            totalAlphaActiveScore = totalAlphaActiveScore + seeActiveAlphaScore(i);
+        }
+        return totalAlphaActiveScore;
     }
 
     function isActiveAlpha(address alpha) public view returns(bool){
