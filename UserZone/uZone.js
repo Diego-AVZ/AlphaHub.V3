@@ -16,18 +16,17 @@ walletBut.addEventListener("click", async () => {
       console.log(connectedAddress);
       walletBut.innerText = "Connected";
       walletBut.style.paddingLeft = "3vw";
-      walletBut.style.background =
-        "linear-gradient(90deg, rgb(14 116 18), rgb(2, 165, 45), rgba(0, 24, 2, 0.541))";
+      walletBut.style.background = "#076c0071";
+      walletBut.style.width = "6.8vw";
+      walletBut.style.fontSize = "1vw";
+      walletBut.style.marginLeft = "5vw";
+      walletBut.style.boxShadow = "inset 0vw 0vw 0.5vw rgba(27, 173, 17, 0.818)";
+      walletBut.style.height = "5vh";
       msg1.style.display = "none";
       cover.style.display = "none";
-      cover2.style.display = "none";
       showEthAddress();
-      seeName();
-      getAlphaScore();
-      getSignalsNum();
-      seeTraSig2();
-      getTradSignalsNum();
-      /*seeIfIsAlpha();*/
+      seeAlphasImFollowing();
+      getValidatorPoints();
     } catch (error) {
       console.log("ERROR al Conectar MTMSK");
     }
@@ -46,24 +45,22 @@ async function connect() {
       connectedAddress = Accounts[0];
       console.log(connectedAddress);
       walletBut.innerText = "Connected";
-      walletBut.style.paddingLeft = "3vw";
-      walletBut.style.background =
-        "linear-gradient(90deg, rgb(14 116 18), rgb(2, 165, 45), rgba(0, 24, 2, 0.541))";
+      walletBut.style.background = "#076c0071";
+      walletBut.style.width = "6.8vw";
+      walletBut.style.fontSize = "1vw";
+      walletBut.style.marginLeft = "5vw";
+      walletBut.style.boxShadow = "inset 0vw 0vw 0.5vw rgba(27, 173, 17, 0.818)";
+      walletBut.style.height = "5vh";
       msg1.style.display = "none";
       cover.style.display = "none";
-      cover2.style.display = "none";
       showEthAddress();
-      seeName();
-      getAlphaScore();
-      getSignalsNum();
-      seeTraSig2();
-      getTradSignalsNum();
-      /*seeIfIsAlpha();*/
+      seeAlphasImFollowing();
+      getValidatorPoints();
     } catch (error) {
-      console.log("ERROR al Conectar MTMSK");
+      console.log("ERROR al Conectar MTMSK"+ error);
     }
   } else {
-    console.log("MTMSK Not Detected");
+    console.log("MTMSK Not Detected 2" + error);
   }
 }
 
@@ -74,585 +71,13 @@ function showEthAddress() {
   var end = connectedAddress.slice(-4);
 
   document.getElementById("address").innerText = `${start}...${end}`;
+  document.getElementById("address2").innerText = `${start}...${end}`;
 }
 
-//CONNECT CONTRACT
-const conAddress = "0xD55D833dC50631fa0E9F97160c68C2bFE6c9950c";
-const conAddress2 = "0x205aAd0c64A4a0D9b48784Ef0fa91Ada87D57944";
-
-const web3Instance = new Web3(window.ethereum);
-
-var alphaZone = document.getElementById("aphaZoneDiv");
-
-/*const seeIfIsAlpha = async () => {
-    try {
-        var isAlphaBool = await contract.methods.seeAlphaProvsList(connectedAddress).call(); //CREA ESTA FUNCIÓN
-        if(isAlphaBool == true) {
-            alphaZone.style.display = "block";
-        } else {
-            msg2.style.display = "flex";
-        }
-    } catch(error){console.log(error)}
-}*/
-
-var changeNameBut = document.getElementById("changeNameBut");
-var nameInput = document.getElementById("changeName");
-
-changeNameBut.addEventListener("click", async () => {
-  try {
-    var name = nameInput.value.toLowerCase();
-    await contract.methods.setName(name).send({ from: connectedAddress });
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-async function seeName() {
-  var hisName = await contract.methods.seeName(connectedAddress).call();
-  document.getElementById("name").innerHTML = `${hisName.toUpperCase()}`;
-}
-
-async function getAlphaScore() {
-  var hisScore = await contract.methods.getAlphaScore(connectedAddress).call();
-  document.getElementById("score").innerHTML = `${hisScore}`;
-}
-
-var hisSignals;
-async function getSignalsNum() {
-  hisSignals = await contract.methods.getNumSignals(connectedAddress).call();
-  document.getElementById("numSig").innerHTML = `${hisSignals}`;
-}
-
-async function getTradSignalsNum() {
-  try{
-    var hisTraSignals = await contract.methods.getNumTraSignals(connectedAddress).call();
-    document.getElementById("numTradSig").innerHTML = `${hisTraSignals}`;
-  } catch(error){console.log("getTradSignalsNum() ERROR" + error);}
-}
-
-var valueId;
-
-async function seeTraSig2() {
-  var tradingSigList = document.getElementById("tradingSigList");
-  var numSignals = await contract.methods.getNumTraSignals(connectedAddress).call();
-
-  if(numSignals < 50){
-      tradingSigList.innerText = "";
-      for (let i = numSignals - 1; i >= 0; i--) {
-        var traSignal = await contract.methods.seeTraSig2(i, connectedAddress, connectedAddress).call();
-        
-        var signalDiv = document.createElement("div");
-        signalDiv.classList.add("signalTrad");
-
-        signalDiv.setAttribute("data-valor", `${traSignal[2]}`);
-
-        (function (signal) {
-          // ESTA FUNCION PERMITE VALIDAR Y CALIFICAR LAS SEÑALES CON UN CLICK, CLICKANDO. CAMBIA `${traSignal[0]}` por EL ID de la señal o la address del Alpha
-          signal.addEventListener("click", function () {
-            console.log(signal.getAttribute("data-valor"));
-          });
-        })(signalDiv);
-
-
-        var assetP = document.createElement("p");
-        assetP.innerText = `${traSignal[0]}`;
-        assetP.classList.add("assetS");
-
-        if (`${traSignal[0]}` == "BTC" || `${traSignal[0]}` == "btc") {
-          var btcImg = document.createElement("img");
-          btcImg.src = "btc.png";
-          btcImg.classList.add("assetImg");
-          signalDiv.appendChild(btcImg);
-        } else if (`${traSignal[0]}` == "ETH" || `${traSignal[0]}` == "eth") {
-          var ethImg = document.createElement("img");
-          ethImg.src = "eth.png";
-          ethImg.classList.add("assetImg");
-          signalDiv.appendChild(ethImg);
-        } else {
-          var elseImg = document.createElement("img");
-          elseImg.src =
-            "https://image.spreadshirtmedia.net/image-server/v1/compositions/T56A2PA4115PT17X0Y67D157542882W24948H18711/views/1,width=550,height=550,appearanceId=2,backgroundColor=000000,noPt=true/signo-de-interrogacion-planeado-hae-simbolo-signo-regalo-bolsa-de-tela.jpg";
-          elseImg.classList.add("assetImg");
-          signalDiv.appendChild(elseImg);
-          elseImg.style.borderRadius ="2vw";
-        }
-
-        var entryP = document.createElement("p");
-        entryP.innerText = `$ ${traSignal[1]}`;
-        entryP.classList.add("entryS");
-        var slP = document.createElement("p");
-        slP.innerText = `$ ${traSignal[2]}`;
-        if (traSignal[4] == 1) {
-          slP.classList.add("slSlong");
-        } else {
-          slP.classList.add("slSshort");
-        }
-        var tpP = document.createElement("p");
-        tpP.innerText = `$ ${traSignal[3]}`;
-        if (traSignal[4] == 1) {
-          tpP.classList.add("tpSlong");
-        } else {
-          tpP.classList.add("tpSshort");
-        }
-        var dirP = document.createElement("p");
-        var LoS = "";
-        if (traSignal[4] == 1) {
-          LoS = "🟢Long";
-        } else {
-          LoS = "🔴Short";
-        }
-        dirP.innerText = `${LoS}`;
-        dirP.classList.add("dirS");
-
-        var date = document.createElement("p");
-        date.classList.add("date");
-        var postBlock = `${traSignal[6]}`;
-        var transDate = new Date(postBlock * 1000);
-        var y = transDate.getFullYear();
-        var m = transDate.getMonth() + 1;
-        var d = transDate.getDate();
-        var h = transDate.getHours();
-        var mi = transDate.getMinutes();
-        var postDate = `${y}/${m}/${d}  ${h}:${mi}`;
-        date.innerHTML = postDate;
-
-        if (traSignal[4] == 1) {
-          var dolp1 = document.createElement("p");
-          dolp1.classList.add("dolp1");
-          dolp1.innerText = "Take Profit";
-          var dolp2 = document.createElement("p");
-          dolp2.classList.add("dolp2");
-          dolp2.innerText = "Entry";
-          var dolp3 = document.createElement("p");
-          dolp3.classList.add("dolp3");
-          dolp3.innerText = "Stop Loss";
-        } else {
-          var dolp1 = document.createElement("p");
-          dolp1.classList.add("dolp3");
-          dolp1.innerText = "Take Profit";
-          var dolp2 = document.createElement("p");
-          dolp2.classList.add("dolp2");
-          dolp2.innerText = "Entry";
-          var dolp3 = document.createElement("p");
-          dolp3.classList.add("dolp1");
-          dolp3.innerText = "Stop Loss";
-        }
-        
-
-        signalDiv.appendChild(dolp1);
-        signalDiv.appendChild(dolp2);
-        signalDiv.appendChild(dolp3);
-        signalDiv.appendChild(entryP);
-        signalDiv.appendChild(assetP);
-        signalDiv.appendChild(slP);
-        signalDiv.appendChild(tpP);
-        signalDiv.appendChild(dirP);
-        signalDiv.appendChild(date);
-        tradingSigList.appendChild(signalDiv);
-        
-      }
-    } else{
-        for (let i = numSignals - 1; i >= numSignals-50; i--) { // solo salen las 50 primeras señales de trading
-          var traSignal = await contract.methods.seeTraSig2(i, connectedAddress).call();
-          
-          var signalDiv = document.createElement("div");
-          signalDiv.classList.add("signalTrad");
-          signalDiv.setAttribute("data-valor", `${traSignal[7]}`);
-
-          (function (signal) {
-            // ESTA FUNCION PERMITE VALIDAR Y CALIFICAR LAS SEÑALES CON UN CLICK, CLICKANDO. CAMBIA `${traSignal[0]}` por EL ID de la señal o la address del Alpha
-            signal.addEventListener("click", function () {
-              console.log(signal.getAttribute("data-valor"));
-            });
-          })(signalDiv);
-
-          var assetP = document.createElement("p");
-          assetP.innerText = `${traSignal[0]}`;
-          assetP.classList.add("assetS");
-
-          if (`${traSignal[0]}` == "BTC" || `${traSignal[0]}` == "btc") {
-            var btcImg = document.createElement("img");
-            btcImg.src = "btc.png";
-            btcImg.classList.add("assetImg");
-            signalDiv.appendChild(btcImg);
-          } else if (`${traSignal[0]}` == "ETH" || `${traSignal[0]}` == "eth") {
-            var ethImg = document.createElement("img");
-            ethImg.src = "eth.png";
-            ethImg.classList.add("assetImg");
-            signalDiv.appendChild(ethImg);
-          } else {
-            var elseImg = document.createElement("img");
-            elseImg.src =
-              "https://image.spreadshirtmedia.net/image-server/v1/compositions/T56A2PA4115PT17X0Y67D157542882W24948H18711/views/1,width=550,height=550,appearanceId=2,backgroundColor=000000,noPt=true/signo-de-interrogacion-planeado-hae-simbolo-signo-regalo-bolsa-de-tela.jpg";
-            elseImg.classList.add("assetImg");
-            signalDiv.appendChild(elseImg);
-            elseImg.style.borderRadius ="2vw"
-          }
-
-          var entryP = document.createElement("p");
-          entryP.innerText = `$ ${traSignal[1]}`;
-          entryP.classList.add("entryS");
-          var slP = document.createElement("p");
-          slP.innerText = `$ ${traSignal[2]}`;
-          if (traSignal[4] == 1) {
-            slP.classList.add("slSlong");
-          } else {
-            slP.classList.add("slSshort");
-          }
-          var tpP = document.createElement("p");
-          tpP.innerText = `$ ${traSignal[3]}`;
-          if (traSignal[4] == 1) {
-            tpP.classList.add("tpSlong");
-          } else {
-            tpP.classList.add("tpSshort");
-          }
-          var dirP = document.createElement("p");
-          var LoS = "";
-          if (traSignal[4] == 1) {
-            LoS = "🟢Long";
-          } else {
-            LoS = "🔴Short";
-          }
-          dirP.innerText = `${LoS}`;
-          dirP.classList.add("dirS");
-
-          var date = document.createElement("p");
-          date.classList.add("date");
-          var postBlock = `${traSignal[6]}`;
-          var transDate = new Date(postBlock * 1000);
-          var y = transDate.getFullYear();
-          var m = transDate.getMonth() +1;
-          var d = transDate.getDate();
-          var h = transDate.getHours();
-          var mi = transDate.getMinutes();
-          var postDate = `${y}/${m}/${d}  ${h}:${mi}`;
-          date.innerHTML = postDate;
-
-          var dolp1 = document.createElement("p");
-          dolp1.classList.add("dolp1");
-          dolp1.innerText = "Take Profit";
-          var dolp2 = document.createElement("p");
-          dolp2.classList.add("dolp2");
-          dolp2.innerText = "Entry";
-          var dolp3 = document.createElement("p");
-          dolp3.classList.add("dolp3");
-          dolp3.innerText = "Stop Loss";
-
-          signalDiv.appendChild(dolp1);
-          signalDiv.appendChild(dolp2);
-          signalDiv.appendChild(dolp3);
-          signalDiv.appendChild(entryP);
-          signalDiv.appendChild(assetP);
-          signalDiv.appendChild(slP);
-          signalDiv.appendChild(tpP);
-          signalDiv.appendChild(dirP);
-          signalDiv.appendChild(date);
-          tradingSigList.appendChild(signalDiv);
-
-      }
-}
-}
-
-
-//AddSignalTrading
-
-var A1 = document.getElementById("addAsset");
-var B1 = document.getElementById("addSl");
-var C1 = document.getElementById("addTp");
-var D1 = document.getElementById("addMsg");
-var E1 = document.getElementById("addEntry");
-var addTradBut = document.getElementById("addTradBut");
-// long & short
-
-
-const botToken = "6973037553:AAHE61fhxhbxF2tZgjcmHi1zZot4pGypqxU";
-const chatId = "-4046315950"; // El ID del chat 
-
-const telegramApiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
-
-//CODIFICADOR:
-var A; //Encrypted Asset
-var B; //Encrypted Entry
-var C; //Encrypted SL
-var D; //Encrypted TP
-
-addTradBut.addEventListener("click", async () => {
-  
-  try {
-    
-    await contract2.methods.addTraSignal(A1.value, E1.value, B1.value, C1.value, directionValue, D1.value).send({ from: connectedAddress, /*gasPrice: "481878",*/ });
-      addTradBut.style.opacity = "20%";
-      var dir;
-    if (directionValue==1){
-      dir = "📈 LONG";
-    } else {dir = "📉 SHORT";}
-      var message = `📊 New Trading Signal - AlphaHub  
-                                                                                                              🔷 Asset: ${A1.value}
-                                                                                                              ${dir}
-                                                                                                               ✴️ Entry: $${E1.value}
-                                                                                                              ✅ Take Profit: $${C1.value}
-                                                                                                              🔴 Stop Loss $${B1.value}`; 
-      
-
-      const messageData = {
-        chat_id: chatId,
-        text: message,
-      };
-
-      fetch(telegramApiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(messageData),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Mensaje enviado con éxito:", data);
-        })
-        .catch((error) => {
-          console.error("Error al enviar el mensaje:", error);
-        });
-
-
-    A1.value = "";
-    B1.value = "";
-    C1.value = "";
-    D1.value = "";
-    E1.value = "";
-    long.style.backgroundColor = "#123611";
-    short.style.backgroundColor = "#420e0e";
-    getSignalsNum();
-    var elementsToDelete = document.querySelectorAll(".signalTrad");
-
-    elementsToDelete.forEach(function (element) {
-      element.parentElement.removeChild(element);
-    });
-    seeTraSig2();
-    addTradBut.style.opacity = "100%";
-    
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-// Codificador trading
-
-//var input = A1.value;
-/*
-function xyz(input) {
-  var abc = "ab1$cdef2-ghi.3j0kl4m9no,5pqr6stu7vwx8yz";
-  var x = "";
-
-  for (var i = 0; i < input.length; i++) {
-    
-    var a = input[i].toLowerCase();
-    
-    if (abc.includes(a)) {
-      var index = abc.indexOf(a);
-      if (index < abc.length - 1 && index > 0) {
-        x += abc[index + 1] + abc[index - 1] ;
-    
-      } else {
-        x += abc[0];
-      }
-    } else {
-      x += input[i];
-    }
-  }
-
-  return x;
-}
-
-var A1 = "y";
-var A2 = xyz(A1);
-
-// Decodificador
-
-function decodeXyz(input2) {
-  var abc = "ab1$cdef2-ghi.3j0kl4m9no,5pqr6stu7vwx8yz";
-  var x = "";
-
-  for (var i = 0; i < input2.length; i++) {
-    var a = input2[i].toLowerCase();
-
-    if (abc.includes(a)) {
-      var index = abc.indexOf(a);
-      if (index > 0) {
-        x += abc[index - 1];
-      } else {
-        x += abc[abc.length - 1];
-      }
-    } else {
-      x += input2[i];
-    }
-  }
-
-  return x;
-}
-
-var A3 = "";
-var A4 = decodeXyz(A3);
-*/
-//SIGNALS
-
-var alphaTrad = document.getElementById("alphaTrad");
-var alphaOnchain = document.getElementById("alphaOnchain");
-var alphaICO = document.getElementById("alphaICO");
-var alphaLows = document.getElementById("alphaLows");
-var addTradingSignals = document.getElementById("addTradingSignals");
-var addOnchainSignals = document.getElementById("addOnchainSignals");
-var addLowsSignals = document.getElementById("addLowsSignals");
-var addIcoSignals = document.getElementById("addIcoSignals");
-var tradingSigList = document.getElementById("tradingSigList");
-var onchainSigList = document.getElementById("onchainSigList");
-var lowSigList = document.getElementById("LowSigList");
-var icoSigList = document.getElementById("icoSigList");
-
-alphaTrad.addEventListener("click", function () {
-  alphaTrad.style.height = "7vh";
-  addTradingSignals.style.display = "block";
-  addOnchainSignals.style.display = "none";
-  addLowsSignals.style.display = "none";
-  addIcoSignals.style.display = "none";
-  alphaOnchain.style.height = "6vh";
-  alphaOnchain.style.background =
-    "linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));";
-  alphaICO.style.height = "6vh";
-  alphaICO.style.background =
-    "linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));";
-  alphaLows.style.height = "6vh";
-  alphaLows.style.background =
-    "linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));";
-  tradingSigList.style.display = "block";
-  onchainSigList.style.display = "none";
-  lowSigList.style.display = "none";
-  icoSigList.style.display = "none";
-});
-
-alphaOnchain.addEventListener("click", function () {
-  alphaOnchain.style.height = "7vh";
-  addTradingSignals.style.display = "none";
-  addOnchainSignals.style.display = "block";
-  addLowsSignals.style.display = "none";
-  addIcoSignals.style.display = "none";
-  alphaTrad.style.height = "6vh";
-  alphaTrad.style.background =
-    "linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));";
-  alphaICO.style.height = "6vh";
-  alphaICO.style.background =
-    "linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));";
-  alphaLows.style.height = "6vh";
-  alphaLows.style.background =
-    "linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));";
-  tradingSigList.style.display = "none";
-  onchainSigList.style.display = "block";
-  lowSigList.style.display = "none";
-  icoSigList.style.display = "none";
-});
-
-alphaLows.addEventListener("click", function () {
-  alphaLows.style.height = "7vh";
-  addTradingSignals.style.display = "none";
-  addOnchainSignals.style.display = "none";
-  addLowsSignals.style.display = "block";
-  addIcoSignals.style.display = "none";
-  alphaTrad.style.height = "6vh";
-  alphaTrad.style.background =
-    "linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));";
-  alphaICO.style.height = "6vh";
-  alphaICO.style.background =
-    "linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));";
-  alphaOnchain.style.height = "6vh";
-  alphaOnchain.style.background =
-    "linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));";
-  tradingSigList.style.display = "none";
-  onchainSigList.style.display = "none";
-  lowSigList.style.display = "block";
-  icoSigList.style.display = "none";
-});
-
-alphaICO.addEventListener("click", function () {
-  alphaICO.style.height = "7vh";
-  addTradingSignals.style.display = "none";
-  addOnchainSignals.style.display = "none";
-  addLowsSignals.style.display = "none";
-  addIcoSignals.style.display = "block";
-  alphaTrad.style.height = "6vh";
-  alphaTrad.style.background =
-    "linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));";
-  alphaLows.style.height = "6vh";
-  alphaLows.style.background =
-    "linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));";
-  alphaOnchain.style.height = "6vh";
-  alphaOnchain.style.background =
-    "linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));";
-  tradingSigList.style.display = "none";
-  onchainSigList.style.display = "none";
-  lowSigList.style.display = "none";
-  icoSigList.style.display = "block";
-});
-
-var long = document.getElementById("long");
-var short = document.getElementById("short");
-var directionValue = 1;
-
-long.addEventListener("click", function () {
-  long.style.backgroundColor = "#047c00";
-  short.style.backgroundColor = "#420e0e";
-  directionValue = 1;
-});
-
-short.addEventListener("click", function () {
-  long.style.backgroundColor = "#123611";
-  short.style.backgroundColor = "rgb(235 1 1)";
-  directionValue = 2;
-});
-
-var set1 = document.getElementById("set1");
-var setName = document.getElementById("setName");
-var _name = document.getElementById("name");
-
-set1.addEventListener("click", function () {
-  if (setName.style.display === "none" || setName.style.display === "") {
-    setName.style.display = "block";
-  } else {
-    setName.style.display = "none";
-  }
-});
-
-set1.addEventListener("mouseover", function () {
-  _name.style.color = "white";
-});
-
-set1.addEventListener("mouseout", function () {
-  _name.style.color = "rgba(255, 255, 255, 0.742)";
-});
-
-
-//ECONOMICS y SETBOT
-
-var econBut = document.getElementById("econ");
-var botBut = document.getElementById("bot");
-var bot = document.getElementById("botW");
-var econ = document.getElementById("econW");
-var tw0 = document.getElementById("toolsWindow");
-
-econBut.addEventListener("click", function(){
-  tw0.style.display = "none";
-  bot.style.display = "none";
-  econ.style.display = "block"
-});
-
-botBut.addEventListener("click", function () {
-  tw0.style.display = "none";
-  bot.style.display = "block";
-  econ.style.display = "none";
-});
-
-
+//CONTRACT:
 
 // ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI
+
 const ABI = [
   {
     inputs: [
@@ -1407,660 +832,155 @@ const ABI = [
   },
 ];
 
+var web3Instance = new Web3(web3.currentProvider);
+
+const conAddress = "0xD55D833dC50631fa0E9F97160c68C2bFE6c9950c";
 const contract = new web3Instance.eth.Contract(ABI, conAddress);
 
-const ABI2 = [
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "addr",
-        type: "address",
-      },
-    ],
-    name: "accuracyPercentage",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "asset",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "_priceEntry",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "_stopLoss",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "_takeProfit",
-        type: "string",
-      },
-      {
-        internalType: "uint8",
-        name: "_direction",
-        type: "uint8",
-      },
-      {
-        internalType: "string",
-        name: "_msg",
-        type: "string",
-      },
-    ],
-    name: "addTraSignal",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "alphaTradInfoFromAddress",
-    outputs: [
-      {
-        internalType: "string",
-        name: "asset",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "priceEntry",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "stopLoss",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "takeProfit",
-        type: "string",
-      },
-      {
-        internalType: "uint8",
-        name: "direction",
-        type: "uint8",
-      },
-      {
-        internalType: "uint16",
-        name: "traSignalId",
-        type: "uint16",
-      },
-      {
-        internalType: "uint256",
-        name: "postDate",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-      {
-        internalType: "string",
-        name: "_msg",
-        type: "string",
-      },
-      {
-        internalType: "int256",
-        name: "success",
-        type: "int256",
-      },
-      {
-        internalType: "uint8",
-        name: "timesVal",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "changePeriod",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getActiveAlphaTra",
-    outputs: [
-      {
-        internalType: "address[]",
-        name: "",
-        type: "address[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getActiveAlphaTraLen",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-    ],
-    name: "getAlphaScore1",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint16",
-        name: "index",
-        type: "uint16",
-      },
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-    ],
-    name: "getTraSignal",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "string",
-            name: "asset",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "priceEntry",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "stopLoss",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "takeProfit",
-            type: "string",
-          },
-          {
-            internalType: "uint8",
-            name: "direction",
-            type: "uint8",
-          },
-          {
-            internalType: "uint16",
-            name: "traSignalId",
-            type: "uint16",
-          },
-          {
-            internalType: "uint256",
-            name: "postDate",
-            type: "uint256",
-          },
-          {
-            internalType: "address",
-            name: "alpha",
-            type: "address",
-          },
-          {
-            internalType: "string",
-            name: "_msg",
-            type: "string",
-          },
-          {
-            internalType: "int256",
-            name: "success",
-            type: "int256",
-          },
-          {
-            internalType: "uint8",
-            name: "timesVal",
-            type: "uint8",
-          },
-        ],
-        internalType: "struct B.traSignal",
-        name: "",
-        type: "tuple",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint16",
-        name: "index",
-        type: "uint16",
-      },
-    ],
-    name: "getTraSignalGlob",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "string",
-            name: "asset",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "priceEntry",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "stopLoss",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "takeProfit",
-            type: "string",
-          },
-          {
-            internalType: "uint8",
-            name: "direction",
-            type: "uint8",
-          },
-          {
-            internalType: "uint16",
-            name: "traSignalId",
-            type: "uint16",
-          },
-          {
-            internalType: "uint256",
-            name: "postDate",
-            type: "uint256",
-          },
-          {
-            internalType: "address",
-            name: "alpha",
-            type: "address",
-          },
-          {
-            internalType: "string",
-            name: "_msg",
-            type: "string",
-          },
-          {
-            internalType: "int256",
-            name: "success",
-            type: "int256",
-          },
-          {
-            internalType: "uint8",
-            name: "timesVal",
-            type: "uint8",
-          },
-        ],
-        internalType: "struct B.traSignal",
-        name: "",
-        type: "tuple",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getTradGlobLength",
-    outputs: [
-      {
-        internalType: "uint16",
-        name: "",
-        type: "uint16",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "lastPostTra",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "maxLengthTrad",
-    outputs: [
-      {
-        internalType: "uint16",
-        name: "",
-        type: "uint16",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-    ],
-    name: "seeLastPostTra",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-    ],
-    name: "seeValidatorScore1",
-    outputs: [
-      {
-        internalType: "uint16",
-        name: "",
-        type: "uint16",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "setActualPeriod",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "traActiveAlphaProvsThisPeriod",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-    ],
-    name: "traSignalAlphaLength",
-    outputs: [
-      {
-        internalType: "uint16",
-        name: "",
-        type: "uint16",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "traSignals",
-    outputs: [
-      {
-        internalType: "string",
-        name: "asset",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "priceEntry",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "stopLoss",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "takeProfit",
-        type: "string",
-      },
-      {
-        internalType: "uint8",
-        name: "direction",
-        type: "uint8",
-      },
-      {
-        internalType: "uint16",
-        name: "traSignalId",
-        type: "uint16",
-      },
-      {
-        internalType: "uint256",
-        name: "postDate",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-      {
-        internalType: "string",
-        name: "_msg",
-        type: "string",
-      },
-      {
-        internalType: "int256",
-        name: "success",
-        type: "int256",
-      },
-      {
-        internalType: "uint8",
-        name: "timesVal",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "traSignalsGlob",
-    outputs: [
-      {
-        internalType: "string",
-        name: "asset",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "priceEntry",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "stopLoss",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "takeProfit",
-        type: "string",
-      },
-      {
-        internalType: "uint8",
-        name: "direction",
-        type: "uint8",
-      },
-      {
-        internalType: "uint16",
-        name: "traSignalId",
-        type: "uint16",
-      },
-      {
-        internalType: "uint256",
-        name: "postDate",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-      {
-        internalType: "string",
-        name: "_msg",
-        type: "string",
-      },
-      {
-        internalType: "int256",
-        name: "success",
-        type: "int256",
-      },
-      {
-        internalType: "uint8",
-        name: "timesVal",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint16",
-        name: "_traSignalId",
-        type: "uint16",
-      },
-      {
-        internalType: "uint8",
-        name: "posNeg",
-        type: "uint8",
-      },
-    ],
-    name: "validate",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "validatorScore1",
-    outputs: [
-      {
-        internalType: "uint16",
-        name: "",
-        type: "uint16",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-];
+//SEARCH ALPHA
 
-const contract2 = new web3Instance.eth.Contract(ABI2, conAddress2);
+var iNam = document.getElementById("input1"); 
+var namBut = document.getElementById("searchBut");
+var divAS = document.getElementById("alphaSearch");
+var alphaName = document.getElementById("alphaName");
+var monPri = document.getElementById("alphaMonPrice");
+var annPri = document.getElementById("alphaAnnPrice");
+var SearchAlphaAddress;
+var zoneBut = document.getElementById("zoneBut");
+var plans = document.getElementById("plans");
+var beta = document.getElementById("beta");
+var alpha = document.getElementById("alpha");
+var myZone = document.getElementById("myZone");
+var search = document.getElementById("search");
+var input1 = document.getElementById("input1");
+var lupa = document.getElementById("lupa");
+var tools = document.getElementById("tools");
+var alphaSignals = document.getElementById("alphaSignals");
+var myAlphas = document.getElementById("myAlphas");
+var out = document.getElementById("out");
+var wt = document.getElementById("toolsWindow");
+var tw = document.getElementById("toolsWindowText");
+var tw1 = document.getElementById("windowTool1");
+var tw2 = document.getElementById("windowTool2");
+var tw3 = document.getElementById("windowTool3");
+var tw4 = document.getElementById("windowTool4");
+var tw0 = document.getElementById("toolsWindow");
+var validate = document.getElementById("validate");
+var butSign = document.getElementById("butSign");
+var validator = document.getElementById("validator");
+var numFollowingDiv = document.getElementById("numFollowingDiv");
+var userZoneOn;
+
+zoneBut.addEventListener("click", function () {
+  plans.style.display = "none";
+  beta.style.display = "none";
+  alpha.style.display= "none";
+  myZone.style.display = "none";
+  tools.style.display = "block";
+  wt.style.display = "block";
+  myAlphas.style.display = "block";
+  validate.style.display = "block";
+  butSign.style.display = "block";
+  alphaSignals.style.display = "block";
+  search.style.marginTop = "15vh";
+  search.style.marginLeft = "5vw";
+  search.style.width = "2vw";
+  search.style.height = "4vh";
+  input1.style.display = "none";
+  namBut.style.display = "none";
+  lupa.style.display = "block";
+  userEarn.style.display = "block";
+  alphaSearch.style.display = "none";
+  userZoneOn = true;
+  input1.value = "";
+  document.getElementById("address2").style.display = "block";
+  validator.style.display = "block";
+  numFollowingDiv.style.display = "block";
+  seeTraSig2();
+});
+
+lupa.addEventListener("click", function(){
+  if (userZoneOn == true){
+    search.style.marginTop = "15vh";
+    search.style.marginLeft = "5vw";
+    search.style.width = "28vw";
+    search.style.height = "25vh";
+    search.style.zIndex = "3";
+    input1.style.display = "block";
+    namBut.style.display = "block";
+    lupa.style.display = "none";
+    out.style.display = "block";
+    userEarn.style.marginLeft = "35.5vw";
+    userEarn.style.marginTop = "15vh";
+    userEarn.style.width = "2vw";
+    userEarn.style.height = "4vh";
+    earnLogo.style.display = "block";
+    out2.style.display = "none";
+    divId2.style.display = "none";
+
+  }
+});
+
+out.addEventListener("click", function () {
+    search.style.width = "2vw";
+    search.style.height = "4vh";
+    search.style.zIndex = "2";
+    input1.style.display = "none";
+    namBut.style.display = "none";
+    lupa.style.display = "block";
+    alphaSearch.style.display = "none";
+    out.style.display = "none";
+    input1.value = "";
+    userEarn.style.marginLeft = "5vw";
+    userEarn.style.marginTop = "24vh";
+  out2.style.display = "none";
+});
+
+var alphaPrices;
+
+namBut.addEventListener("click", async () => {
+  try {
+    var _name = iNam.value;
+    var _name2 = _name.toLowerCase();
+    SearchAlphaAddress = await contract.methods.searchName(_name2).call();
+    if (SearchAlphaAddress == "0x0000000000000000000000000000000000000000") {
+      alphaName.innerText = "Not Found";
+    } else {
+      var name = iNam.value;
+      alphaName.innerText = name.toUpperCase();
+      alphaPrices = await contract.methods.seeAlphaPrices(SearchAlphaAddress).call();
+      monPri.innerText = `${alphaPrices[0]} ETH`;
+      annPri.innerText = `${alphaPrices[1]} ETH`;
+    }
+    iNam.style.marginTop = "2vh";
+    namBut.style.marginTop = "2vh";
+    divAS.style.display = "block"
+    seeAlphasImFollowing();
+  } catch (error) {
+    console.log("error searching name" + error);
+  }
+});
+
+monPri.addEventListener("click", async()=>{
+  try{
+    await contract.methods
+      .payAlpha(SearchAlphaAddress, 1)
+      .send({ from: connectedAddress, value: alphaPrices[0], });
+      seeAlphasImFollowing();
+  } catch(error){console.log(error);}
+})
+
+annPri.addEventListener("click", async () => {
+  try {
+    await contract.methods
+      .payAlpha(SearchAlphaAddress, 2)
+      .send({ from: connectedAddress, value: alphaPrices[1] });
+      seeAlphasImFollowing();
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 
 var varWidth = "30vw";
 var varHeight = 350;
@@ -2081,16 +1001,6 @@ new TradingView.widget({
   container_id: "windowTool1",
 });
 
-
-var tw = document.getElementById("toolsWindowText");
-var tw1 = document.getElementById("windowTool1");
-var tw2 = document.getElementById("windowTool2");
-var tw3 = document.getElementById("windowTool3");
-var tw4 = document.getElementById("windowTool4");
-
-
-
-
 function cmc() {
   tw.innerText = "";
   tw1.style.display = "none";
@@ -2098,10 +1008,6 @@ function cmc() {
   tw3.style.display = "none";
   tw4.style.display = "none";
   tw0.style.display = "block";
-  bot.style.display = "none";
-  econ.style.display = "none";
-  
-
 }
 
 function tv() {
@@ -2111,9 +1017,6 @@ function tv() {
   tw3.style.display = "none";
   tw4.style.display = "none";
   tw0.style.display = "block";
-  bot.style.display = "none";
-  econ.style.display = "none";
-
 }
 
 function uni() {
@@ -2123,9 +1026,6 @@ function uni() {
   tw3.style.display = "block";
   tw4.style.display = "none";
   tw0.style.display = "block";
-  bot.style.display = "none";
-  econ.style.display = "none";
-
 }
 
 function mtry() {
@@ -2135,43 +1035,334 @@ function mtry() {
   tw3.style.display = "none";
   tw4.style.display = "block";
   tw0.style.display = "block";
-  bot.style.display = "none";
-  econ.style.display = "none";
 }
 
+var sigId = document.getElementById("sigId");
 
+async function seeTraSig2(alphaAddress) {
+  var tradingSigList = document.getElementById("tradingSigList");
+  var numSignals = await contract.methods.getNumTraSignals(alphaAddress).call();
 
-//__________________________________________________________________________________________________________
+  if (numSignals < 50) {
+    tradingSigList.innerText = "";
+    for (let i = numSignals - 1; i >= 0; i--) {
+      var traSignal = await contract.methods
+        .seeTraSig2(i, alphaAddress, connectedAddress)
+        .call();
 
-// TELEGRAM BOT
-/*
-const botToken = "6973037553:AAHE61fhxhbxF2tZgjcmHi1zZot4pGypqxU";
-const chatId = "-4046315950"; // El ID del chat al que deseas enviar el mensaje.
+      var signalDiv = document.createElement("div");
+      signalDiv.classList.add("signalTrad");
 
-var message;
+      signalDiv.setAttribute("data-valor", `${traSignal[5]}`);
 
-const telegramApiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`; 
+      (function (signal) {
+        // ESTA FUNCION PERMITE VALIDAR Y CALIFICAR LAS SEÑALES CON UN CLICK, CLICKANDO. CAMBIA `${traSignal[0]}` por EL ID de la señal o la address del Alpha
+        signal.addEventListener("click", function () {
+          var idSignal = signal.getAttribute("data-valor")
+          sigId.innerText = "id." + idSignal;
+        });
+      })(signalDiv);
 
-const messageData = {
-  chat_id: chatId,
-  text: message,
-};
-function botSendMessage(){
-  console.log("entrando en la Funcion de BOT")
-  fetch(telegramApiUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(messageData),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Mensaje enviado con éxito:", data);
-    })
-    .catch((error) => {
-      console.error("Error al enviar el mensaje:", error);
-    });
+      var assetP = document.createElement("p");
+      assetP.innerText = `${traSignal[0]}`;
+      assetP.classList.add("assetS");
 
+      if (`${traSignal[0]}` == "BTC" || `${traSignal[0]}` == "btc") {
+        var btcImg = document.createElement("img");
+        btcImg.src = "btc.png";
+        btcImg.classList.add("assetImg");
+        signalDiv.appendChild(btcImg);
+      } else if (`${traSignal[0]}` == "ETH" || `${traSignal[0]}` == "eth") {
+        var ethImg = document.createElement("img");
+        ethImg.src = "eth.png";
+        ethImg.classList.add("assetImg");
+        signalDiv.appendChild(ethImg);
+      } else {
+        var elseImg = document.createElement("img");
+        elseImg.src =
+          "https://image.spreadshirtmedia.net/image-server/v1/compositions/T56A2PA4115PT17X0Y67D157542882W24948H18711/views/1,width=550,height=550,appearanceId=2,backgroundColor=000000,noPt=true/signo-de-interrogacion-planeado-hae-simbolo-signo-regalo-bolsa-de-tela.jpg";
+        elseImg.classList.add("assetImg");
+        signalDiv.appendChild(elseImg);
+        elseImg.style.borderRadius = "2vw";
+      }
+
+      var entryP = document.createElement("p");
+      entryP.innerText = `$ ${traSignal[1]}`;
+      entryP.classList.add("entryS");
+      var slP = document.createElement("p");
+      slP.innerText = `$ ${traSignal[2]}`;
+      if (traSignal[4] == 1) {
+        slP.classList.add("slSlong");
+      } else {
+        slP.classList.add("slSshort");
+      }
+      var tpP = document.createElement("p");
+      tpP.innerText = `$ ${traSignal[3]}`;
+      if (traSignal[4] == 1) {
+        tpP.classList.add("tpSlong");
+      } else {
+        tpP.classList.add("tpSshort");
+      }
+      var dirP = document.createElement("p");
+      var LoS = "";
+      if (traSignal[4] == 1) {
+        LoS = "Long";
+        var longImg = document.createElement("div");
+        longImg.classList.add("longImg");
+        signalDiv.appendChild(longImg);
+      } else {
+        LoS = "Short";
+        var shortImg = document.createElement("div");
+        shortImg.classList.add("shortImg");
+        signalDiv.appendChild(shortImg);
+      }
+      dirP.innerText = `${LoS}`;
+      dirP.classList.add("dirS");
+
+      var date = document.createElement("p");
+      date.classList.add("date");
+      var postBlock = `${traSignal[6]}`;
+      var transDate = new Date(postBlock * 1000);
+      var y = transDate.getFullYear();
+      var m = transDate.getMonth() + 1;
+      var d = transDate.getDate();
+      var h = transDate.getHours();
+      var mi = transDate.getMinutes();
+      if (mi >= 10) {
+        var postDate = `${y}/${m}/${d}  ${h}:${mi}`;
+      } else {
+        var postDate = `${y}/${m}/${d}  ${h}:0${mi}`;
+      }
+      date.innerHTML = postDate;
+
+      if (traSignal[4] == 1) {
+        var dolp1 = document.createElement("p");
+        dolp1.classList.add("dolp1");
+        dolp1.innerText = "Take Profit";
+        var dolp2 = document.createElement("p");
+        dolp2.classList.add("dolp2");
+        dolp2.innerText = "Entry";
+        var dolp3 = document.createElement("p");
+        dolp3.classList.add("dolp3");
+        dolp3.innerText = "Stop Loss";
+      } else {
+        var dolp1 = document.createElement("p");
+        dolp1.classList.add("dolp3");
+        dolp1.innerText = "Take Profit";
+        var dolp2 = document.createElement("p");
+        dolp2.classList.add("dolp2");
+        dolp2.innerText = "Entry";
+        var dolp3 = document.createElement("p");
+        dolp3.classList.add("dolp1");
+        dolp3.innerText = "Stop Loss";
+      }
+
+      if(traSignal[8] != undefined){
+        var msgSig = document.createElement("p");
+        msgSig.innerText = `${traSignal[8]}`;
+        msgSig.classList.add("msgSig");
+        signalDiv.appendChild(msgSig);
+    }
+
+      signalDiv.appendChild(dolp1);
+      signalDiv.appendChild(dolp2);
+      signalDiv.appendChild(dolp3);
+      signalDiv.appendChild(entryP);
+      signalDiv.appendChild(assetP);
+      signalDiv.appendChild(slP);
+      signalDiv.appendChild(tpP);
+      signalDiv.appendChild(dirP);
+      signalDiv.appendChild(date);
+      tradingSigList.appendChild(signalDiv);
+    }
+  } else {
+    for (let i = numSignals - 1; i >= numSignals - 50; i--) {
+      // solo salen las 50 primeras señales de trading
+      var traSignal = await contract.methods
+        .seeTraSig2(i, connectedAddress)
+        .call();
+
+      var signalDiv = document.createElement("div");
+      signalDiv.classList.add("signalTrad");
+      signalDiv.setAttribute("data-valor", `${traSignal[5]}`);
+
+      signalDiv.setAttribute("data-valor", `${traSignal[5]}`);
+
+      (function (signal) {
+        // ESTA FUNCION PERMITE VALIDAR Y CALIFICAR LAS SEÑALES CON UN CLICK, CLICKANDO. CAMBIA `${traSignal[0]}` por EL ID de la señal o la address del Alpha
+        signal.addEventListener("click", function () {
+          var idSignal = signal.getAttribute("data-valor");
+          sigId.innerText = "id." + idSignal;
+        });
+      })(signalDiv);
+
+      var assetP = document.createElement("p");
+      assetP.innerText = `${traSignal[0]}`;
+      assetP.classList.add("assetS");
+
+      if (`${traSignal[0]}` == "BTC" || `${traSignal[0]}` == "btc") {
+        var btcImg = document.createElement("img");
+        btcImg.src = "btc.png";
+        btcImg.classList.add("assetImg");
+        signalDiv.appendChild(btcImg);
+      } else if (`${traSignal[0]}` == "ETH" || `${traSignal[0]}` == "eth") {
+        var ethImg = document.createElement("img");
+        ethImg.src = "eth.png";
+        ethImg.classList.add("assetImg");
+        signalDiv.appendChild(ethImg);
+      } else {
+        var elseImg = document.createElement("img");
+        elseImg.src =
+          "https://image.spreadshirtmedia.net/image-server/v1/compositions/T56A2PA4115PT17X0Y67D157542882W24948H18711/views/1,width=550,height=550,appearanceId=2,backgroundColor=000000,noPt=true/signo-de-interrogacion-planeado-hae-simbolo-signo-regalo-bolsa-de-tela.jpg";
+        elseImg.classList.add("assetImg");
+        signalDiv.appendChild(elseImg);
+        elseImg.style.borderRadius = "2vw";
+      }
+
+      var entryP = document.createElement("p");
+      entryP.innerText = `$ ${traSignal[1]}`;
+      entryP.classList.add("entryS");
+      var slP = document.createElement("p");
+      slP.innerText = `$ ${traSignal[2]}`;
+      if (traSignal[4] == 1) {
+        slP.classList.add("slSlong");
+      } else {
+        slP.classList.add("slSshort");
+      }
+      var tpP = document.createElement("p");
+      tpP.innerText = `$ ${traSignal[3]}`;
+      if (traSignal[4] == 1) {
+        tpP.classList.add("tpSlong");
+      } else {
+        tpP.classList.add("tpSshort");
+      }
+      var dirP = document.createElement("p");
+      var LoS = "";
+      if (traSignal[4] == 1) {
+        LoS = "Long";
+        var longImg = document.createElement("div");
+        longImg.classList.add("longImg");
+        signalDiv.appendChild(longImg);
+      } else {
+        LoS = "Short";
+        var shortImg = document.createElement("div");
+        shortImg.classList.add("shortImg");
+        signalDiv.appendChild(shortImg);
+      }
+      dirP.innerText = `${LoS}`;
+      dirP.classList.add("dirS");
+
+      var date = document.createElement("p");
+      date.classList.add("date");
+      var postBlock = `${traSignal[6]}`;
+      var transDate = new Date(postBlock * 1000);
+      var y = transDate.getFullYear();
+      var m = transDate.getMonth() + 1;
+      var d = transDate.getDate();
+      var h = transDate.getHours();
+      var mi = transDate.getMinutes();
+      if(mi >= 10){
+        var postDate = `${y}/${m}/${d}  ${h}:${mi}`;
+      } else{var postDate = `${y}/${m}/${d}  ${h}:0${mi}`;}
+      date.innerHTML = postDate;
+      var dolp1 = document.createElement("p");
+      dolp1.classList.add("dolp1");
+      dolp1.innerText = "Take Profit";
+      var dolp2 = document.createElement("p");
+      dolp2.classList.add("dolp2");
+      dolp2.innerText = "Entry";
+      var dolp3 = document.createElement("p");
+      dolp3.classList.add("dolp3");
+      dolp3.innerText = "Stop Loss";
+
+      signalDiv.appendChild(dolp1);
+      signalDiv.appendChild(dolp2);
+      signalDiv.appendChild(dolp3);
+      signalDiv.appendChild(entryP);
+      signalDiv.appendChild(assetP);
+      signalDiv.appendChild(slP);
+      signalDiv.appendChild(tpP);
+      signalDiv.appendChild(dirP);
+      signalDiv.appendChild(date);
+      tradingSigList.appendChild(signalDiv);
+    }
+  }
 }
-*/
+
+async function seeAlphasImFollowing() {
+  try{
+    var myAlphasListLen = await contract.methods.seeImFollowingListLen(connectedAddress).call();
+    for(var i = myAlphasListLen-1; i >= 0; i--){
+      var alphaAddressI = await contract.methods.seeAlphasFollowing(connectedAddress, i).call();
+      var alphaNameIObj = await contract.methods.seeName(alphaAddressI).call();
+      var alphaNameI = alphaNameIObj.toString(); // Convertir el objeto a cadena
+      var alphaP = document.createElement("p");
+      alphaP.innerText = alphaNameI;
+      alphaP.classList.add("myAlphaName");
+      myAlphas.appendChild(alphaP);
+      alphaP.setAttribute("data-valor", `${alphaAddressI}`);
+
+      (function (alpha) {
+        alpha.addEventListener("click", function () {
+          console.log(alpha.getAttribute("data-valor"));
+          var alphaClick = alpha.getAttribute("data-valor");
+          alphaClick;
+          seeTraSig2(alphaClick);
+        });
+      })(alphaP);
+    }
+
+    
+  } catch(error){console.log("error" + error)}
+}
+
+var valPoints = document.getElementById("valPoints");
+
+async function getValidatorPoints() {
+  try{
+    var validatorScore = await contract.methods.seeTotalValidatorScore(connectedAddress).call();
+    valPoints.innerText = `${validatorScore}`;
+  } catch(error){}
+}
+
+var userEarn = document.getElementById("userEarn");
+var earnLogo = document.getElementById("earnLogo");
+var out2 = document.getElementById("out2");
+var divId2 = document.getElementById("divId2");
+
+earnLogo.addEventListener("click", function(){
+  userEarn.style.marginTop = "15vh";
+  userEarn.style.marginLeft = "5vw";
+  userEarn.style.width = "28vw";
+  userEarn.style.height = "25vh";
+  userEarn.style.zIndex = "3";
+  input1.style.display = "block";
+  namBut.style.display = "block";
+  earnLogo.style.display = "none";
+  out2.style.display = "block";
+  input1.style.display = "none";
+  namBut.style.display = "none";
+  search.style.marginLeft = "35.5vw";
+  search.style.width = "2vw";
+  search.style.height = "4vh";
+  search.style.zIndex = "2";
+  input1.style.display = "none";
+  namBut.style.display = "none";
+  lupa.style.display = "block";
+  alphaSearch.style.display = "none";
+  out.style.display = "none";
+  input1.value = "";
+  divId2.style.display = "block";
+});
+
+out2.addEventListener("click", function () {
+  userEarn.style.width = "2vw";
+  userEarn.style.height = "4vh";
+  userEarn.style.marginTop = "25vh";
+  userEarn.style.zIndex = "2";
+  earnLogo.style.display = "block";
+  out2.style.display = "none";
+  search.style.marginLeft = "5vw";
+  divId2.style.display = "none";
+
+});
