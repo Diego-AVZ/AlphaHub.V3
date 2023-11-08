@@ -19,7 +19,8 @@ walletBut.addEventListener("click", async () => {
       walletBut.style.background = "#076c0071";
       walletBut.style.width = "6.8vw";
       walletBut.style.fontSize = "1vw";
-      walletBut.style.marginLeft = "5vw";
+      walletBut.style.marginLeft = "5.5vw";
+      walletBut.style.marginTop = "-2vh";
       walletBut.style.boxShadow = "inset 0vw 0vw 0.5vw rgba(27, 173, 17, 0.818)";
       walletBut.style.height = "5vh";
       msg1.style.display = "none";
@@ -49,6 +50,7 @@ async function connect() {
       walletBut.style.width = "6.8vw";
       walletBut.style.fontSize = "1vw";
       walletBut.style.marginLeft = "5vw";
+      walletBut.style.marginTop = "-2vh";
       walletBut.style.boxShadow = "inset 0vw 0vw 0.5vw rgba(27, 173, 17, 0.818)";
       walletBut.style.height = "5vh";
       msg1.style.display = "none";
@@ -831,11 +833,662 @@ const ABI = [
     type: "function",
   },
 ];
-
+const ABI2 = [
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "addr",
+        type: "address",
+      },
+    ],
+    name: "accuracyPercentage",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "asset",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "_priceEntry",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "_stopLoss",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "_takeProfit",
+        type: "string",
+      },
+      {
+        internalType: "uint8",
+        name: "_direction",
+        type: "uint8",
+      },
+      {
+        internalType: "string",
+        name: "_msg",
+        type: "string",
+      },
+    ],
+    name: "addTraSignal",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "alphaTradInfoFromAddress",
+    outputs: [
+      {
+        internalType: "string",
+        name: "asset",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "priceEntry",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "stopLoss",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "takeProfit",
+        type: "string",
+      },
+      {
+        internalType: "uint8",
+        name: "direction",
+        type: "uint8",
+      },
+      {
+        internalType: "uint16",
+        name: "traSignalId",
+        type: "uint16",
+      },
+      {
+        internalType: "uint256",
+        name: "postDate",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+      {
+        internalType: "string",
+        name: "_msg",
+        type: "string",
+      },
+      {
+        internalType: "int256",
+        name: "success",
+        type: "int256",
+      },
+      {
+        internalType: "uint8",
+        name: "timesVal",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "changePeriod",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getActiveAlphaTra",
+    outputs: [
+      {
+        internalType: "address[]",
+        name: "",
+        type: "address[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getActiveAlphaTraLen",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+    ],
+    name: "getAlphaScore1",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint16",
+        name: "index",
+        type: "uint16",
+      },
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+    ],
+    name: "getTraSignal",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "asset",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "priceEntry",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "stopLoss",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "takeProfit",
+            type: "string",
+          },
+          {
+            internalType: "uint8",
+            name: "direction",
+            type: "uint8",
+          },
+          {
+            internalType: "uint16",
+            name: "traSignalId",
+            type: "uint16",
+          },
+          {
+            internalType: "uint256",
+            name: "postDate",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "alpha",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "_msg",
+            type: "string",
+          },
+          {
+            internalType: "int256",
+            name: "success",
+            type: "int256",
+          },
+          {
+            internalType: "uint8",
+            name: "timesVal",
+            type: "uint8",
+          },
+        ],
+        internalType: "struct B.traSignal",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint16",
+        name: "index",
+        type: "uint16",
+      },
+    ],
+    name: "getTraSignalGlob",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "asset",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "priceEntry",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "stopLoss",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "takeProfit",
+            type: "string",
+          },
+          {
+            internalType: "uint8",
+            name: "direction",
+            type: "uint8",
+          },
+          {
+            internalType: "uint16",
+            name: "traSignalId",
+            type: "uint16",
+          },
+          {
+            internalType: "uint256",
+            name: "postDate",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "alpha",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "_msg",
+            type: "string",
+          },
+          {
+            internalType: "int256",
+            name: "success",
+            type: "int256",
+          },
+          {
+            internalType: "uint8",
+            name: "timesVal",
+            type: "uint8",
+          },
+        ],
+        internalType: "struct B.traSignal",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getTradGlobLength",
+    outputs: [
+      {
+        internalType: "uint16",
+        name: "",
+        type: "uint16",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "lastPostTra",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "maxLengthTrad",
+    outputs: [
+      {
+        internalType: "uint16",
+        name: "",
+        type: "uint16",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+    ],
+    name: "seeLastPostTra",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+    ],
+    name: "seeValidatorScore1",
+    outputs: [
+      {
+        internalType: "uint16",
+        name: "",
+        type: "uint16",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "setActualPeriod",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "traActiveAlphaProvsThisPeriod",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+    ],
+    name: "traSignalAlphaLength",
+    outputs: [
+      {
+        internalType: "uint16",
+        name: "",
+        type: "uint16",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "traSignals",
+    outputs: [
+      {
+        internalType: "string",
+        name: "asset",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "priceEntry",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "stopLoss",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "takeProfit",
+        type: "string",
+      },
+      {
+        internalType: "uint8",
+        name: "direction",
+        type: "uint8",
+      },
+      {
+        internalType: "uint16",
+        name: "traSignalId",
+        type: "uint16",
+      },
+      {
+        internalType: "uint256",
+        name: "postDate",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+      {
+        internalType: "string",
+        name: "_msg",
+        type: "string",
+      },
+      {
+        internalType: "int256",
+        name: "success",
+        type: "int256",
+      },
+      {
+        internalType: "uint8",
+        name: "timesVal",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "traSignalsGlob",
+    outputs: [
+      {
+        internalType: "string",
+        name: "asset",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "priceEntry",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "stopLoss",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "takeProfit",
+        type: "string",
+      },
+      {
+        internalType: "uint8",
+        name: "direction",
+        type: "uint8",
+      },
+      {
+        internalType: "uint16",
+        name: "traSignalId",
+        type: "uint16",
+      },
+      {
+        internalType: "uint256",
+        name: "postDate",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+      {
+        internalType: "string",
+        name: "_msg",
+        type: "string",
+      },
+      {
+        internalType: "int256",
+        name: "success",
+        type: "int256",
+      },
+      {
+        internalType: "uint8",
+        name: "timesVal",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint16",
+        name: "_traSignalId",
+        type: "uint16",
+      },
+      {
+        internalType: "uint8",
+        name: "posNeg",
+        type: "uint8",
+      },
+    ],
+    name: "validate",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "validatorScore1",
+    outputs: [
+      {
+        internalType: "uint16",
+        name: "",
+        type: "uint16",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+];
 var web3Instance = new Web3(web3.currentProvider);
 
 const conAddress = "0xD55D833dC50631fa0E9F97160c68C2bFE6c9950c";
+const conAddress2 = "0x205aAd0c64A4a0D9b48784Ef0fa91Ada87D57944";
 const contract = new web3Instance.eth.Contract(ABI, conAddress);
+const contract2 = new web3Instance.eth.Contract(ABI2, conAddress2);
 
 //SEARCH ALPHA
 
@@ -865,7 +1518,7 @@ var tw2 = document.getElementById("windowTool2");
 var tw3 = document.getElementById("windowTool3");
 var tw4 = document.getElementById("windowTool4");
 var tw0 = document.getElementById("toolsWindow");
-var validate = document.getElementById("validate");
+var TraSig = document.getElementById("validate");
 var butSign = document.getElementById("butSign");
 var validator = document.getElementById("validator");
 var numFollowingDiv = document.getElementById("numFollowingDiv");
@@ -877,7 +1530,7 @@ zoneBut.addEventListener("click", function () {
   alpha.style.display= "none";
   myZone.style.display = "none";
   tools.style.display = "block";
-  wt.style.display = "block";
+  wt.style.display = "none";
   myAlphas.style.display = "block";
   validate.style.display = "block";
   butSign.style.display = "block";
@@ -891,6 +1544,7 @@ zoneBut.addEventListener("click", function () {
   lupa.style.display = "block";
   userEarn.style.display = "block";
   alphaSearch.style.display = "none";
+  moreInfoSig.style.display = "block";
   userZoneOn = true;
   input1.value = "";
   document.getElementById("address2").style.display = "block";
@@ -1037,8 +1691,10 @@ function mtry() {
   tw0.style.display = "block";
 }
 
-var sigId = document.getElementById("sigId");
+var moreInfoSig = document.getElementById("moreInfoSig");
 
+var sigId = document.getElementById("sigId");
+var idSignal;
 async function seeTraSig2(alphaAddress) {
   var tradingSigList = document.getElementById("tradingSigList");
   var numSignals = await contract.methods.getNumTraSignals(alphaAddress).call();
@@ -1052,17 +1708,72 @@ async function seeTraSig2(alphaAddress) {
 
       var signalDiv = document.createElement("div");
       signalDiv.classList.add("signalTrad");
-
-      signalDiv.setAttribute("data-valor", `${traSignal[5]}`);
-
-      (function (signal) {
-        // ESTA FUNCION PERMITE VALIDAR Y CALIFICAR LAS SEÑALES CON UN CLICK, CLICKANDO. CAMBIA `${traSignal[0]}` por EL ID de la señal o la address del Alpha
-        signal.addEventListener("click", function () {
-          var idSignal = signal.getAttribute("data-valor")
+      var dataValorList = [
+        traSignal[0], //asset
+        traSignal[1], //entry
+        traSignal[2], //sl
+        traSignal[3], //tp1
+        traSignal[4], //dir
+        traSignal[5], //id
+        await contract.methods.seeName(traSignal[7]).call(), //alphaName
+      ];
+      signalDiv.setAttribute("data-valor", JSON.stringify(dataValorList));
+      
+      function addClickHandler(div, data) {
+        div.addEventListener("click", function () {
+          var dataValor = JSON.parse(data);
+          idSignal = dataValor[5];
+          var tp1 = dataValor[3];
+          var asset = dataValor[0];
+          var entry = dataValor[1];
+          var sl = dataValor[2];
+          var alphaName = dataValor[6];
+          var potProfit = ((tp1 - entry) / entry)*100;  
+          potProfit = Math.abs(potProfit);
+          potProfit = potProfit.toFixed(2);
+          document.getElementById("mrinfNam").style.display = "block";
+          if (entry > tp1) {
+            var potLoss = ((entry - sl) / entry) * 100;
+            document.getElementById("mrinfNam").innerText = "Short";
+            document.getElementById("imgLongmi").style.display = "none";
+            document.getElementById("imgShortmi").style.display = "block";
+          } else {
+              potLoss = ((sl - entry) / entry) * 100; 
+              document.getElementById("mrinfNam").innerText = "Long";
+              document.getElementById("imgLongmi").style.display = "block";
+              document.getElementById("imgShortmi").style.display = "none";
+            }
+          potLoss = potLoss.toFixed(2);
           sigId.innerText = "id." + idSignal;
-        });
-      })(signalDiv);
+          document.getElementById("takeProfitsDiv4").innerText = "$" + tp1;
+          document.getElementById("takeProfitsDiv6").innerText = potProfit + "%";
+          document.getElementById("stopLossDiv4").innerText = "$" + sl;
+          document.getElementById("stopLossDiv6").innerText = potLoss + "%";
+          document.getElementById("mrinfAss").innerHTML= asset;
+          if (asset == "BTC" || asset == "btc") {
+            var btcImg = document.createElement("img");
+            btcImg.src = "btc.png";
+            btcImg.classList.add("assetImg2");
+            moreInfoSig.appendChild(btcImg);
+          } else if (asset == "ETH" || asset == "eth") {
+            var ethImg = document.createElement("img");
+            ethImg.src = "eth.png";
+            ethImg.classList.add("assetImg2");
+            moreInfoSig.appendChild(ethImg);
+          } else {
+            var elseImg = document.createElement("img");
+            elseImg.src =
+              "https://image.spreadshirtmedia.net/image-server/v1/compositions/T56A2PA4115PT17X0Y67D157542882W24948H18711/views/1,width=550,height=550,appearanceId=2,backgroundColor=000000,noPt=true/signo-de-interrogacion-planeado-hae-simbolo-signo-regalo-bolsa-de-tela.jpg";
+            elseImg.classList.add("assetImg2");
+            moreInfoSig.appendChild(elseImg);
+            elseImg.style.borderRadius = "2vw";
+          }
 
+        });
+      }
+
+      addClickHandler(signalDiv, signalDiv.getAttribute("data-valor"));
+      
       var assetP = document.createElement("p");
       assetP.innerText = `${traSignal[0]}`;
       assetP.classList.add("assetS");
@@ -1291,6 +2002,10 @@ async function seeTraSig2(alphaAddress) {
 
 async function seeAlphasImFollowing() {
   try{
+    var elementsToDelete2 = document.querySelectorAll(".myAlphaName");
+    elementsToDelete2.forEach(function (element) {
+      element.parentElement.removeChild(element);
+    });
     var myAlphasListLen = await contract.methods.seeImFollowingListLen(connectedAddress).call();
     for(var i = myAlphasListLen-1; i >= 0; i--){
       var alphaAddressI = await contract.methods.seeAlphasFollowing(connectedAddress, i).call();
@@ -1310,6 +2025,11 @@ async function seeAlphasImFollowing() {
           seeTraSig2(alphaClick);
         });
       })(alphaP);
+      var goBut = document.createElement("div");
+      goBut.innerText = "Go";
+      goBut.classList.add("goBut");
+      alphaP.appendChild(goBut);
+      goBut.style.display = "flex";
     }
 
     
@@ -1366,3 +2086,32 @@ out2.addEventListener("click", function () {
   divId2.style.display = "none";
 
 });
+
+var succBut = document.getElementById("succ");
+var failBut = document.getElementById("fail");
+
+succBut.addEventListener("click", async () => {
+  try {
+    console.log("clicked succ");
+    await contract2.methods.validate(idSignal, 0).send({from: connectedAddress});
+    getValidatorPoints();
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+failBut.addEventListener("click", async () => {
+  try {
+    console.log("clicked fail");
+    await contract2.methods
+      .validate(idSignal, 0)
+      .send({ from: connectedAddress });
+      getValidatorPoints();
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+
+//AÑADE AL SOLIDITY:
+// en la funcion validate, que se sume +1 a timesVal, si no no funciona!!!
