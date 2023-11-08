@@ -1,1407 +1,1588 @@
-var walletBut = document.getElementById("wallet");
-var connectedAddress;
-var msg1 = document.getElementById("msg1");
-var msg2 = document.getElementById("msg2");
-var cover = document.getElementById("cover");
-var cover2 = document.getElementById("cover2");
-
-walletBut.addEventListener("click", async () => {
-  if (typeof window.ethereum !== "undefined") {
-    try {
-      const Accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      console.log("MTMSK Connected");
-      connectedAddress = Accounts[0];
-      console.log(connectedAddress);
-      walletBut.innerText = "Connected";
-      walletBut.style.paddingLeft = "3vw";
-      walletBut.style.background = "#076c0071";
-      walletBut.style.width = "6.8vw";
-      walletBut.style.fontSize = "1vw";
-      walletBut.style.marginLeft = "5.5vw";
-      walletBut.style.marginTop = "-2vh";
-      walletBut.style.boxShadow = "inset 0vw 0vw 0.5vw rgba(27, 173, 17, 0.818)";
-      walletBut.style.height = "5vh";
-      msg1.style.display = "none";
-      cover.style.display = "none";
-      showEthAddress();
-      seeAlphasImFollowing();
-      getValidatorPoints();
-    } catch (error) {
-      console.log("ERROR al Conectar MTMSK");
-    }
-  } else {
-    console.log("MTMSK Not Detected");
-  }
-});
-
-async function connect() {
-  if (typeof window.ethereum !== "undefined") {
-    try {
-      const Accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      console.log("MTMSK Connected");
-      connectedAddress = Accounts[0];
-      console.log(connectedAddress);
-      walletBut.innerText = "Connected";
-      walletBut.style.background = "#076c0071";
-      walletBut.style.width = "6.8vw";
-      walletBut.style.fontSize = "1vw";
-      walletBut.style.marginLeft = "5vw";
-      walletBut.style.marginTop = "-2vh";
-      walletBut.style.boxShadow = "inset 0vw 0vw 0.5vw rgba(27, 173, 17, 0.818)";
-      walletBut.style.height = "5vh";
-      msg1.style.display = "none";
-      cover.style.display = "none";
-      showEthAddress();
-      seeAlphasImFollowing();
-      getValidatorPoints();
-    } catch (error) {
-      console.log("ERROR al Conectar MTMSK"+ error);
-    }
-  } else {
-    console.log("MTMSK Not Detected 2" + error);
-  }
+/* Estilos para la barra de desplazamiento */
+::-webkit-scrollbar {
+  width: 0.6vw; 
+  height: 2vh;
 }
 
-connect();
-
-function showEthAddress() {
-  var start = connectedAddress.slice(0, 6);
-  var end = connectedAddress.slice(-4);
-
-  document.getElementById("address").innerText = `${start}...${end}`;
-  document.getElementById("address2").innerText = `${start}...${end}`;
+/* Estilos para el riel de la barra */
+::-webkit-scrollbar-track {
+  background-color: hwb(0 0% 100% / 0); /* Color de fondo del riel */
 }
 
-//CONTRACT:
-
-// ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI
-
-const ABI = [
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-    ],
-    name: "add1ToTotalSig",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "becomeAlpha",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "changePeriod",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-    ],
-    name: "countAllAlphaSignals",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-      {
-        internalType: "uint8",
-        name: "plan",
-        type: "uint8",
-      },
-    ],
-    name: "payAlpha",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "paySimpleAnnual",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "referrer",
-        type: "address",
-      },
-    ],
-    name: "paySimpleAnnualRefDiscount",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "paySimpleMonth",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "referrer",
-        type: "address",
-      },
-    ],
-    name: "paySimpleMonthRefDiscount",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "setActualPeriod",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "_chatId",
-        type: "string",
-      },
-    ],
-    name: "setAlphaHubBot",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "_name",
-        type: "string",
-      },
-    ],
-    name: "setName",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "plan",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "price",
-        type: "uint256",
-      },
-    ],
-    name: "setPriceAlphaPlans",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "mon",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "ann",
-        type: "uint256",
-      },
-    ],
-    name: "setSimplePrices",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "withdrawFromAlphaBase",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "addAllAlphaScores",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "alphaAmountTotalSignals",
-    outputs: [
-      {
-        internalType: "uint16",
-        name: "",
-        type: "uint16",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "b",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-    ],
-    name: "canSeeThisAlpha",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "_name",
-        type: "string",
-      },
-    ],
-    name: "checkNameList",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "ethInContractThisPeriod",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-    ],
-    name: "genNumIndex",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-    ],
-    name: "getChatId",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-    ],
-    name: "getNumSignals",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-    ],
-    name: "getNumTraSignals",
-    outputs: [
-      {
-        internalType: "uint16",
-        name: "",
-        type: "uint16",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-    ],
-    name: "isActiveAlpha",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "_name",
-        type: "string",
-      },
-    ],
-    name: "searchName",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "t",
-        type: "uint256",
-      },
-    ],
-    name: "seeActiveAlphaScore",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "seeAllActiveAlpha",
-    outputs: [
-      {
-        internalType: "address[]",
-        name: "",
-        type: "address[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-    ],
-    name: "seeAlphaPrices",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "i",
-        type: "uint256",
-      },
-    ],
-    name: "seeAlphasFollowing",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "seeDiscPrices",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-    ],
-    name: "seeImFollowingListLen",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-    ],
-    name: "seeLastPay",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-    ],
-    name: "seeName",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "seePrices",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-    ],
-    name: "seeTotalAlphaScore",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-    ],
-    name: "seeTotalValidatorScore",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint16",
-        name: "index",
-        type: "uint16",
-      },
-    ],
-    name: "seeTraSig",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-      {
-        internalType: "uint8",
-        name: "",
-        type: "uint8",
-      },
-      {
-        internalType: "uint16",
-        name: "",
-        type: "uint16",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint16",
-        name: "i",
-        type: "uint16",
-      },
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "reader",
-        type: "address",
-      },
-    ],
-    name: "seeTraSig2",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-      {
-        internalType: "uint8",
-        name: "",
-        type: "uint8",
-      },
-      {
-        internalType: "uint16",
-        name: "",
-        type: "uint16",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "totalAlphaScore",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "volume",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-];
-
-var web3Instance = new Web3(web3.currentProvider);
-
-const conAddress = "0xD55D833dC50631fa0E9F97160c68C2bFE6c9950c";
-const contract = new web3Instance.eth.Contract(ABI, conAddress);
-
-//SEARCH ALPHA
-
-var iNam = document.getElementById("input1"); 
-var namBut = document.getElementById("searchBut");
-var divAS = document.getElementById("alphaSearch");
-var alphaName = document.getElementById("alphaName");
-var monPri = document.getElementById("alphaMonPrice");
-var annPri = document.getElementById("alphaAnnPrice");
-var SearchAlphaAddress;
-var zoneBut = document.getElementById("zoneBut");
-var plans = document.getElementById("plans");
-var beta = document.getElementById("beta");
-var alpha = document.getElementById("alpha");
-var myZone = document.getElementById("myZone");
-var search = document.getElementById("search");
-var input1 = document.getElementById("input1");
-var lupa = document.getElementById("lupa");
-var tools = document.getElementById("tools");
-var alphaSignals = document.getElementById("alphaSignals");
-var myAlphas = document.getElementById("myAlphas");
-var out = document.getElementById("out");
-var wt = document.getElementById("toolsWindow");
-var tw = document.getElementById("toolsWindowText");
-var tw1 = document.getElementById("windowTool1");
-var tw2 = document.getElementById("windowTool2");
-var tw3 = document.getElementById("windowTool3");
-var tw4 = document.getElementById("windowTool4");
-var tw0 = document.getElementById("toolsWindow");
-var validate = document.getElementById("validate");
-var butSign = document.getElementById("butSign");
-var validator = document.getElementById("validator");
-var numFollowingDiv = document.getElementById("numFollowingDiv");
-var userZoneOn;
-
-zoneBut.addEventListener("click", function () {
-  plans.style.display = "none";
-  beta.style.display = "none";
-  alpha.style.display= "none";
-  myZone.style.display = "none";
-  tools.style.display = "block";
-  wt.style.display = "none";
-  myAlphas.style.display = "block";
-  validate.style.display = "block";
-  butSign.style.display = "block";
-  alphaSignals.style.display = "block";
-  search.style.marginTop = "15vh";
-  search.style.marginLeft = "5vw";
-  search.style.width = "2vw";
-  search.style.height = "4vh";
-  input1.style.display = "none";
-  namBut.style.display = "none";
-  lupa.style.display = "block";
-  userEarn.style.display = "block";
-  alphaSearch.style.display = "none";
-  userZoneOn = true;
-  input1.value = "";
-  document.getElementById("address2").style.display = "block";
-  validator.style.display = "block";
-  numFollowingDiv.style.display = "block";
-  seeTraSig2();
-});
-
-lupa.addEventListener("click", function(){
-  if (userZoneOn == true){
-    search.style.marginTop = "15vh";
-    search.style.marginLeft = "5vw";
-    search.style.width = "28vw";
-    search.style.height = "25vh";
-    search.style.zIndex = "3";
-    input1.style.display = "block";
-    namBut.style.display = "block";
-    lupa.style.display = "none";
-    out.style.display = "block";
-    userEarn.style.marginLeft = "35.5vw";
-    userEarn.style.marginTop = "15vh";
-    userEarn.style.width = "2vw";
-    userEarn.style.height = "4vh";
-    earnLogo.style.display = "block";
-    out2.style.display = "none";
-    divId2.style.display = "none";
-
-  }
-});
-
-out.addEventListener("click", function () {
-    search.style.width = "2vw";
-    search.style.height = "4vh";
-    search.style.zIndex = "2";
-    input1.style.display = "none";
-    namBut.style.display = "none";
-    lupa.style.display = "block";
-    alphaSearch.style.display = "none";
-    out.style.display = "none";
-    input1.value = "";
-    userEarn.style.marginLeft = "5vw";
-    userEarn.style.marginTop = "24vh";
-  out2.style.display = "none";
-});
-
-var alphaPrices;
-
-namBut.addEventListener("click", async () => {
-  try {
-    var _name = iNam.value;
-    var _name2 = _name.toLowerCase();
-    SearchAlphaAddress = await contract.methods.searchName(_name2).call();
-    if (SearchAlphaAddress == "0x0000000000000000000000000000000000000000") {
-      alphaName.innerText = "Not Found";
-    } else {
-      var name = iNam.value;
-      alphaName.innerText = name.toUpperCase();
-      alphaPrices = await contract.methods.seeAlphaPrices(SearchAlphaAddress).call();
-      monPri.innerText = `${alphaPrices[0]} ETH`;
-      annPri.innerText = `${alphaPrices[1]} ETH`;
-    }
-    iNam.style.marginTop = "2vh";
-    namBut.style.marginTop = "2vh";
-    divAS.style.display = "block"
-    seeAlphasImFollowing();
-  } catch (error) {
-    console.log("error searching name" + error);
-  }
-});
-
-monPri.addEventListener("click", async()=>{
-  try{
-    await contract.methods
-      .payAlpha(SearchAlphaAddress, 1)
-      .send({ from: connectedAddress, value: alphaPrices[0], });
-      seeAlphasImFollowing();
-  } catch(error){console.log(error);}
-})
-
-annPri.addEventListener("click", async () => {
-  try {
-    await contract.methods
-      .payAlpha(SearchAlphaAddress, 2)
-      .send({ from: connectedAddress, value: alphaPrices[1] });
-      seeAlphasImFollowing();
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-
-var varWidth = "30vw";
-var varHeight = 350;
-
-new TradingView.widget({
-  width: varWidth,
-  height: varHeight,
-  symbol: "BINANCE:BTCUSDT",
-  interval: "D",
-  timezone: "Etc/UTC",
-  theme: "dark",
-  style: "1",
-  locale: "en",
-  toolbar_bg: "#f1f3f6",
-  enable_publishing: false,
-  hide_top_toolbar: false,
-  save_image: false,
-  container_id: "windowTool1",
-});
-
-function cmc() {
-  tw.innerText = "";
-  tw1.style.display = "none";
-  tw2.style.display = "block";
-  tw3.style.display = "none";
-  tw4.style.display = "none";
-  tw0.style.display = "block";
+/* Estilos para el pulgar de la barra */
+::-webkit-scrollbar-thumb {
+  background-color: #636363b2; /* Color del pulgar */
+  border-radius: 1vw; /* Borde redondeado del pulgar */
 }
 
-function tv() {
-  tw.innerText = "";
-  tw1.style.display = "block";
-  tw2.style.display = "none";
-  tw3.style.display = "none";
-  tw4.style.display = "none";
-  tw0.style.display = "block";
+/* Estilos para el pulgar cuando se desplaza */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #b3b3afb2; /* Color del pulgar al pasar el cursor */
 }
-
-function uni() {
-  tw.innerText = "";
-  tw1.style.display = "none";
-  tw2.style.display = "none";
-  tw3.style.display = "block";
-  tw4.style.display = "none";
-  tw0.style.display = "block";
-}
-
-function mtry() {
-  tw.innerText = "";
-  tw1.style.display = "none";
-  tw2.style.display = "none";
-  tw3.style.display = "none";
-  tw4.style.display = "block";
-  tw0.style.display = "block";
-}
-
-var sigId = document.getElementById("sigId");
-
-async function seeTraSig2(alphaAddress) {
-  var tradingSigList = document.getElementById("tradingSigList");
-  var numSignals = await contract.methods.getNumTraSignals(alphaAddress).call();
-
-  if (numSignals < 50) {
-    tradingSigList.innerText = "";
-    for (let i = numSignals - 1; i >= 0; i--) {
-      var traSignal = await contract.methods
-        .seeTraSig2(i, alphaAddress, connectedAddress)
-        .call();
-
-      var signalDiv = document.createElement("div");
-      signalDiv.classList.add("signalTrad");
-      var dataValorList = [
-        traSignal[0], //asset
-        traSignal[1], //entry
-        traSignal[2], //sl
-        traSignal[3], //tp1
-        traSignal[4], //dir
-        traSignal[5], //id
-        await contract.methods.seeName(traSignal[7]).call(), //alphaName
-      ];
-      signalDiv.setAttribute("data-valor", JSON.stringify(dataValorList));
-
-      function addClickHandler(div, data) {
-        div.addEventListener("click", function () {
-          var dataValor = JSON.parse(data);
-          var idSignal = dataValor[5];
-          var tp1 = dataValor[3];
-          var asset = dataValor[0];
-          var entry = dataValor[1];
-          var sl = dataValor[2];
-          var alphaName = dataValor[7];
-          var potProfit = ((tp1 - entry) / entry)*100;  
-          potProfit = Math.abs(potProfit);
-          potProfit = potProfit.toFixed(2);
-          console.log(traSignal[4]);
-          if (entry > tp1) {
-            var potLoss = ((entry - sl) / entry) * 100;
-          } else {potLoss = ((sl - entry) / entry) * 100;}
-          potLoss = potLoss.toFixed(2);
-          sigId.innerText = "id." + idSignal;
-          document.getElementById("takeProfitsDiv4").innerText = "$" + tp1;
-          document.getElementById("takeProfitsDiv6").innerText = potProfit + "%";
-          document.getElementById("stopLossDiv4").innerText = "$" + sl;
-          document.getElementById("stopLossDiv6").innerText = potLoss + "%";
-
-        });
-      }
-
-      addClickHandler(signalDiv, signalDiv.getAttribute("data-valor"));
-      
-      var assetP = document.createElement("p");
-      assetP.innerText = `${traSignal[0]}`;
-      assetP.classList.add("assetS");
-
-      if (`${traSignal[0]}` == "BTC" || `${traSignal[0]}` == "btc") {
-        var btcImg = document.createElement("img");
-        btcImg.src = "btc.png";
-        btcImg.classList.add("assetImg");
-        signalDiv.appendChild(btcImg);
-      } else if (`${traSignal[0]}` == "ETH" || `${traSignal[0]}` == "eth") {
-        var ethImg = document.createElement("img");
-        ethImg.src = "eth.png";
-        ethImg.classList.add("assetImg");
-        signalDiv.appendChild(ethImg);
-      } else {
-        var elseImg = document.createElement("img");
-        elseImg.src =
-          "https://image.spreadshirtmedia.net/image-server/v1/compositions/T56A2PA4115PT17X0Y67D157542882W24948H18711/views/1,width=550,height=550,appearanceId=2,backgroundColor=000000,noPt=true/signo-de-interrogacion-planeado-hae-simbolo-signo-regalo-bolsa-de-tela.jpg";
-        elseImg.classList.add("assetImg");
-        signalDiv.appendChild(elseImg);
-        elseImg.style.borderRadius = "2vw";
-      }
-
-      var entryP = document.createElement("p");
-      entryP.innerText = `$ ${traSignal[1]}`;
-      entryP.classList.add("entryS");
-      var slP = document.createElement("p");
-      slP.innerText = `$ ${traSignal[2]}`;
-      if (traSignal[4] == 1) {
-        slP.classList.add("slSlong");
-      } else {
-        slP.classList.add("slSshort");
-      }
-      var tpP = document.createElement("p");
-      tpP.innerText = `$ ${traSignal[3]}`;
-      if (traSignal[4] == 1) {
-        tpP.classList.add("tpSlong");
-      } else {
-        tpP.classList.add("tpSshort");
-      }
-      var dirP = document.createElement("p");
-      var LoS = "";
-      if (traSignal[4] == 1) {
-        LoS = "Long";
-        var longImg = document.createElement("div");
-        longImg.classList.add("longImg");
-        signalDiv.appendChild(longImg);
-      } else {
-        LoS = "Short";
-        var shortImg = document.createElement("div");
-        shortImg.classList.add("shortImg");
-        signalDiv.appendChild(shortImg);
-      }
-      dirP.innerText = `${LoS}`;
-      dirP.classList.add("dirS");
-
-      var date = document.createElement("p");
-      date.classList.add("date");
-      var postBlock = `${traSignal[6]}`;
-      var transDate = new Date(postBlock * 1000);
-      var y = transDate.getFullYear();
-      var m = transDate.getMonth() + 1;
-      var d = transDate.getDate();
-      var h = transDate.getHours();
-      var mi = transDate.getMinutes();
-      if (mi >= 10) {
-        var postDate = `${y}/${m}/${d}  ${h}:${mi}`;
-      } else {
-        var postDate = `${y}/${m}/${d}  ${h}:0${mi}`;
-      }
-      date.innerHTML = postDate;
-
-      if (traSignal[4] == 1) {
-        var dolp1 = document.createElement("p");
-        dolp1.classList.add("dolp1");
-        dolp1.innerText = "Take Profit";
-        var dolp2 = document.createElement("p");
-        dolp2.classList.add("dolp2");
-        dolp2.innerText = "Entry";
-        var dolp3 = document.createElement("p");
-        dolp3.classList.add("dolp3");
-        dolp3.innerText = "Stop Loss";
-      } else {
-        var dolp1 = document.createElement("p");
-        dolp1.classList.add("dolp3");
-        dolp1.innerText = "Take Profit";
-        var dolp2 = document.createElement("p");
-        dolp2.classList.add("dolp2");
-        dolp2.innerText = "Entry";
-        var dolp3 = document.createElement("p");
-        dolp3.classList.add("dolp1");
-        dolp3.innerText = "Stop Loss";
-      }
-
-      if(traSignal[8] != undefined){
-        var msgSig = document.createElement("p");
-        msgSig.innerText = `${traSignal[8]}`;
-        msgSig.classList.add("msgSig");
-        signalDiv.appendChild(msgSig);
-    }
-
-      signalDiv.appendChild(dolp1);
-      signalDiv.appendChild(dolp2);
-      signalDiv.appendChild(dolp3);
-      signalDiv.appendChild(entryP);
-      signalDiv.appendChild(assetP);
-      signalDiv.appendChild(slP);
-      signalDiv.appendChild(tpP);
-      signalDiv.appendChild(dirP);
-      signalDiv.appendChild(date);
-      tradingSigList.appendChild(signalDiv);
-    }
-  } else {
-    for (let i = numSignals - 1; i >= numSignals - 50; i--) {
-      // solo salen las 50 primeras señales de trading
-      var traSignal = await contract.methods
-        .seeTraSig2(i, connectedAddress)
-        .call();
-
-      var signalDiv = document.createElement("div");
-      signalDiv.classList.add("signalTrad");
-      signalDiv.setAttribute("data-valor", `${traSignal[5]}`);
-
-      signalDiv.setAttribute("data-valor", `${traSignal[5]}`);
-
-      (function (signal) {
-        // ESTA FUNCION PERMITE VALIDAR Y CALIFICAR LAS SEÑALES CON UN CLICK, CLICKANDO. CAMBIA `${traSignal[0]}` por EL ID de la señal o la address del Alpha
-        signal.addEventListener("click", function () {
-          var idSignal = signal.getAttribute("data-valor");
-          sigId.innerText = "id." + idSignal;
-        });
-      })(signalDiv);
-
-      var assetP = document.createElement("p");
-      assetP.innerText = `${traSignal[0]}`;
-      assetP.classList.add("assetS");
-
-      if (`${traSignal[0]}` == "BTC" || `${traSignal[0]}` == "btc") {
-        var btcImg = document.createElement("img");
-        btcImg.src = "btc.png";
-        btcImg.classList.add("assetImg");
-        signalDiv.appendChild(btcImg);
-      } else if (`${traSignal[0]}` == "ETH" || `${traSignal[0]}` == "eth") {
-        var ethImg = document.createElement("img");
-        ethImg.src = "eth.png";
-        ethImg.classList.add("assetImg");
-        signalDiv.appendChild(ethImg);
-      } else {
-        var elseImg = document.createElement("img");
-        elseImg.src =
-          "https://image.spreadshirtmedia.net/image-server/v1/compositions/T56A2PA4115PT17X0Y67D157542882W24948H18711/views/1,width=550,height=550,appearanceId=2,backgroundColor=000000,noPt=true/signo-de-interrogacion-planeado-hae-simbolo-signo-regalo-bolsa-de-tela.jpg";
-        elseImg.classList.add("assetImg");
-        signalDiv.appendChild(elseImg);
-        elseImg.style.borderRadius = "2vw";
-      }
-
-      var entryP = document.createElement("p");
-      entryP.innerText = `$ ${traSignal[1]}`;
-      entryP.classList.add("entryS");
-      var slP = document.createElement("p");
-      slP.innerText = `$ ${traSignal[2]}`;
-      if (traSignal[4] == 1) {
-        slP.classList.add("slSlong");
-      } else {
-        slP.classList.add("slSshort");
-      }
-      var tpP = document.createElement("p");
-      tpP.innerText = `$ ${traSignal[3]}`;
-      if (traSignal[4] == 1) {
-        tpP.classList.add("tpSlong");
-      } else {
-        tpP.classList.add("tpSshort");
-      }
-      var dirP = document.createElement("p");
-      var LoS = "";
-      if (traSignal[4] == 1) {
-        LoS = "Long";
-        var longImg = document.createElement("div");
-        longImg.classList.add("longImg");
-        signalDiv.appendChild(longImg);
-      } else {
-        LoS = "Short";
-        var shortImg = document.createElement("div");
-        shortImg.classList.add("shortImg");
-        signalDiv.appendChild(shortImg);
-      }
-      dirP.innerText = `${LoS}`;
-      dirP.classList.add("dirS");
-
-      var date = document.createElement("p");
-      date.classList.add("date");
-      var postBlock = `${traSignal[6]}`;
-      var transDate = new Date(postBlock * 1000);
-      var y = transDate.getFullYear();
-      var m = transDate.getMonth() + 1;
-      var d = transDate.getDate();
-      var h = transDate.getHours();
-      var mi = transDate.getMinutes();
-      if(mi >= 10){
-        var postDate = `${y}/${m}/${d}  ${h}:${mi}`;
-      } else{var postDate = `${y}/${m}/${d}  ${h}:0${mi}`;}
-      date.innerHTML = postDate;
-      var dolp1 = document.createElement("p");
-      dolp1.classList.add("dolp1");
-      dolp1.innerText = "Take Profit";
-      var dolp2 = document.createElement("p");
-      dolp2.classList.add("dolp2");
-      dolp2.innerText = "Entry";
-      var dolp3 = document.createElement("p");
-      dolp3.classList.add("dolp3");
-      dolp3.innerText = "Stop Loss";
-
-      signalDiv.appendChild(dolp1);
-      signalDiv.appendChild(dolp2);
-      signalDiv.appendChild(dolp3);
-      signalDiv.appendChild(entryP);
-      signalDiv.appendChild(assetP);
-      signalDiv.appendChild(slP);
-      signalDiv.appendChild(tpP);
-      signalDiv.appendChild(dirP);
-      signalDiv.appendChild(date);
-      tradingSigList.appendChild(signalDiv);
-    }
-  }
-}
-
-async function seeAlphasImFollowing() {
-  try{
-    var elementsToDelete2 = document.querySelectorAll(".myAlphaName");
-    elementsToDelete2.forEach(function (element) {
-      element.parentElement.removeChild(element);
-    });
-    var myAlphasListLen = await contract.methods.seeImFollowingListLen(connectedAddress).call();
-    for(var i = myAlphasListLen-1; i >= 0; i--){
-      var alphaAddressI = await contract.methods.seeAlphasFollowing(connectedAddress, i).call();
-      var alphaNameIObj = await contract.methods.seeName(alphaAddressI).call();
-      var alphaNameI = alphaNameIObj.toString(); // Convertir el objeto a cadena
-      var alphaP = document.createElement("p");
-      alphaP.innerText = alphaNameI;
-      alphaP.classList.add("myAlphaName");
-      myAlphas.appendChild(alphaP);
-      alphaP.setAttribute("data-valor", `${alphaAddressI}`);
-
-      (function (alpha) {
-        alpha.addEventListener("click", function () {
-          console.log(alpha.getAttribute("data-valor"));
-          var alphaClick = alpha.getAttribute("data-valor");
-          alphaClick;
-          seeTraSig2(alphaClick);
-        });
-      })(alphaP);
-      var goBut = document.createElement("div");
-      goBut.innerText = "Go";
-      goBut.classList.add("goBut");
-      alphaP.appendChild(goBut);
-      goBut.style.display = "flex";
-    }
-
     
-  } catch(error){console.log("error" + error)}
+
+body{
+    overflow: hidden;
+    background-color: black;
 }
 
-var valPoints = document.getElementById("valPoints");
-
-async function getValidatorPoints() {
-  try{
-    var validatorScore = await contract.methods.seeTotalValidatorScore(connectedAddress).call();
-    valPoints.innerText = `${validatorScore}`;
-  } catch(error){}
+#header {
+    position: absolute;
+    width: 100vw;
+    height: 12vh;
+    background-color: rgb(0, 0, 0);
+    color: white;
+    top: 0;
+    left: 0;
 }
 
-var userEarn = document.getElementById("userEarn");
-var earnLogo = document.getElementById("earnLogo");
-var out2 = document.getElementById("out2");
-var divId2 = document.getElementById("divId2");
+#logo {
+    position: absolute;
+    margin-left: 0.4vw;
+    margin-top: 0.3vw;
+    width: 5.5vw;
+    
+}
 
-earnLogo.addEventListener("click", function(){
-  userEarn.style.marginTop = "15vh";
-  userEarn.style.marginLeft = "5vw";
-  userEarn.style.width = "28vw";
-  userEarn.style.height = "25vh";
-  userEarn.style.zIndex = "3";
-  input1.style.display = "block";
-  namBut.style.display = "block";
-  earnLogo.style.display = "none";
-  out2.style.display = "block";
-  input1.style.display = "none";
-  namBut.style.display = "none";
-  search.style.marginLeft = "35.5vw";
-  search.style.width = "2vw";
-  search.style.height = "4vh";
-  search.style.zIndex = "2";
-  input1.style.display = "none";
-  namBut.style.display = "none";
-  lupa.style.display = "block";
-  alphaSearch.style.display = "none";
-  out.style.display = "none";
-  input1.value = "";
-  divId2.style.display = "block";
-});
+#logo2 {
+    position: absolute;
+    margin-left: 0.4vw;
+    margin-top: -40vh;
+    width: 13vw;
+    opacity: 0.8;
+    
+}
 
-out2.addEventListener("click", function () {
-  userEarn.style.width = "2vw";
-  userEarn.style.height = "4vh";
-  userEarn.style.marginTop = "25vh";
-  userEarn.style.zIndex = "2";
-  earnLogo.style.display = "block";
-  out2.style.display = "none";
-  search.style.marginLeft = "5vw";
-  divId2.style.display = "none";
+#title {
+    position: absolute;
+    margin-left: 5.2vw;
+    margin-top: 4vh;
+    font-size: 1.3vw;
+    font-family: sans-serif;
+}
 
-});
+#wallet {
+    position: absolute;
+    color: white;
+    background: linear-gradient(112deg, rgb(13 44 101), rgb(0, 41, 191), rgb(46 128 255), rgb(0, 41, 191), rgb(10 2 95), rgba(2, 0, 24, 0.541));
+    left: 87vw;
+    top: 2vw;
+    border-style: none;
+    border-radius: 0.5vw;
+    height: 3vw;
+    width: 13vw;
+    text-align: left;
+    padding-left: 1vw;
+    font-family: sans-serif;
+    font-size: 1.4vw;
+    text-shadow: 0vw 0vw 1vw rgb(0 0 0);
+
+} #wallet:hover{text-shadow: 0vw 0vw 1vw rgb(255, 255, 255); cursor: pointer; transition: ease-in, 0.8s; letter-spacing: 1px; opacity:0.9; width: 13.5vw;}
+
+#msg1 {
+    position: absolute;
+    display: flex;
+    color: rgb(255 255 255 / 90%);
+    font-family: sans-serif;
+    font-size: 1.4vw;
+    background: linear-gradient(39deg, rgba(13, 44, 101, 0.9), rgb(0, 41, 191, 0.9), rgb(46, 128, 255, 0.9), rgb(0, 41, 191, 0.90), rgb(10, 2, 95, 0.90), rgba(2, 0, 24, 0.9));
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1vw;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30vw;
+    height: 10vw;
+    text-shadow: 0vw 0vw 1vw rgb(0, 0, 0);
+    letter-spacing: 2px;
+    z-index: 3;
+}
+
+#userZoneDiv {
+    position: absolute;
+    width: 96vw;
+    height: 80vh;
+    bottom: 2vh;
+    color: rgb(140, 140, 140);
+    background-color: #080808;
+    transform: translateX(-50%);
+    left: 50%;
+    border-radius: 1vw;
+    padding: 1vw;
+    z-index: 2;
+    font-size: 1.3vw;
+}
+
+#beta {
+    position: absolute;
+    width: 28vw;
+    height: 16vh;
+    margin-top: 16vh;
+    margin-left: 2.5vw;
+    color: rgb(140, 140, 140);
+    background-color: #14141440;
+    box-shadow: inset 0vw 0vw 1vw rgb(40 40 40 / 77%);
+    border-radius: 0.5vw;
+    padding: 1vw;
+    z-index: 2;
+    font-size: 1.3vw;
+}
+
+#plans {
+    position: absolute;
+    width: 28vw;
+    height: 48vh;
+    margin-top: 40vh;
+    margin-left: 2.5vw;
+    color: rgb(140, 140, 140);
+    background-color: #14141440;
+    box-shadow: inset 0vw 0vw 1vw rgb(40 40 40 / 77%);
+    border-radius: 0.5vw;
+    padding: 1vw;
+    z-index: 2;
+    font-size: 1.3vw;
+}
+
+#alpha {
+    position: absolute;
+    display: flex;
+    width: 28vw;
+    height: 60vh;
+    margin-top: 21vh;
+    margin-left: 34.5vw;
+    color: rgb(255, 255, 255);
+    background-color: #14141440;
+    box-shadow: inset 0vw 0vw 1vw rgb(40 40 40 / 77%);
+    border-radius: 0.5vw;
+    padding: 1vw;
+    z-index: 2;
+    font-size: 4vw;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 0vw 0vw 0.5vw rgba(0, 0, 0);
+    padding-bottom: 5vh;
+    
+} #alpha:hover{margin-top: 19vh; transition: ease, 1s; box-shadow: inset 0vw 0vw 1vw rgba(92, 92, 92, 0.92);}
+
+#myZone {
+    position: absolute;
+    width: 28vw;
+    height: 40vh;
+    margin-top: 16vh;
+    margin-left: 66.5vw;
+    color: rgb(140, 140, 140);
+    background-color: #14141440;
+    box-shadow: inset 0vw 0vw 1vw rgb(40 40 40 / 77%);
+    border-radius: 0.5vw;
+    padding: 1vw;
+    z-index: 2;
+    font-size: 1.3vw;
+}
+
+#search {
+    position: absolute;
+    width: 28vw;
+    height: 25vh;
+    margin-top: 64vh;
+    margin-left: 66.5vw;
+    color: rgb(140, 140, 140);
+    background-color: #111111;
+    box-shadow: inset 0vw 0vw 0.5vw rgba(83, 83, 83, 0.818);
+    border-radius: 0.5vw;
+    padding: 1vw;
+    z-index: 2;
+    font-size: 1.3vw;
+    
+}
+
+#out {
+    position: absolute;
+    display: none;
+    right: 0.5vw;
+    top: 1vh;
+    width: 2vw;
+    opacity: 60%;
+} #out:hover{opacity: 100%; cursor:pointer; transition: ease,0.5s;}
+
+#out2 {
+    position: absolute;
+    display: none;
+    right: 0.5vw;
+    top: 1vh;
+    width: 2vw;
+    opacity: 60%;
+} #out2:hover{opacity: 100%; cursor:pointer; transition: ease,0.5s;}
+
+.input {
+    position: absolute;
+    background-color: #1d1d1d;
+    border-style: none;
+    color: white;
+    border-radius: 1vw 0vw 0vw 1vw;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 1.2vw;
+    padding-top: 0.3vw;
+    padding-bottom: 0.3vw;
+    box-shadow: 0vw 0vw 1vw rgb(0 0 0);
+}
+
+#input1 {
+    margin-top: 10vh;
+    left: 40%;
+    transform: translateX(-50%);
+    
+}
+
+#searchBut{
+    position: absolute;
+    background: linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));
+    border-style: none;
+    color: white;
+    border-radius: 0vw 1vw 1vw 0vw;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 1vw;
+    letter-spacing: 0.06vw;
+    width: 6vw;
+    height: 4vh;
+    margin-top: 10vh;
+    margin-left: 21.7vw;
+    transform: translateX(-50%);
+    box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
+    z-index: 3;
+} #searchBut:hover {cursor: pointer; box-shadow: inset 0vw 0vw 1vw rgb(133, 173, 248);transition: ease, 0.5s; }
+
+#address {
+    position: absolute;
+    font-size: 1.2vw;
+    font-family: sans-serif;
+    margin-top: 6vh;
+    margin-left: 3vw;
+    color:rgb(255, 255, 255);
+    text-shadow: 0vw 0vw 0.2vw rgb(77, 141, 237);
+}
+
+#address2 {
+    position: absolute;
+    display: none;
+    font-size: 1vw;
+    font-family: sans-serif;
+    margin-top: 3.8vh;
+    margin-left: 84.4vw;
+    color:rgb(155, 155, 155);
+    text-shadow: 0vw 0vw 0.1vw rgb(0, 0, 0);
+    z-index: 2;
+}
+
+#valPoints {
+    position: absolute;
+    font-size: 1.6vw;
+    font-family: sans-serif;
+    margin-top: -5vh;
+    left: 50%;
+    transform: translateX(-50%);
+    color:rgb(255, 255, 255);
+    z-index: 2;
+}
+
+#validator {
+    position: absolute;
+    display: none;
+    font-size: 1vw;
+    font-family: sans-serif;
+    margin-top: 15.6vh;
+    margin-left: 11vw;
+    color: rgb(184, 180, 180);
+    z-index: 2;
+    width: 5vw;
+    height: 5vh;
+    box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);
+    background-color: #0000006c;
+    border-radius: 1vw;
+    text-align: center;
+    padding-top: 7vh;
+    padding-bottom: 0.5vh;
+    letter-spacing: 0.5px;
+}
+
+#numFollowingDiv{
+    position: absolute;
+    display: none;
+    font-size: 0.9vw;
+    font-family: sans-serif;
+    margin-top: 15.5vh;
+    margin-left: 17vw;
+    color: rgb(184, 180, 180);
+    z-index: 2;
+    width: 5vw;
+    height: 5vh;
+    box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);
+    background-color: #0000006c;
+    border-radius: 1vw;
+    text-align: center;
+    padding-top: 5.5vh;
+    padding-bottom: 2vh;
+    letter-spacing: 0.5px;
+} 
+
+#numFollowing {
+    position: absolute;
+    font-size: 1.6vw;
+    font-family: sans-serif;
+    margin-top: -3.5vh;
+    left: 50%;
+    transform: translateX(-50%);
+    color:rgb(255, 255, 255);
+}
+
+#addressText {
+    position: absolute;
+    font-size: 1.4vw;
+    font-family: sans-serif;
+    margin-top: 10vh;
+    margin-left: 4vw;
+    color:rgb(180, 180, 180);
+    text-shadow: 0vw 0vw 0.2vw rgb(77, 141, 237);
+}
+
+#followText {
+    position: absolute;
+    font-size: 1.4vw;
+    font-family: sans-serif;
+    margin-top: 10vh;
+    margin-left: 18vw;
+    color:rgb(180, 180, 180);
+    text-shadow: 0vw 0vw 0.2vw rgb(77, 141, 237);
+}
+
+#follow {
+    position: absolute;
+    font-size: 2vw;
+    font-family: sans-serif;
+    margin-top: 4vh;
+    margin-left: 20.1vw;
+    color:rgb(255, 255, 255);
+    text-shadow: 0vw 0vw 0.2vw rgb(0, 70, 176);
+}
+
+#planText {
+    position: absolute;
+    font-size: 1.4vw;
+    font-family: sans-serif;
+    margin-top: 23vh;
+    margin-left: 5vw;
+    color:rgb(180, 180, 180);
+    text-shadow: 0vw 0vw 0.2vw rgb(77, 141, 237);
+}
+
+#plan {
+    position: absolute;
+    font-size: 1.6vw;
+    font-family: sans-serif;
+    margin-top: 18vh;
+    margin-left: 3.2vw;
+    color:rgb(255, 255, 255);
+    letter-spacing: 0.3vw;
+    text-shadow: 0vw 0vw 0.2vw rgb(77, 141, 237);
+}
+
+#nextPayText {
+    position: absolute;
+    font-size: 1.4vw;
+    font-family: sans-serif;
+    margin-top: 23vh;
+    margin-left: 16.5vw;
+    color:rgb(180, 180, 180);
+    text-shadow: 0vw 0vw 0.2vw rgb(77, 141, 237);
+}
+
+#nextPay {
+    position: absolute;
+    font-size: 1.4vw;
+    font-family: sans-serif;
+    margin-top: 18.5vh;
+    margin-left: 17vw;
+    color:rgb(255, 255, 255);
+    text-shadow: 0vw 0vw 0.2vw rgb(77, 141, 237);
+}
+
+#zoneBut{
+    position: absolute;
+    background: linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));
+    border-style: none;
+    color: white;
+    border-radius: 1vw 1vw 1vw 1vw;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 1.3vw;
+    width: 10vw;
+    height: 5vh;
+    margin-top: 32vh;
+    left: 50%;
+    transform: translateX(-50%);
+    transform: translateX(-50%);
+    box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
+    z-index: 3;
+} #zoneBut:hover {cursor: pointer; box-shadow: inset 0vw 0vw 1vw rgb(133, 173, 248);transition: ease, 0.5s; }
+
+#launch{
+    position: absolute;
+    background: linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));
+    border-style: none;
+    color: white;
+    border-radius: 1vw 1vw 1vw 1vw;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 1.5vw;
+    width: 12vw;
+    height: 7vh;
+    margin-top: 32vh;
+    left: 50%;
+    transform: translateX(-50%);
+    transform: translateX(-50%);
+    box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
+    
+} #launch:hover {cursor: pointer; box-shadow: inset 0vw 0vw 1vw rgb(133, 173, 248);transition: ease, 0.5s; }
+
+#B{
+   position: absolute;
+   width: 5vw;
+   height: 5vh; 
+   color: white;
+   text-shadow: 0vw 0vw 0.4vw rgb(0,0,0);
+   top: 0;
+   margin-left: 3.5vw;
+   background: linear-gradient(20deg, rgb(7, 49, 100), rgb(117, 107, 211), rgb(34, 32, 60),rgb(80, 82, 165));
+   border-style: none;
+   border-radius: 0vw 0vw 0.5vw 0.5vw;
+   box-shadow: inset 0vw 0vw 1vw rgb(0,0,0);
+   font-size: 1.2vw;
+   font-weight: 200;
+} #B:hover{cursor: pointer; height: 6vh; transition: ease, 0.5s;}
+
+#S{
+   position: absolute;
+   width: 5vw;
+   height: 5vh; 
+   color: rgb(255, 255, 255);
+   text-shadow: 0vw 0vw 0.2vw rgb(0, 0, 0);
+   top: 0;
+   margin-left: 9vw;
+   background: linear-gradient(25deg, rgb(83, 83, 83),  rgba(207, 205, 205, 0.744),rgb(51, 51, 51), rgb(79, 79, 79));
+   border-style: none;
+   border-radius: 0vw 0vw 0.5vw 0.5vw;
+   box-shadow: inset 0vw 0vw 1vw rgb(0,0,0);
+   font-size: 1.2vw;
+   font-weight: 200;
+} #S:hover{cursor: pointer;height: 6vh; transition: ease, 0.5s;}
+
+#G{
+   position: absolute;
+   width: 5vw;
+   height: 5vh; 
+   color: white;
+   text-shadow: 0vw 0vw 0.5vw rgb(0,0,0);
+   top: 0;
+   margin-left: 14.5vw;
+   background: linear-gradient(25deg, rgb(164, 110, 2), rgb(227, 164, 28), rgb(108, 72, 0), rgb(231, 177, 0));
+   border-style: none;
+   border-radius: 0vw 0vw 0.5vw 0.5vw;
+   box-shadow: inset 0vw 0vw 1vw rgb(0,0,0);
+   font-size: 1.2vw;
+   font-weight: 200;
+} #G:hover{cursor: pointer; height: 6vh; transition: ease, 0.5s;}
+
+#L{
+   position: absolute;
+   width: 5vw;
+   height: 5vh;
+   color: white;
+   text-shadow: 0vw 0vw 0.4vw rgb(0,0,0);
+   top: 0;
+   margin-left: 20vw;
+   background: linear-gradient(20deg, rgb(2, 178, 81), rgb(0, 65, 63),rgb(0,0,0), rgb(0, 69, 33));
+   border-style: none;
+   border-radius: 0vw 0vw 0.5vw 0.5vw;
+   box-shadow: inset 0vw 0vw 0.2vw rgb(0,0,0);
+   font-size: 1.vw;
+   font-weight: 200;
+
+}#L:hover{cursor: pointer; height: 6vh; transition: ease, 0.5s;}
+
+#buy {
+   position: absolute;
+   width: 9vw;
+   height: 5vh; 
+   color: white;
+   text-shadow: 0vw 0vw 0.4vw rgb(0,0,0);
+   margin-top: 42vh;
+   margin-left: 4vw;
+   background: linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgba(22, 99, 200, 0.3), rgb(10, 2, 95, 0.3));
+   border-style: none;
+   border-radius: 0vw 0vw 0.6vw 0.6vw;
+   box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
+   font-size: 1.3vw;
+   z-index: 3;
+}#buy:hover{cursor: pointer; border-radius: 0.6vw; height: 10vh; margin-top: 36vh; background: linear-gradient(0deg, rgb(0, 41, 191), rgba(7, 29, 142), rgba(2, 33, 146), rgb(10, 2, 95)); transition: ease, 0.5s;}
+
+#buyB {
+   position: absolute;
+   width: 9vw;
+   height: 5vh; 
+   color: white;
+   text-shadow: 0vw 0vw 0.4vw rgb(0,0,0);
+   margin-top: 42vh;
+   margin-left: 14.5vw;
+   background: linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgba(7, 29, 142, 0.3), rgba(2, 33, 146, 0.525), rgb(10, 2, 95, 0.3));
+   border-style: none;
+   border-radius: 0vw 0vw 0.6vw 0.6vw;
+   box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
+   font-size: 1.3vw;
+   z-index: 3;
+}#buyB:hover{cursor: pointer; border-radius: 0.6vw; height: 10vh; margin-top: 36vh; background: linear-gradient(0deg, rgb(0, 41, 191), rgba(7, 29, 142), rgba(2, 33, 146), rgb(10, 2, 95)); transition: ease, 0.5s;}
+
+#alphaName {
+    position: absolute;
+    margin-top: 10vh;
+    margin-left: 4vw;
+    letter-spacing: 0.1vw;
+    color: rgb(255, 255, 255);
+    width: 9VW;
+    height: 3vh;
+    font-size: 1.2vw;
+    overflow-x: auto;
+    
+}
+
+#followers {
+    position: absolute;
+    margin-top: 9.5vh;
+    margin-left: 16vw;
+    color:white;
+}
+
+#signals {
+    position: absolute;
+    margin-top: 9.5vh;
+    margin-left: 23vw;
+    color:white;
+}
+
+#s {
+    position: absolute;
+    margin-top: 13vh;
+    margin-left: 22.3vw;
+    font-size: 1vw;
+}
+
+#f {
+    position: absolute;
+    margin-top: 13vh;
+    margin-left: 14.8vw;
+    font-size: 1vw;
+}
+
+#alphaMonPrice {
+    position: absolute;
+    margin-top: 19vh;
+    margin-left: 5vw;
+    width: 8vw;
+   height: 4vh; 
+   color: white;
+   text-shadow: 0vw 0vw 0.4vw rgb(0,0,0);
+   background: linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgba(22, 99, 200, 0.3), rgb(10, 2, 95, 0.3));
+   border-style: none;
+   border-radius: 2vw;
+   box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
+   font-size: 1.2vw;
+
+}
+#alphaAnnPrice {
+    position: absolute;
+    margin-top: 19vh;
+    margin-left: 14vw;
+    width: 8vw;
+   height: 4vh; 
+   color: white;
+   text-shadow: 0vw 0vw 0.4vw rgb(0,0,0);
+   background: linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgba(22, 99, 200, 0.3), rgb(10, 2, 95, 0.3));
+   border-style: none;
+   border-radius: 2vw;
+   box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
+   font-size: 1.2vw;
+}
+
+#a {
+    position: absolute;
+    margin-top: 23.5vh;
+    margin-left: 16.5vw;
+    font-size: 1vw;
+}
+
+#m {
+    position: absolute;
+    margin-top: 23.5vh;
+    margin-left: 7.5vw;
+    font-size: 1vw;
+}
+
+.planDes {
+    position: absolute;
+    text-align: center;
+    margin-top: 8vh;
+    width: 18vw;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    letter-spacing: 0.1vw;
+}
+
+#refCodeIn{
+    position: absolute;
+    margin-top: 23.7vh;
+    width: 10vw;
+    border-radius: 0.6vw 0.6vw 0vw 0vw;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.1vw;
+} #refCodeIn:focus {
+    outline: none; 
+}
+
+#apply {
+    position: absolute;
+    background: linear-gradient(0deg, rgb(0, 41, 191, 0.2), rgb(46, 81, 255, 0.2), rgb(0, 41, 191, 0.2), rgb(10, 2, 95, 0.2));
+    color: white;
+    text-shadow: 0vw 0vw 0.25vw rgb(0,0,0);
+    margin-top: 27.5vh;
+    border-style: none;
+    width: 10.2vw;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
+    border-radius: 0vw 0vw 0.6vw 0.6vw;
+} #apply:hover{cursor: pointer; letter-spacing: 0.05vw; height: 3.4vh; transition: ease, 1s; }
+
+.moreI {
+    position: absolute;
+    display: flex;
+    color: rgba(255, 255, 255, 0.707);
+    align-items: center;
+    padding-left: 0.9vw;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 17vh;
+    text-decoration: none;
+    border-color: rgba(255, 255, 255, 0.664);
+    border-style: solid;
+    height: 3.5vh;
+    width: 5vw;
+    border-radius: 1vw;
+    border-width: 0.1vw;
+    font-size: 1vw;
+} .moreI:hover{letter-spacing: 0.1vw; width: 6vw; transition: ease, 1s;}
+
+.monPrice{
+    position: absolute;
+    display: flex;
+    margin-top: 36vh;
+    margin-left: 4.05vw;
+    color: white;
+    font-family: monospace;
+    border-color: rgba(255, 255, 255, 0.664);
+    border-style: solid;
+    border-bottom-style: none;
+    width: 7.2vw;
+    height: 3vh;
+    text-align: center;
+    align-items: center;
+    padding-bottom: 2vh;
+    padding-top: 1vh;
+    padding-left: 1.65vw;
+    border-radius: 0.5vw 0.5vw 0vw 0vw;
+    border-width: 0.1vw;
+    z-index: 2;
+}
+
+.annPrice{
+    position: absolute;
+    display: flex;
+    margin-top: 36vh;
+    margin-left: 14.55vw;
+    color: white;
+    font-family: monospace;
+    border-color: rgba(255, 255, 255, 0.664);
+    border-style: solid;
+    border-bottom-style: none;
+    width: 8.75vw;
+    height: 3vh;
+    text-align: center;
+    align-items: center;
+    padding-bottom: 2vh;
+    padding-top: 1vh;
+    border-radius: 0.5vw 0.5vw 0vw 0vw;
+    border-width: 0.1vw;
+    z-index: 2;
+}
+
+#simpleMonPrice {
+    position: absolute;
+    right: 2.8vw;
+    max-width: 5.7vw;
+    overflow: hidden;
+}
+#simpleAnnPrice {
+    position: absolute;
+    right: 2.8vw;
+    max-width: 5.7vw;
+    overflow: hidden;
+}
+
+
+.eth1{
+    position: absolute;
+    right: 0.5vw;
+}
+
+#tools {
+    position: absolute;
+    display: none;
+    width: 3vw;
+    height: 80vh;
+    margin-top: 15vh;
+    left: 2vw;
+    background-color: #2d2d2e3d;
+    border-radius: 0.5vw;
+    z-index: 2;
+    color: white;
+} #tools:hover{background-color: rgba(91, 91, 92, 0.239); box-shadow: inset 0vw 0vw 0.5vw rgb(83 83 83);}
+
+.toolsImg{
+    width: 2vw;
+    margin-top: 3vh;
+    margin-left: 0.4vw;
+    border-radius: 1vw;
+    box-shadow: 0vw 0vw 0.5vw rgb(0, 0, 0);
+} .toolsImg:hover{cursor: pointer; box-shadow: 0vw 0vw 0.2vw rgb(74, 74, 74);}
+
+#toolsWindow{
+    position: absolute;
+    display: none;
+    width: 35vw;
+    height: 50vh;
+    margin-top: 45vh;
+    left: 5.5vw;
+    background-color: #19191971;
+    border-radius: 0.5vw;
+    color: white;
+    z-index: 2;
+    /*box-shadow: inset 0vw 0vw 0.5vw rgba(83, 83, 83, 0.818);*/
+    overflow-y: scroll;
+}
+
+#toolsWindowText{
+    position: absolute;
+    display: block;
+    font-size: 3vw;
+    font-weight: 700;
+}
+
+#windowTool1{
+    right: 0.9vw;
+    margin-top: 2vh;
+    z-index: 200;
+}
+
+#windowTool3{
+    position: absolute;
+    margin-left: 0vw;
+    margin-top: -1vh;
+    overflow-x: hidden;
+    width: 35vw; 
+    height: 49vh;
+    z-index: 200;
+}
+
+#windowTool4{
+    position: absolute;
+    margin-left: 0vw;
+    margin-top: -1vh;
+    overflow-x: hidden;
+    width: 35vw; 
+    height: 49vh;
+    z-index: 200;
+
+}
+
+#alphaSignals {
+    position: absolute;
+    right: 17.7vw;
+    margin-top: 14vh;
+    width: 42vw;
+    height: 79vh;
+    display: none;
+    background-color: #19191900;
+    border-radius: 0.5vw;
+    color: white;
+    z-index: 2;
+    overflow-y: scroll;
+    box-shadow: inset 0vw 0vw 0.5vw rgb(83 83 83 / 0%);
+}
+
+#myAlphas {
+    position: absolute;
+    right: 1.5vw;
+    margin-top: 15vh;
+    width: 15vw;
+    height: 29vh;
+    display: none;
+    background-color: #0000006c;
+    border-radius: 0.5vw;
+    color: white;
+    z-index: 2;
+    font-family: sans-serif;
+    letter-spacing: 1px;
+    text-align: center;
+    padding-top: 1vh;
+    font-size: 1.1vw;
+}
+
+#lupa{
+    position: absolute;
+    display: none;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 3vw;
+    filter: invert(100%);
+} #lupa:hover{cursor: pointer;}
+
+#tradingSigList {
+    display: block;
+    overflow: hidden;
+    direction: ltr;
+}
+
+.signalTrad{
+    background-color: #0000006c;
+    box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);
+    width: 40vw;
+    height: 18.5vh;
+    border-radius: 0.5vw;
+    margin-left: 1vw;
+    margin-top: 1.25vh;
+    
+} .signalTrad:hover{transition: ease, 1s; box-shadow: inset 0vw 0vw 0.5vw rgb(143, 142, 142);}
+
+.assetS{
+    position: absolute;
+    margin-top: 3vh;
+    margin-left: 4vw;
+    color:#ffffff;
+    font-size: 1vw;
+    
+}
+
+.entryS{
+    position: absolute;
+    margin-top: 7vh;
+    margin-left: 8vw;
+    color:#c5c4c4;
+    font-size: 1vw;
+    background-color: #0000006c;
+    width: auto;
+    text-align: center;
+    padding: 0.5vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    border-radius: 0.4vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgba(51, 112, 245, 0.541);
+    text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
+    max-width: 4.5vw;
+    
+}
+.slSlong{
+    position: absolute;
+    margin-top: 12vh;
+    margin-left: 8vw;
+    color:#ffffffd7;
+    font-size: 1vw;
+    background-color: #0000006c;
+    width: auto;
+    text-align: center;
+    padding: 0.5vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    border-radius: 0.4vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgb(245, 5, 5);
+    max-width: 4.5vw;
+}
+.slSshort{
+    position: absolute;
+    margin-top: 2vh;
+    margin-left: 8vw;
+    color:#ffffffd7;
+    font-size: 1vw;
+    background-color: #0000006c;
+    width: auto;
+    text-align: center;
+    padding: 0.5vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    border-radius: 0.4vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgb(245, 5, 5);
+    max-width: 4.5vw;
+}
+.tpSlong{
+    position: absolute;
+    margin-top: 2vh;
+    margin-left: 8vw;
+    color:#ffffff;
+    font-size: 1vw;
+    background-color: #0000006c;
+    width: auto;
+    text-align: center;
+    padding: 0.5vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    border-radius: 0.4vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgb(15, 182, 0);
+    max-width: 4.5vw;
+}
+.tpSshort{
+    position: absolute;
+    margin-top: 12vh;
+    margin-left: 8vw;
+    color:#ffffffdb;
+    font-size: 1vw;
+    background-color: #0000006c;
+    width: auto;
+    text-align: center;
+    padding: 0.5vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    border-radius: 0.4vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgb(15, 182, 0);
+    max-width: 4.5vw;
+}
+
+.dirS{
+    position: absolute;
+    margin-top: 6.8vh;
+    margin-left: 4vw;
+    color:#ffffffea;
+    font-size: 1vw;
+    text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
+    
+}
+
+.dolp1{
+    position: absolute;
+    margin-top: 3vh;
+    margin-left: 15vw;
+    color:#bbbbbb;
+    letter-spacing: 0.8px;
+    font-size: 1vw;
+    text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
+    z-index: 2;
+}
+.dolp2{
+   position: absolute;
+    margin-top: 8vh;
+    margin-left:15vw;
+    color:#bbbbbb;
+    letter-spacing: 0.8px;
+    font-size: 1vw;
+    text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
+    z-index: 2;
+}
+.dolp3{
+   position: absolute;
+    margin-top: 13vh;
+    margin-left: 15vw;
+    color:#bbbbbb;
+    letter-spacing: 0.8px;
+    font-size: 1vw;
+    text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
+    z-index: 2;
+}
+
+.assetImg{
+    position: absolute;
+    width: 2vw;
+    margin-top: 2vh;
+    margin-left: 1.5vw;
+}
+
+.date {
+    position: absolute;
+    margin-top: 15.5vh;
+    right: 1.5vw;
+    color:#b5b5b5ea;
+    font-size: 0.8vw;
+    text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
+    z-index: 2;
+    letter-spacing: 0.1vw;
+}
+
+.butAlpha {
+    position: absolute;
+    width: 8vw;
+    height: 5vh;
+    color: white;
+    font-size: 1.2vw;
+    font-size: 1vw;
+    letter-spacing: 0.06vw;
+    font-weight: 100;
+    border-radius: 0.4vw 0.4vw 0vw 0vw;
+    border-style: none;
+    text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
+    opacity: 100%;
+    background: rgb(0 35 177 / 71%);
+    margin-top: 7.7vh; 
+    z-index: 3;
+    
+} .butAlpha:hover{cursor: pointer;}
+
+#alphaTrad{
+    margin-left: 40.5vw;
+    
+}#alphaTrad:hover{background: rgb(90 122 255 / 71%); height: 6vh; margin-top: 6.7vh; transition: ease, 0.2s;}
+
+#alphaLows{
+    margin-left: 49vw;
+} #alphaLows:hover{background: rgb(90 122 255 / 71%); height: 6vh; margin-top: 6.7vh; transition: ease, 0.2s;}
+
+#alphaOnchain{
+    margin-left: 57.5vw;
+} #alphaOnchain:hover{background: rgb(90 122 255 / 71%); height: 6vh; margin-top: 6.7vh; transition: ease, 0.2s;}
+
+#alphaICO{
+    margin-left: 66vw;
+} #alphaICO:hover{background: rgb(90 122 255 / 71%); height: 6vh; margin-top: 6.7vh; transition: ease, 0.2s;}
+
+#butSign {
+    display: none;
+    position: absolute;
+
+}
+
+.myAlphaName{
+    font-size: 1.1vw;
+    text-align: left;
+    margin-left: 1.5vw;
+    margin-top: 2vh;
+    border-radius: 0.5vw;
+    background-color: #1d1d1d;
+    border-style: none;
+    width: 10vw;
+    height: 3vh;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    padding-bottom: 0.4vh;
+    padding-top: 0.4vh;
+    letter-spacing: 0.05vw;
+    font-family: sans-serif;
+    box-shadow: 0vw 0vw 0.6vw rgb(0 0 0);
+    color: #b9b9b9;
+} .myAlphaName:hover {box-shadow: 0vw 0vw 0.2vw rgba(133, 132, 132, 0.818); }
+
+.goBut {
+    position: absolute;
+    background: linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));
+    border-style: none;
+    color: white;
+    border-radius: 0.4vw;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 1vw;
+    letter-spacing: 0.06vw;
+    width: 3vw;
+    height: 11%;
+    margin-top: -2.77vh;
+    margin-left: 9.3vw;
+    transform: translateX(-50%);
+    box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
+    align-items: center;
+    justify-content: center;
+} .goBut:hover{cursor: pointer; background: linear-gradient(0deg, rgb(0, 41, 191), rgb(46, 81, 255), rgb(0, 41, 191), rgb(10, 2, 95)); }
+
+.msgSig{
+    position: absolute;
+    margin-left: 22vw;
+    margin-top: 6vh;
+    border: 1px solid rgb(45, 45, 45);
+    font-size: 0.8vw;
+    width: 15vw;
+    max-height: 6vh;
+    padding: 0.5vw;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+#earnLogo {
+    position: absolute;
+    filter: invert(100);
+    width: 2vw;
+}
+
+#userEarn {
+    display: none;
+    position: absolute;
+    margin-top: 24vh;
+    margin-left: 5vw;
+    width: 2vw;
+    height: 4vh;
+    color: rgb(140, 140, 140);
+    background-color: #111111;
+    box-shadow: inset 0vw 0vw 0.5vw rgba(83, 83, 83, 0.818);
+    border-radius: 0.5vw;
+    padding: 1vw;
+    z-index: 2;
+    font-size: 1.3vw;
+}
+
+#textRefer {
+    position: absolute;
+    font-size: 1vw;
+    width: 20vw;
+    text-align: center;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#textRefer2 {
+    position: absolute;
+    font-size: 1vw;
+    width: 20vw;
+    text-align: center;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 21vh;
+}
+
+#refCodeCreate{
+    position: absolute;
+    margin-top: 11vh;
+    width: 10vw;
+    border-radius: 0.6vw 0.6vw 0vw 0vw;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.1vw;
+} #refCodeCreate:focus {
+    outline: none; 
+}
+
+#create {
+    position: absolute;
+    background: linear-gradient(0deg, rgb(0, 41, 191, 0.2), rgb(46, 81, 255, 0.2), rgb(0, 41, 191, 0.2), rgb(10, 2, 95, 0.2));
+    color: white;
+    text-shadow: 0vw 0vw 0.25vw rgb(0,0,0);
+    margin-top: 14.6vh;
+    border-style: none;
+    width: 10.2vw;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
+    border-radius: 0vw 0vw 0.6vw 0.6vw;
+} #create:hover{cursor: pointer; letter-spacing: 0.05vw; height: 3.4vh; transition: ease, 1s; }
+
+#divId2{
+    display: none;
+}
+
+.longImg {
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    background: radial-gradient(rgb(45, 158, 22), rgb(0, 112, 0));
+    border-radius: 0.5vw;
+    margin-top: 7.2vh;
+    margin-left: 2.2vw;
+}
+
+.shortImg {
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    background: radial-gradient(rgb(255, 10, 10), rgb(175, 1, 1));
+    border-radius: 0.5vw;
+    margin-top: 7.2vh;
+    margin-left: 2.2vw;
+}
+
+#moreInfoSig {
+    position: absolute;
+    width: 34.5vw;
+    height: 50vh;
+    z-index: 3;
+    background-color: #19191900;
+    margin-top: 45vh;
+    margin-left: 5vw;
+    border-radius: 0.5vw;
+}
+
+#takeProfitsDiv1 {
+    position: absolute;
+    display: flex;
+    width: 6vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 1vh;
+    margin-left: 0.3vw;
+    border-radius: 0.4vw 0vw 0vw 0vw;
+    border: 0px;
+    background-color: #0d140e;
+    color: white;
+    font-size: 1vw;
+    text-align: left;
+    align-items: center;
+    padding-left: 0.5vw;
+}
+
+#takeProfitsDiv2 {
+    position: absolute;
+    display: flex;
+    width: 6vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 6.1vh;
+    margin-left: 0.3vw;
+    border-radius: 0vw;
+    border: 0px;
+    background-color: #0d140e;
+    color: white;
+    font-size: 1vw;
+    text-align: left;
+    align-items: center;
+    padding-left: 0.5vw;
+}
+
+#takeProfitsDiv3 {
+    position: absolute;
+    display: flex;
+    width: 6vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 11.2vh;
+    margin-left: 0.3vw;
+    border-radius: 0vw 0vw 0vw 0.4vw;
+    border: 0px;
+    background-color: #0d140e;
+    color: white;
+    font-size: 1vw;
+    text-align: left;
+    align-items: center;
+    padding-left: 0.5vw;
+}
+
+#takeProfitsDiv4 {
+    position: absolute;
+    display: flex;
+    width: 4.5vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 1vh;
+    margin-left: 6.9vw;
+    border-radius: 0vw 0.4vw 0vw 0vw;
+    border: 0px;
+
+    background-color: #0000006c;
+    color: rgb(200,200,200);
+    font-size: 1vw;
+    justify-content: right;
+    align-items: center;
+    padding-right: 0.5vw;
+}
+
+#takeProfitsDiv5 {
+    position: absolute;
+    display: flex;
+    width: 4.5vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 6.1vh;
+    margin-left: 6.9vw;
+    border-radius: 0vw ;
+    border: 0px;
+
+    background-color: #0000006c;
+    color: rgb(200,200,200);
+    font-size: 1vw;
+    justify-content: right;
+    align-items: center;
+    padding-right: 0.5vw;
+}
+
+#takeProfitsDiv6 {
+    position: absolute;
+    display: flex;
+    width: 4.5vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 11.2vh;
+    margin-left: 6.9vw;
+    border-radius: 0vw  0vw  0.4vw 0vw;
+    border: 0px;
+
+    background-color: #0000006c;
+    color: rgb(200,200,200);
+    font-size: 1vw;
+    justify-content: right;
+    align-items: center;
+    padding-right: 0.5vw;
+}
+
+#stopLossDiv1 {
+    position: absolute;
+    display: flex;
+    width: 6vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 6.2vh;
+    margin-left: 0.3vw;
+    border-radius: 0.4vw 0vw 0vw 0vw;
+    border: 0px;
+
+    background-color: #140d0d;
+    color: white;
+    font-size: 1vw;
+    text-align: left;
+    align-items: center;
+    padding-left: 0.5vw;
+}
+
+#entrymit {
+    position: absolute;
+    display: flex;
+    width: 6vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 17.2vh;
+    margin-left: 0.3vw;
+    border-radius: 0vw;
+    border: 0px;
+    background-color: #0d0f14;
+    color: white;
+    font-size: 1vw;
+    text-align: left;
+    align-items: center;
+    padding-left: 0.5vw;
+}
+
+#stopLossDiv3 {
+    position: absolute;
+    display: flex;
+    width: 6vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 11.3vh;
+    margin-left: 0.3vw;
+    border-radius: 0vw 0vw 0vw 0.4vw;
+    border: 0px;
+
+    background-color: #140d0d;
+    color: white;
+    font-size: 1vw;
+    text-align: left;
+    align-items: center;
+    padding-left: 0.5vw;
+}
+
+#stopLossDiv4 {
+    position: absolute;
+    display: flex;
+    width: 4.5vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 6.2vh;
+    margin-left: 6.9vw;
+    border-radius: 0vw 0.4vw 0vw 0vw;
+    border: 0px;
+
+    background-color: #0000006c;
+    color: rgb(200,200,200);
+    font-size: 1vw;
+    justify-content: right;
+    align-items: center;
+    padding-right: 0.5vw;
+}
+
+#entrymit2 {
+    position: absolute;
+    display: flex;
+    width: 4.5vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 17.2vh;
+    margin-left: 6.9vw;
+    border-radius: 0vw ;
+    border: 0px;
+
+    background-color: #0000006c;
+    color: rgb(200,200,200);
+    font-size: 1vw;
+    justify-content: right;
+    align-items: center;
+    padding-right: 0.5vw;
+}
+
+#stopLossDiv6 {
+    position: absolute;
+    display: flex;
+    width: 4.5vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 11.3vh;
+    margin-left: 6.9vw;
+    border-radius: 0vw  0vw  0.4vw 0vw;
+    border: 0px;
+
+    background-color: #0000006c;
+    color: rgb(200,200,200);
+    font-size: 1vw;
+    justify-content: right;
+    align-items: center;
+    padding-right: 0.5vw;
+}
+
+#mis1{
+    margin-top: 16vh;
+    margin-left: 0vw;
+}
+
+#mis2{
+    margin-top: 33vh;
+    margin-left: 0vw;
+}
+
+#alphaMsg {
+    position: absolute;
+    width: 21vw;
+    height:15vh;
+    z-index: 3;
+    margin-top: 1vh;
+    margin-left: 12.6vw;
+    border-radius: 0.4vw;
+    border: 0px;
+    
+    background-color: #0000006c;
+    color: rgb(200,200,200);
+    font-size: 1vw;
+}
+
+#validate {
+    position: absolute;
+    right: 0.8vw;
+    margin-top: -16vh;
+    width: 21vw;
+    height: 14vh;
+    display: block;
+    border-radius: 0.5vw;
+    color: white;
+    z-index: 3;
+    /*box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);*/
+    background-color: #0000006c;
+    text-align: center;
+    padding-top: 1.5vh;
+}
+
+#fail {
+    position: absolute;
+    right: 1vw;
+    margin-top: 8vh;
+    width: 6vw; 
+    height: 4vh;
+    background-color: #b20a0a71;
+    box-shadow: inset 0vw 0vw 0.5vw rgba(255, 61, 61, 0.818);
+    border-radius: 0.5vw;
+    color: white;
+    font-size: 1.1vw;
+    border-style: none;
+
+}
+
+#succ {
+    position: absolute;
+    right: 1vw;
+    margin-top: 1vh;
+    width: 6vw; 
+    height: 4vh;
+    background-color: #076c0071;
+    box-shadow: inset 0vw 0vw 0.5vw rgba(27, 173, 17, 0.818);
+    border-radius: 0.5vw;
+    color: white;
+    border-style: none;
+    font-size: 1.1vw;
+}
+
+#sigId {
+    position: absolute;
+    text-shadow: 0vw 0vw 0.5vw rgb(0, 0, 0);
+    left: 47%;
+    top: 32%;
+    transform: translate(-50%, -50%);
+    width: auto; 
+    height: 4vh;
+    background-color: #1d1d1d;
+    border-style: none;
+    padding-top: 0.8vh;
+    padding-left: 0.5vw;
+    padding-right: 0.5vw;
+    border-radius: 0.3vw;
+    font-size: 1.3vw;
+    font-family: sans-serif;
+    box-shadow: 0vw 0vw 0.6vw rgb(0 0 0);
+    color: #b9b9b9;
+}
+
+#mrinfAss {
+    position: absolute;
+    color: white;
+    margin-top: 13vh;
+    margin-left: 1.1vw;
+    font-size: 1vw;
+}
+
+.assetImg2 {
+    position: absolute;
+    width: 2.2vw;
+    margin-top: -25vh;
+    margin-left: 1vw;
+}
+
+#mrinfNam{
+    position: absolute;
+    display: none;
+    color: rgb(195, 195, 195);
+    font-size: 1.1vw;
+    margin-top: 7vh;
+    margin-left: 4vw;
+    width: 3vw;
+    /*box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);*/
+    background-color: #0000006c;
+    padding: 1.4vw;
+    padding-left: 0.8vw;
+    padding-right:4vw;
+    border-radius: 0.4vw;
+}
+
+#imgLongmi {
+    position: absolute;
+    display: none;
+    width: 3.5vw;
+    margin-top: 8.5vh;
+    margin-left: 8vw;
+}
+
+#imgShortmi {
+    position: absolute;
+    display: none;
+    width: 3.5vw;
+    margin-top: 8.5vh;
+    margin-left: 8vw;
+}
