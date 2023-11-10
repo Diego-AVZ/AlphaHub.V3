@@ -139,13 +139,17 @@ contract A {
 
     function paySimpleMonth() public payable {
         changePeriod();
-        require(msg.value == simplePlanMon);
+        if(seeTotalAlphaScore(msg.sender) > 10){
+            require(msg.value == simplePlanMon/33);
+        } else{
+            require(msg.value == simplePlanMon);
+        }
         lastPay[msg.sender] = block.timestamp;
-        monAnnu[msg.sender] = 1; 
-        hasPay = true;
-        canValidate = true;
-        volume = volume + msg.value;
-        ethInContractThisPeriod[actualPeriod] += msg.value;
+            monAnnu[msg.sender] = 1; 
+            hasPay = true;
+            canValidate = true;
+            volume = volume + msg.value;
+            ethInContractThisPeriod[actualPeriod] += msg.value;
     }
 
     uint discountSimpleMon = simplePlanMon/20;
@@ -184,7 +188,22 @@ contract A {
     }
 
     function seePrices() public view returns(uint, uint){
+        if(seeTotalAlphaScore(msg.sender) > 10){
+        return(simplePlanMon/33, simplePlanAnnu/33);
+        } else if(seeTotalAlphaScore(msg.sender) > 20){
+        return(simplePlanMon/20, simplePlanAnnu/20);
+        } if(seeTotalAlphaScore(msg.sender) > 30){
+        return(simplePlanMon/10, simplePlanAnnu/10);
+        } if(seeTotalAlphaScore(msg.sender) > 40){
+        return(simplePlanMon/7, simplePlanAnnu/7);
+        } if(seeTotalAlphaScore(msg.sender) > 50){
+        return(simplePlanMon/5, simplePlanAnnu/5);
+        } /*...
+            ... go to paySimpleMonth()
+            ...
+        */ else{
         return(simplePlanMon, simplePlanAnnu);
+        }
     }
 
     function seeDiscPrices() public view returns(uint, uint){
@@ -199,6 +218,7 @@ contract A {
 
     uint32 constant points = 10000;
     uint timesPaid;
+
     function withdrawFromAlphaBase() public{
         timesPaid++;
         //la cantidad a retirar dependerá de:   - nº de alphas activos
@@ -208,18 +228,18 @@ contract A {
                                             //  - calidad/precisión en las señales 
                                             //  - lo generado en el último periodo "ethInContractThisPeriod"
                                             // EL ALPHApROV DEBE COBRAR SI HA SIDO ACTIVO EN LOS ULTIMOS 10 DIAS Y SI ES PRECISO Y COMPARTE VALOR.
-       /* require(isActiveAlpha(alpha));
-        uint amountToSend;
-        uint score = seeTotalAlphaScore(alpha);
+       /* 
+        
         uint accuTra = bC.accuracyPercentage(alpha);
         */
-        // payable(alpha).transfer(amountToSend);
+
+        require(isActiveAlpha(msg.sender));
 
         uint total = ethInContractThisPeriod[actualPeriod];
-        seeAllActiveAlpha().length;
-        uint32 pointsA = points * 70/100; 
-        uint32 pointsB = points * 20/100;
-        uint32 pointsC = points * 10/100;
+        uint32 pointsA = points * 40/100;  // ALPHASCORE
+        uint32 pointsB = points * 40/100;  // Accuracy
+        uint32 pointsC = points * 10/100;  // Number of Signals En el periodo
+        uint32 pointsD = points * 10/100;  // Number of Followers En el periodo
 
         uint ethPerPoint = total / points;
 
@@ -228,7 +248,6 @@ contract A {
         uint myPerAlphaScore = myAlphaScore/addAllAlphaScores();
 
         uint amountA = pointsA * myPerAlphaScore * ethPerPoint;
-
 
         uint ethToSend = amountA; // +B+C
         address alpha = msg.sender;
@@ -298,7 +317,6 @@ contract A {
         uint8 planPaid;
     } 
 
-    followerS[] followerList;
     mapping(address => followerS[]) followers;
     mapping(address => uint) alphaAnnualPrice;
     mapping(address => uint) alphaMonthlyPrice; 
