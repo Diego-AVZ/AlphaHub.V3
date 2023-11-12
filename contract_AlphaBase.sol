@@ -9,27 +9,34 @@ pragma solidity ^0.8.0;
 contract A {
 
     mapping(address => string) chatId;
+    string[] chatIdsList;
 
-    function setAlphaHubBot(string memory _chatId) public {
+    function setAlphaBaseBot(string memory _chatId) public {
         chatId[msg.sender] = _chatId;
+        chatIdsList.push(_chatId);
     } 
 
     function getChatId(address alpha) public view returns(string memory){
         return(chatId[alpha]);
     }
 
-    address public b = 0x0fC5025C764cE34df352757e82f7B5c4Df39A836;
+    function getIndexChatIdList(uint32 i) public view returns(string memory){
+        return(chatIdsList[i]);
+    }
 
+    /////////////
+    B bC = B(b);
+    C cC = C(c);
+    /////////////
+    address public b = 0x0fC5025C764cE34df352757e82f7B5c4Df39A836;
+    address public c = 0x0fC5025C764cE34df352757e82f7B5c4Df39A836;
+    ////////////
     //AlphaProv
 
     address[] alphasList;
     mapping(address => uint) alphaJoinDate;
     uint16 alphaCount;
     mapping(address => uint16) public alphaAmountTotalSignals;
-
-    function add1ToTotalSig(address alpha) public {
-        alphaAmountTotalSignals[alpha]++;
-    }
     
     function becomeAlpha() public {
         alphasList.push(msg.sender);
@@ -68,16 +75,13 @@ contract A {
     mapping(address => uint) public totalAlphaScore;
 
     function seeTotalAlphaScore(address alpha) public view returns(uint){
-        return(bC.getAlphaScore1(alpha)); //+ bC.getAlphaScore2(alpha) + ... + ...
+        return(bC.getAlphaScore(alpha) + cC.getAlphaScore(alpha)); //+ bC.getAlphaScore2(alpha) + ... + ...
     }
 
+    //TRADING
 
-
-    /////////////
-    B bC = B(b);
     function seeTraSig(uint16 index) public view returns(string memory, string memory, string memory, string memory, uint8, uint16, uint256) {
         require(index < bC.getTradGlobLength(), "no list element");
-        require(hasPay);
         uint lastPayDate = seeLastPay(msg.sender);
         uint actualDate = block.timestamp;
         if(monAnnu[msg.sender] == 1){
@@ -88,7 +92,6 @@ contract A {
         
     }
 
-    // Function to see alphaProv trading list
     function seeTraSig2(uint16 i, address alpha, address reader) public view returns(string memory, string memory, string memory, string memory, uint8, uint16, uint256, address){
         B.traSignal memory traSignalAlpha = bC.getTraSignal(i, alpha);
         require(i < bC.traSignalAlphaLength(alpha));
@@ -104,111 +107,125 @@ contract A {
         return(bC.traSignalAlphaLength(alpha));
     }
 
-    function countAllAlphaSignals(address alpha) public {
-        alphaAmountTotalSignals[alpha] = getNumTraSignals(alpha);
+    //Onchain
+
+    function seeOncSig(uint16 index) public view returns(string memory, string memory, string memory, string memory, uint8, uint16, uint256) {
+        require(index < cC.getOncGlobLength(), "no list element");
+        uint lastPayDate = seeLastPay(msg.sender);
+        uint actualDate = block.timestamp;
+        if(monAnnu[msg.sender] == 1){
+            require((actualDate - lastPayDate) <= 30 days );
+        } else {require((actualDate - lastPayDate) <= 364 days );}
+        C.oncSignal memory oncSigAlphaGlob = cC.getOncSignalGlob(index);
+        return(oncSigAlphaGlob.asset, oncSigAlphaGlob.priceEntry, oncSigAlphaGlob.stopLoss, oncSigAlphaGlob.takeProfit, oncSigAlphaGlob.direction, oncSigAlphaGlob.oncSignalId, oncSigAlphaGlob.postDate);
+        
+    }
+
+    function seeOncSig2(uint16 i, address alpha, address reader) public view returns(string memory, string memory, string memory, string memory, uint8, uint16, uint256, address){
+        C.oncSignal memory oncSignalAlpha = cC.getOncSignal(i, alpha);
+        require(i < cC.oncSignalAlphaLength(alpha));
+        if (reader == alpha){
+            return(oncSignalAlpha.asset, oncSignalAlpha.priceEntry, oncSignalAlpha.stopLoss, oncSignalAlpha.takeProfit, oncSignalAlpha.direction, oncSignalAlpha.oncSignalId, oncSignalAlpha.postDate, oncSignalAlpha.alpha);
+        } else {
+            require(canSeeThisAlpha(reader, alpha) == true);
+            return(oncSignalAlpha.asset, oncSignalAlpha.priceEntry, oncSignalAlpha.stopLoss, oncSignalAlpha.takeProfit, oncSignalAlpha.direction, oncSignalAlpha.oncSignalId, oncSignalAlpha.postDate, oncSignalAlpha.alpha);
+        }
+    }
+    
+    function getNumOncSignals(address alpha) public view returns(uint16){
+        return(bC.traSignalAlphaLength(alpha) + cC.oncSignalAlphaLength(alpha));
     }
 
     function getNumSignals(address alpha) public view returns(uint){
         return(alphaAmountTotalSignals[alpha]);
     }
-
-    function genNumIndex(address user) public view returns(uint){
-        return(uint(keccak256(abi.encodePacked(seeLastPay(user), user)))% bC.getTradGlobLength());
-    }
-
-    //genera un número con la dirección del usuario y la ultima vez que pagó
-
-
     //PAYMENT
 
-    uint simplePlanMon;
-    uint simplePlanAnnu;
-    bool canValidate; // Solo si es usuario y ha pagado puede validar
+    uint fullPlanMon;
+    uint fullPlanAnnu;
+    mapping(address => bool) canValidate;
     uint public volume;
     mapping(uint => uint) public ethInContractThisPeriod;
 
-    function setSimplePrices(uint mon, uint ann) public { //onlyOwner
-        simplePlanMon = mon * 1 ether;
-        simplePlanAnnu = ann * 1 ether;
+    function setFullPrices(uint mon, uint ann) public { //onlyOwner
+        fullPlanMon = mon;
+        fullPlanAnnu = ann;
     }
 
     mapping(address => uint) lastPay;
     mapping(address => uint) monAnnu; // 1 -> monthly
                                       // 2 -> Annual
-    bool hasPay;
 
-    function paySimpleMonth() public payable {
+    function payFullMonth() public payable {
         changePeriod();
-        if(seeTotalAlphaScore(msg.sender) > 10){
-            require(msg.value == simplePlanMon/33);
+        if(seeTotalAlphaScore(msg.sender) > 10 || seeTotalValidatorScore(msg.sender) > 10){
+            require(msg.value == fullPlanMon/33);
         } else{
-            require(msg.value == simplePlanMon);
+            require(msg.value == fullPlanMon);
         }
         lastPay[msg.sender] = block.timestamp;
             monAnnu[msg.sender] = 1; 
-            hasPay = true;
-            canValidate = true;
+
+            canValidate[msg.sender] = true;
             volume = volume + msg.value;
             ethInContractThisPeriod[actualPeriod] += msg.value;
     }
 
-    uint discountSimpleMon = simplePlanMon/20;
+    uint discountFullMon = fullPlanMon/20;
 
-    function paySimpleMonthRefDiscount(address referrer) public payable {
+    function payFullMonthRefDiscount(address referrer) public payable {
         changePeriod();
-        require(msg.value == simplePlanMon - discountSimpleMon);
+        require(msg.value == fullPlanMon - discountFullMon);
         lastPay[msg.sender] = block.timestamp;
         monAnnu[msg.sender] = 1; 
-        hasPay = true;
-        canValidate = true;
+        canValidate[msg.sender] = true;
+
         payable(referrer).transfer(msg.value/33);
         ethInContractThisPeriod[actualPeriod] += msg.value - msg.value/33;
 
     }
 
-    function paySimpleAnnual() public payable {
+    function payFullAnnual() public payable {
         changePeriod();
-        require(msg.value == simplePlanAnnu);
+        require(msg.value == fullPlanAnnu);
         lastPay[msg.sender] = block.timestamp;
         monAnnu[msg.sender] = 2; 
-        hasPay = true;
-        canValidate = true;
+        canValidate[msg.sender] = true;
     }
 
-    uint discountSimpleAnn = simplePlanAnnu/20;
+    uint discountFullAnn = fullPlanAnnu/20;
 
-    function paySimpleAnnualRefDiscount(address referrer) public payable {
+    function payFullAnnualRefDiscount(address referrer) public payable {
         changePeriod();
-        require(msg.value == simplePlanAnnu - discountSimpleAnn);
+        require(msg.value == fullPlanAnnu - discountFullAnn);
         lastPay[msg.sender] = block.timestamp;
         monAnnu[msg.sender] = 2; 
-        hasPay = true;
-        canValidate = true;
+        canValidate[msg.sender] = true;
         payable(referrer).transfer(msg.value/33);
     }
 
     function seePrices() public view returns(uint, uint){
         if(seeTotalAlphaScore(msg.sender) > 10){
-        return(simplePlanMon/33, simplePlanAnnu/33);
+        return(fullPlanMon-fullPlanMon/33, fullPlanAnnu-fullPlanAnnu/33);
         } else if(seeTotalAlphaScore(msg.sender) > 20){
-        return(simplePlanMon/20, simplePlanAnnu/20);
+        return(fullPlanMon-fullPlanMon/20, fullPlanAnnu-fullPlanAnnu/20);
         } if(seeTotalAlphaScore(msg.sender) > 30){
-        return(simplePlanMon/10, simplePlanAnnu/10);
+        return(fullPlanMon-fullPlanMon/10, fullPlanAnnu-fullPlanAnnu/10);
         } if(seeTotalAlphaScore(msg.sender) > 40){
-        return(simplePlanMon/7, simplePlanAnnu/7);
+        return(fullPlanMon-fullPlanMon/7, fullPlanAnnu-fullPlanAnnu/7);
         } if(seeTotalAlphaScore(msg.sender) > 50){
-        return(simplePlanMon/5, simplePlanAnnu/5);
+        return(fullPlanMon-fullPlanMon/5, fullPlanAnnu-fullPlanAnnu/5);
         } /*...
-            ... go to paySimpleMonth()
+            ... go to payFullMonth()
             ...
         */ else{
-        return(simplePlanMon, simplePlanAnnu);
+        return(fullPlanMon, fullPlanAnnu);
         }
     }
 
     function seeDiscPrices() public view returns(uint, uint){
-        uint discPriceMon = simplePlanMon - discountSimpleMon;
-        uint discPriceAnn = simplePlanMon - discountSimpleMon;
+        uint discPriceMon = fullPlanMon - discountFullMon;
+        uint discPriceAnn = fullPlanMon - discountFullMon;
         return(discPriceMon, discPriceAnn);
     }
 
@@ -217,29 +234,17 @@ contract A {
     }
 
     uint32 constant points = 10000;
-    uint timesPaid;
 
     function withdrawFromAlphaBase() public{
-        timesPaid++;
-        //la cantidad a retirar dependerá de:   - nº de alphas activos
-                                            //  - nº seguidores 
-                                            //  - AlphaScore
-                                            //  - Señales en los ultimos X días
-                                            //  - calidad/precisión en las señales 
-                                            //  - lo generado en el último periodo "ethInContractThisPeriod"
-                                            // EL ALPHApROV DEBE COBRAR SI HA SIDO ACTIVO EN LOS ULTIMOS 10 DIAS Y SI ES PRECISO Y COMPARTE VALOR.
-       /* 
         
-        uint accuTra = bC.accuracyPercentage(alpha);
-        */
-
         require(isActiveAlpha(msg.sender));
 
-        uint total = ethInContractThisPeriod[actualPeriod];
-        uint32 pointsA = points * 40/100;  // ALPHASCORE
-        uint32 pointsB = points * 40/100;  // Accuracy
-        uint32 pointsC = points * 10/100;  // Number of Signals En el periodo
-        uint32 pointsD = points * 10/100;  // Number of Followers En el periodo
+        uint total = ethInContractThisPeriod[actualPeriod-period];
+
+        uint32 pointsA = points * 50/100;  // ALPHASCORE
+        uint32 pointsB = points * 50/100;  // Accuracy
+        //uint32 pointsC = points * 0/100;  // Number of Signals En el periodo
+        //uint32 pointsD = points * 0/100;  // Number of Followers En el periodo
 
         uint ethPerPoint = total / points;
 
@@ -249,9 +254,30 @@ contract A {
 
         uint amountA = pointsA * myPerAlphaScore * ethPerPoint;
 
-        uint ethToSend = amountA; // +B+C
+        uint myAccu = bC.accuracyPer(msg.sender); //+ cC.accuracyPercentage2(alpha);
+
+        uint myPerAccu = myAccu / addAllAlphaAccuracy(); 
+
+        uint amountB = pointsB * myPerAccu * ethPerPoint;
+
+        uint ethToSend = amountA + amountB; // +C +D
         address alpha = msg.sender;
         payable(alpha).transfer(ethToSend);
+    }
+
+    function showEarnedAmount() public view returns(uint){
+        uint total = ethInContractThisPeriod[actualPeriod-period];
+        uint32 pointsA = points * 50/100;  // ALPHASCORE
+        uint32 pointsB = points * 50/100;  // Accuracy
+        uint ethPerPoint = total / points;
+        uint myAlphaScore = seeTotalAlphaScore(msg.sender);
+        uint myPerAlphaScore = myAlphaScore/addAllAlphaScores();
+        uint amountA = pointsA * myPerAlphaScore * ethPerPoint;
+        uint myAccu = bC.accuracyPer(msg.sender); //+ cC.accuracyPercentage2(alpha);
+        uint myPerAccu = myAccu / addAllAlphaAccuracy(); 
+        uint amountB = pointsB * myPerAccu * ethPerPoint;      
+        uint ethToSend = amountA + amountB;
+        return(ethToSend);
     }
 
     function seeAllActiveAlpha() public view returns(address[] memory){
@@ -301,6 +327,22 @@ contract A {
             totalAlphaActiveScore = totalAlphaActiveScore + seeActiveAlphaScore(i);
         }
         return totalAlphaActiveScore;
+    }
+
+    function seeActiveAlphaAccu(uint t) public view returns(uint) {
+        address[] memory activeAlphaAddresses = seeAllActiveAlpha();
+        require(t < activeAlphaAddresses.length);
+        uint activeAlphaAccu = bC.accuracyPer(activeAlphaAddresses[t]); //+ cC.accuracyPer(activeAlphaAddresses[t])
+        return(activeAlphaAccu);
+    }
+
+    function addAllAlphaAccuracy() public view returns(uint){
+        address[] memory activeAlphaAddresses = seeAllActiveAlpha();
+        uint totalAlphaActiveAccu;
+        for(uint64 i = 0; i < activeAlphaAddresses.length; i++){
+            totalAlphaActiveAccu = totalAlphaActiveAccu + seeActiveAlphaAccu(i);
+        }
+        return totalAlphaActiveAccu;
     }
 
     function isActiveAlpha(address alpha) public view returns(bool){
@@ -384,8 +426,8 @@ contract A {
         return(bC.seeValidatorScore1(user)); //+ bC.seeValidatorScore2(user) + ... + ...
     }
 
-    function setActualPeriod() public { //onlyOwner
-        actualPeriod = block.timestamp;
+    function setActualPeriod(uint timestamp) public { //onlyOwner
+        actualPeriod = timestamp;
         periodNum++;
     }
 
@@ -412,8 +454,8 @@ contract A {
 
 contract B {
 
-    function setActualPeriod() public { //onlyOwner
-        actualPeriod = block.timestamp;
+    function setActualPeriod(uint timestamp) public { //onlyOwner
+        actualPeriod = timestamp;
         periodNum++;
     }
 
@@ -520,7 +562,7 @@ contract B {
 
     mapping(address => uint) seeAlphaTraScore;
 
-    function getAlphaScore1(address alpha) public view returns(uint){
+    function getAlphaScore(address alpha) public view returns(uint){
         return(seeAlphaTraScore[alpha]);
     }
 
@@ -549,14 +591,22 @@ contract B {
             tradSigIdToValid[_traSignalId].push(val2);
             if(posNeg == 0 /*good Signal*/){
                 traGlob.success++;
+                traGlob.timesVal++;
             }
             else{
                 traGlob.success--;
+                traGlob.timesVal++;
             }
         } else if(traGlob.timesVal == 5) {
             tradSigIdToValid[_traSignalId].push(val2);
-            if(posNeg == 0){traGlob.success++;}
-            else{traGlob.success--;}
+            if(posNeg == 0){
+                traGlob.success++;
+                traGlob.timesVal++;
+            }
+            else{
+                traGlob.success--;
+                traGlob.timesVal++;
+            }
             //
             if(traGlob.success < 0){
                addrTotValNum[traGlob.alpha]++;
@@ -595,7 +645,7 @@ contract B {
         return(validatorScore1[user]);
     }
 
-    mapping(address => uint) accuracyPer;
+    mapping(address => uint) public accuracyPer;
     
     function accuracyPercentage(address addr) public returns(uint){
        if(addrTotValNum[addr] > 0){
@@ -611,6 +661,225 @@ contract B {
 
     function traSignalAlphaLength(address alpha) public view returns(uint16){
         return(uint16(alphaTradInfoFromAddress[alpha].length));
+    }
+    
+}
+
+//___________________________________________________________________________________
+//_______________________Onchain Contract____________________________________
+//___________________________________________________________________________________
+
+
+contract C {
+
+    function setActualPeriod(uint timestamp) public { //onlyOwner
+        actualPeriod = timestamp;
+        periodNum++;
+    }
+
+    uint period = 30 days;
+    uint actualPeriod;
+    uint32 periodNum;
+
+    function changePeriod() public {
+        uint actualDay = block.timestamp;
+        if(actualPeriod + period > actualDay) { //Dentro del period
+            actualPeriod = actualPeriod;
+        } else { //actualDay fuera del periodo actual
+            actualPeriod = actualPeriod + period;
+        }
+    }
+
+    struct oncSignal {
+        string asset;
+        address tokenAddr;
+        string priceEntry;
+        string stopLoss;
+        string takeProfit; 
+        uint8 direction;
+        uint16 oncSignalId;
+        uint256 postDate;
+        address alpha;
+        string _msg;
+        int success; // if(<0) = fail
+        uint8 timesVal; //número de veces que se ha valorado
+    }
+
+    uint16 public maxLengthOnc = 100;
+    uint16 oncSignalNum;
+    oncSignal [] public oncSignals;
+    oncSignal [] public oncSignalsGlob;
+    mapping(address => oncSignal[]) public alphaOncInfoFromAddress;
+    mapping(address => uint16) AmountOncSignals;
+    mapping(address => uint) public lastPostOnc;
+    mapping(uint => address[]) public traActiveAlphaProvsThisPeriod;
+
+    function addOncSignal(string memory asset, address tokenAddr, string memory _priceEntry, string memory _stopLoss, string memory _takeProfit, uint8 _direction, string memory _msg) public {
+        changePeriod();
+        if(oncSignalsGlob.length == maxLengthOnc){
+            for (uint32 i = 0; i <= oncSignalsGlob.length - 1; i++) {
+                oncSignalsGlob[i] = oncSignalsGlob[i + 1];
+            }
+            oncSignalsGlob.pop();
+        }
+        oncSignalNum++;
+        uint16 _oncSignalId  =  oncSignalNum;
+        oncSignal memory newOncSignal = oncSignal(asset, tokenAddr, _priceEntry, _stopLoss, _takeProfit, _direction, _oncSignalId, block.timestamp, msg.sender, _msg, 0, 0);
+        oncSignals.push(newOncSignal); //NOT NECESARY
+        oncSignalsGlob.push(newOncSignal);
+        alphaOncInfoFromAddress[msg.sender].push(newOncSignal);
+        AmountOncSignals[msg.sender]++;
+        lastPostOnc[msg.sender] = block.timestamp;
+        traActiveAlphaProvsThisPeriod[actualPeriod].push(msg.sender);
+        uint perAccuracy =  accuracyPercentage(msg.sender);
+        uint _score = seeAlphaOncScore[msg.sender];
+        uint altIndex = 50 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 50;
+        uint altIndex2 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
+        uint altIndex3 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
+        uint altIndex4 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
+        uint altIndex5 = 75 + uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 25;
+
+        if(_score > 10 && perAccuracy > 50){oncSignalsGlob[altIndex] = newOncSignal;} 
+        else if(_score > 25 && perAccuracy > 50){oncSignalsGlob[altIndex] = newOncSignal; oncSignalsGlob[altIndex2] = newOncSignal; }
+        else if(_score > 50 && perAccuracy > 50){
+            oncSignalsGlob[altIndex] = newOncSignal; 
+            oncSignalsGlob[altIndex2] = newOncSignal; 
+            oncSignalsGlob[altIndex3] = newOncSignal;
+            oncSignalsGlob[altIndex4] = newOncSignal;
+            }
+        else if(_score > 75 && perAccuracy > 50){
+            oncSignalsGlob[altIndex] = newOncSignal; 
+            oncSignalsGlob[altIndex2] = newOncSignal; 
+            oncSignalsGlob[altIndex3] = newOncSignal;
+            oncSignalsGlob[altIndex4] = newOncSignal;
+            oncSignalsGlob[altIndex5] = newOncSignal;
+            }
+    }
+
+    function seeLastPostOnc(address alpha) public view returns(uint){
+        return(lastPostOnc[alpha]);
+    }
+
+    function getActiveAlphaOnc() public view returns(address[] memory){
+        return(traActiveAlphaProvsThisPeriod[actualPeriod]);
+    }
+
+    function getActiveAlphaOncLen() public view returns(uint){
+        return(traActiveAlphaProvsThisPeriod[actualPeriod].length);
+    }
+
+
+    function getOncSignalGlob(uint16 index) public view returns (oncSignal memory) {
+        require(index < oncSignalsGlob.length, "Index out of bounds");
+        return oncSignalsGlob[index];
+    }
+
+    function getOncSignal(uint16 index, address alpha) public view returns (oncSignal memory) {
+        return alphaOncInfoFromAddress[alpha][index];
+    }
+    
+
+    mapping(address => uint) seeAlphaOncScore;
+
+    function getAlphaScore(address alpha) public view returns(uint){
+        return(seeAlphaOncScore[alpha]);
+    }
+
+    mapping(address => uint) addrPosNum;        // Aciertos
+    mapping(address => uint) addrTotValNum;     // Total de señales valoradas
+                                                // para obtener % de accierto
+
+    struct valid{
+        address user;
+        uint8 val; //voto a la señal
+    }
+
+    valid[] validList;
+
+    mapping(uint16 => valid[]) oncSigIdToValid;
+
+    mapping(address => uint16) public validatorScore2;
+
+    function validate(uint16 _oncSignalId, uint8 posNeg) public {
+
+        uint i =  findOncSignalIndex(_oncSignalId);
+        oncSignal storage oncGlob = oncSignalsGlob[i];
+        valid memory val2 = valid(msg.sender, posNeg);
+        require(oncGlob.timesVal < 6 );
+        if(oncGlob.timesVal < 5){
+            oncSigIdToValid[_oncSignalId].push(val2);
+            if(posNeg == 0 /*good Signal*/){
+                oncGlob.success++;
+                oncGlob.timesVal++;
+            }
+            else{
+                oncGlob.success--;
+                oncGlob.timesVal++;
+            }
+        } else if(oncGlob.timesVal == 5) {
+            oncSigIdToValid[_oncSignalId].push(val2);
+            if(posNeg == 0){
+                oncGlob.success++;
+                oncGlob.timesVal++;
+            }
+            else{
+                oncGlob.success--;
+                oncGlob.timesVal++;
+            }
+            //
+            if(oncGlob.success < 0){
+               addrTotValNum[oncGlob.alpha]++;
+               seeAlphaOncScore[oncGlob.alpha]--;
+               for (uint8 a; a < oncSigIdToValid[_oncSignalId].length; a++){
+                    valid storage val3 = oncSigIdToValid[_oncSignalId][a];
+                    if(val3.val == 0){
+                        validatorScore2[val3.user]--;
+                    } else {validatorScore2[val3.user]++;}
+                }
+            } else {
+                addrTotValNum[oncGlob.alpha]++;
+                addrPosNum[oncGlob.alpha]++;
+                seeAlphaOncScore[oncGlob.alpha]++;
+                for (uint8 a; a < oncSigIdToValid[_oncSignalId].length; a++){
+                    valid storage val3 = oncSigIdToValid[_oncSignalId][a];
+                    if(val3.val == 1){
+                        validatorScore2[val3.user]--;
+                    } else {validatorScore2[val3.user]++;}
+                }
+            }
+
+        }
+    }
+
+    function findOncSignalIndex(uint16 oncSignalId) internal view returns (uint) {
+        for (uint i = 0; i < oncSignalsGlob.length; i++) {
+            if (oncSignalsGlob[i].oncSignalId == oncSignalId) {
+                return i;
+            }
+        }
+        return oncSignals.length; 
+    }
+
+    function seeValidatorScore2(address user) public view returns(uint16) {
+        return(validatorScore2[user]);
+    }
+
+    mapping(address => uint) public accuracyPer;
+    
+    function accuracyPercentage(address addr) public returns(uint){
+       if(addrTotValNum[addr] > 0){
+            accuracyPer[addr] = (addrPosNum[addr]*100) / addrTotValNum[addr];
+            uint per = accuracyPer[addr];
+            return(per);
+       } else {return(0);}
+    }
+   
+   function getOncGlobLength() public view returns(uint16){
+        return(uint16(oncSignalsGlob.length));
+    }
+
+    function oncSignalAlphaLength(address alpha) public view returns(uint16){
+        return(uint16(alphaOncInfoFromAddress[alpha].length));
     }
     
 }
