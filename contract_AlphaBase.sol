@@ -225,7 +225,7 @@ contract A {
 
     function seeDiscPrices() public view returns(uint, uint){
         uint discPriceMon = fullPlanMon - discountFullMon;
-        uint discPriceAnn = fullPlanMon - discountFullMon;
+        uint discPriceAnn = fullPlanAnn - discountFullMon;
         return(discPriceMon, discPriceAnn);
     }
 
