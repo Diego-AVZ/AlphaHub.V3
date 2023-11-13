@@ -25,6 +25,9 @@ walletBut.addEventListener("click", async () => {
       walletBut.style.height = "5vh";
       msg1.style.display = "none";
       cover.style.display = "none";
+      mrc.innerHTML = await contract3.methods
+        .seeMyCode(connectedAddress)
+        .call();
       showEthAddress();
       seeAlphasImFollowing();
       getValidatorPoints();
@@ -55,9 +58,13 @@ async function connect() {
       walletBut.style.height = "5vh";
       msg1.style.display = "none";
       cover.style.display = "none";
+      mrc.innerHTML = await contract3.methods
+        .seeMyCode(connectedAddress)
+        .call();
       showEthAddress();
       seeAlphasImFollowing();
       getValidatorPoints();
+
     } catch (error) {
       console.log("ERROR al Conectar MTMSK"+ error);
     }
@@ -1483,12 +1490,232 @@ const ABI2 = [
     type: "function",
   },
 ];
+const ABI3 = [
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "code",
+        type: "string",
+      },
+    ],
+    name: "createCode",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "code",
+        type: "string",
+      },
+    ],
+    name: "regWithCode",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint32",
+        name: "_points",
+        type: "uint32",
+      },
+    ],
+    name: "setPoinsAmount",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint32",
+        name: "_points",
+        type: "uint32",
+      },
+    ],
+    name: "setPoinsReferrer",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "addressCode",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "AddressPuntuation",
+    outputs: [
+      {
+        internalType: "uint32",
+        name: "",
+        type: "uint32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    name: "codeAddress",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "code",
+        type: "string",
+      },
+    ],
+    name: "codeListReview",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "isInList",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "codeUsed",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "points",
+    outputs: [
+      {
+        internalType: "uint32",
+        name: "",
+        type: "uint32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "pointsRef",
+    outputs: [
+      {
+        internalType: "uint32",
+        name: "",
+        type: "uint32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+    ],
+    name: "seeIfHasReg",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+    ],
+    name: "seeMyCode",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+];
 var web3Instance = new Web3(web3.currentProvider);
 
 const conAddress = "0xD55D833dC50631fa0E9F97160c68C2bFE6c9950c";
 const conAddress2 = "0x205aAd0c64A4a0D9b48784Ef0fa91Ada87D57944";
+const conAddress3 = "0x10B0c63Eb35e64e4dFFF50457dBD3a0f06033303";
 const contract = new web3Instance.eth.Contract(ABI, conAddress);
 const contract2 = new web3Instance.eth.Contract(ABI2, conAddress2);
+const contract3 = new web3Instance.eth.Contract(ABI3, conAddress3);
 
 //SEARCH ALPHA
 
@@ -1750,6 +1977,7 @@ async function seeTraSig2(alphaAddress) {
           document.getElementById("stopLossDiv4").innerText = "$" + sl;
           document.getElementById("stopLossDiv6").innerText = potLoss + "%";
           document.getElementById("mrinfAss").innerHTML= asset;
+          document.getElementById("entrymit2").innerHTML = entry;
           if (asset == "BTC" || asset == "btc") {
             var btcImg = document.createElement("img");
             btcImg.src = "btc.png";
@@ -1768,7 +1996,7 @@ async function seeTraSig2(alphaAddress) {
             moreInfoSig.appendChild(elseImg);
             elseImg.style.borderRadius = "2vw";
           }
-
+          
         });
       }
 
@@ -2025,11 +2253,6 @@ async function seeAlphasImFollowing() {
           seeTraSig2(alphaClick);
         });
       })(alphaP);
-      var goBut = document.createElement("div");
-      goBut.innerText = "Go";
-      goBut.classList.add("goBut");
-      alphaP.appendChild(goBut);
-      goBut.style.display = "flex";
     }
 
     
@@ -2113,5 +2336,72 @@ failBut.addEventListener("click", async () => {
 });
 
 
-//AÑADE AL SOLIDITY:
-// en la funcion validate, que se sume +1 a timesVal, si no no funciona!!!
+var myRefCode = document.getElementById("myReferCode");
+
+myRefCode.addEventListener("mouseover", function () {
+  userEarn.style.backgroundColor = "#606060";
+});
+
+myRefCode.addEventListener("mouseout", function () {
+  userEarn.style.backgroundColor = "#111111";
+});
+
+var refCodeUsed = document.getElementById("refCodeIn");
+var applyCode = document.getElementById("apply");
+
+var referrerAddress;
+
+applyCode.addEventListener("click", async() => {
+  try{
+    await contract3.methods.regWithCode(refCodeUsed.value).send({ from: connectedAddress });
+    referrerAddress = await contract3.methods.seeIfHasReg(connectedAddress).send({ from: connectedAddress });
+    var disPrices = await contract.methods.seeDiscPrices().call();
+    document.getElementById("simpleMonPrice").innerHTML = disPrices[0];
+    document.getElementById("simpleMonPrice").innerHTML = disPrices[1];
+
+  } catch(error){console.log(error);}
+});
+
+var refCreate = document.getElementById("refCodeCreate");
+var createBut = document.getElementById("create");
+var mrc = document.getElementById("mrc");
+
+createBut.addEventListener("click", async () => {
+  try {
+    await contract3.methods.createCode(refCreate.value).send({ from: connectedAddress });
+    mrc.innerHTML = await contract3.methods.seeMyCode(connectedAddress).call();
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+var copyRef = document.getElementById("butCopyRefLink");
+var refLink;
+
+copyRef.addEventListener("click", async() => {
+  try {
+    var myRefCode = await contract3.methods.seeMyCode(connectedAddress).call();
+    refLink = "http://127.0.0.1:5501/AlphaHub%20V3/userZone/userZone.html?refCode=" + myRefCode.toString();
+    copyToClipboard(refLink);
+    alert("Enlace de referencia copiado al portapapeles: " + refLink);
+
+  } catch(error){console.error(error);}
+});
+
+function copyToClipboard(text) {
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand("copy");
+  document.body.removeChild(textarea);
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  // Obtén el código de referencia de la URL al cargar la página
+  const urlParams = new URLSearchParams(window.location.search);
+  const refCodeFromURL = urlParams.get('refCode');
+  refCodeUsed.value = refCodeFromURL;
+});
+
+
