@@ -65,4 +65,8 @@ contract referralProgramAlphaBase {
     function seeIfHasReg(address user) public view returns(address){
         return (codeAddress[codeUsed[user]]);
     }  // JS tiene una función la address llama a seeIfHasReg(addressConnected) y le devuelve la address del referrer al que eviar el % de ETH pagado por USER
+
+    function seeMyCode(address user) public view returns(string memory){
+        return addressCode[user];
+    }
 } 
