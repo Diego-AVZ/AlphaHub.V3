@@ -59,6 +59,9 @@ body{
     margin-top: 4vh;
     font-size: 1.3vw;
     font-family: sans-serif;
+    color: transparent;
+    background: linear-gradient(to right, rgb(255, 255, 255),rgb(146, 145, 145), rgb(71, 71, 71));
+    -webkit-background-clip: text;
 }
 
 #wallet {
@@ -234,6 +237,7 @@ body{
     margin-top: 10vh;
     left: 40%;
     transform: translateX(-50%);
+    height: 2.9vh;
     
 }
 
@@ -833,24 +837,6 @@ body{
     box-shadow: inset 0vw 0vw 0.5vw rgb(83 83 83 / 0%);
 }
 
-#myAlphas {
-    position: absolute;
-    right: 1.5vw;
-    margin-top: 15vh;
-    width: 15vw;
-    height: 29vh;
-    display: none;
-    background-color: #0000006c;
-    border-radius: 0.5vw;
-    color: white;
-    z-index: 2;
-    font-family: sans-serif;
-    letter-spacing: 1px;
-    text-align: center;
-    padding-top: 1vh;
-    font-size: 1.1vw;
-}
-
 #lupa{
     position: absolute;
     display: none;
@@ -1090,26 +1076,6 @@ body{
     box-shadow: 0vw 0vw 0.6vw rgb(0 0 0);
     color: #b9b9b9;
 } .myAlphaName:hover {box-shadow: 0vw 0vw 0.2vw rgba(133, 132, 132, 0.818); }
-
-.goBut {
-    position: absolute;
-    background: linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));
-    border-style: none;
-    color: white;
-    border-radius: 0.4vw;
-    text-align: center;
-    font-family: sans-serif;
-    font-size: 1vw;
-    letter-spacing: 0.06vw;
-    width: 3vw;
-    height: 11%;
-    margin-top: -2.77vh;
-    margin-left: 9.3vw;
-    transform: translateX(-50%);
-    box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
-    align-items: center;
-    justify-content: center;
-} .goBut:hover{cursor: pointer; background: linear-gradient(0deg, rgb(0, 41, 191), rgb(46, 81, 255), rgb(0, 41, 191), rgb(10, 2, 95)); }
 
 .msgSig{
     position: absolute;
@@ -1469,7 +1435,6 @@ body{
     margin-left: 12.6vw;
     border-radius: 0.4vw;
     border: 0px;
-    
     background-color: #0000006c;
     color: rgb(200,200,200);
     font-size: 1vw;
@@ -1489,6 +1454,7 @@ body{
     background-color: #0000006c;
     text-align: center;
     padding-top: 1.5vh;
+    font-size: 1.3vw;
 }
 
 #fail {
@@ -1585,4 +1551,122 @@ body{
     width: 3.5vw;
     margin-top: 8.5vh;
     margin-left: 8vw;
+}
+
+#launchABbut {
+    display: block;
+    position: absolute;
+    margin-top: 33vh;
+    margin-left: 5vw;
+    width: 2vw;
+    height: 4vh;
+    background-color: #111111;
+    box-shadow: inset 0vw 0vw 0.5vw rgba(83, 83, 83, 0.818);
+    border-radius: 0.5vw;
+    padding: 1vw;
+    z-index: 2;
+}
+
+#LaunchLogoBut{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 3.5vw;
+}
+
+#alphaNextPay {
+    position: absolute;
+    display: block;
+    font-size: 0.9vw;
+    font-family: sans-serif;
+    margin-top: 30vh;
+    margin-left: 11vw;
+    color: rgb(184, 180, 180);
+    z-index: 2;
+    width: 11vw;
+    height: 5vh;
+    box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);
+    background-color: #0000006c;
+    border-radius: 1vw;
+    text-align: center;
+    padding-top: 5.5vh;
+    padding-bottom: 0vh;
+    letter-spacing: 0.5px;
+}
+
+#myAlphas {
+    position: absolute;
+    margin-left: 23vw;
+    margin-top: 22vh;
+    width: 15vw;
+    height: 28vh;
+    display: none;
+    box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);
+    background-color: #0000006c;
+    border-radius: 0.5vw;
+    color: white;
+    z-index: 2;
+    font-family: sans-serif;
+    letter-spacing: 1px;
+    text-align: center;
+    padding-top: 1vh;
+    font-size: 1.1vw;
+    overflow-y: scroll;
+}
+
+#myReferCode {
+    position: absolute;
+    display: block;
+    font-size: 0.9vw;
+    font-family: sans-serif;
+    margin-top: 15.6vh;
+    margin-left: 23vw;
+    color: rgb(184, 180, 180);
+    z-index: 2;
+    width: 15vw;
+    height: 4vh;
+    box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);
+    background-color: #0000006c;
+    border-radius: 0.6vw;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+#butCopyRefLink {
+    position: absolute;
+    width: 4vw;
+    height: 3vh;
+    color: white;
+    background-color: rgb(0 35 177 / 71%);
+    font-size: 1vw;
+    padding-left: 1.5vw;
+    border-style: none;
+    border-radius: 0.4vw;
+    margin-top: 0.4vh;
+    right: 0.2vw;
+}
+
+#copyImg {
+    position: absolute;
+    filter: invert(100);
+    width: 1vw;
+    left: 0.2vw;
+    top: 0.5vh;
+}
+
+#mrc {
+    position: absolute;
+    margin-top: 1vh;
+    margin-left: 1vw;
+    color: #3f3e3e;
+}
+
+#npta {
+    position: absolute;
+    margin-top: -2vh;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.3vw;
+    color: #ffffff;
 }
