@@ -1749,6 +1749,9 @@ var TraSig = document.getElementById("validate");
 var butSign = document.getElementById("butSign");
 var validator = document.getElementById("validator");
 var numFollowingDiv = document.getElementById("numFollowingDiv");
+var alphaNextPay = document.getElementById("alphaNextPay");
+var alBaLauBut = document.getElementById("launchABbut");
+
 var userZoneOn;
 
 zoneBut.addEventListener("click", function () {
@@ -1772,6 +1775,10 @@ zoneBut.addEventListener("click", function () {
   userEarn.style.display = "block";
   alphaSearch.style.display = "none";
   moreInfoSig.style.display = "block";
+  alphaNextPay.style.display = "block";
+  alBaLauBut.style.display = "block";
+  myRefCode.style.display = "block";
+  document.getElementById("myAlphaInfo").style.display = "block";
   userZoneOn = true;
   input1.value = "";
   document.getElementById("address2").style.display = "block";
@@ -2251,6 +2258,7 @@ async function seeAlphasImFollowing() {
           var alphaClick = alpha.getAttribute("data-valor");
           alphaClick;
           seeTraSig2(alphaClick);
+          seeAlphaInfo(alphaClick);
         });
       })(alphaP);
     }
@@ -2353,8 +2361,10 @@ var referrerAddress;
 
 applyCode.addEventListener("click", async() => {
   try{
-    await contract3.methods.regWithCode(refCodeUsed.value).send({ from: connectedAddress });
-    referrerAddress = await contract3.methods.seeIfHasReg(connectedAddress).send({ from: connectedAddress });
+    await contract3.methods
+      .regWithCode(refCodeUsed.value)
+      .send({ from: connectedAddress, gasPrice: "481878" });
+    referrerAddress = await contract3.methods.seeIfHasReg(connectedAddress).call();
     var disPrices = await contract.methods.seeDiscPrices().call();
     document.getElementById("simpleMonPrice").innerHTML = disPrices[0];
     document.getElementById("simpleMonPrice").innerHTML = disPrices[1];
@@ -2403,5 +2413,16 @@ document.addEventListener("DOMContentLoaded", function() {
   const refCodeFromURL = urlParams.get('refCode');
   refCodeUsed.value = refCodeFromURL;
 });
+
+async function seeAlphaInfo(alpha) {
+  try{
+    document.getElementById("seeTotalSig").innerText = await contract2.methods.traSignalAlphaLength(alpha).call(); //+++++++
+    document.getElementById("seeTraSig").innerText = await contract2.methods.traSignalAlphaLength(alpha).call();
+    document.getElementById("seeOncSig").innerText = await contract4.methods.traSignalAlphaLength(alpha).call();
+    document.getElementById("alScore").innerText = await contract.methods.seeTotalAlphaScore(alpha).call();
+    var totalAccuracy = await contract2.methods.getAccu(alpha).call(); // + if(>0){contract4...}
+    document.getElementById("alScore").innerText = totalAccuracy;
+  } catch(error){console.error(error);}
+}
 
 
