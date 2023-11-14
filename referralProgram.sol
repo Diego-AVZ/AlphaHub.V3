@@ -20,10 +20,9 @@ contract referralProgramAlphaBase {
     uint32 public pointsRef;
     uint32 public points;
     string[] codeList;
-    mapping(address => bool) hasReg;
     mapping(address => string) public codeUsed;
     
-    mapping(address => uint32) timesUsedReferralCode;
+    mapping(address => uint32) public timesUsedReferralCode;
 
     function setPoinsAmount(uint32 _points) public onlyOwner{
         points = _points;
@@ -52,12 +51,11 @@ contract referralProgramAlphaBase {
     } 
 
     function regWithCode(string memory code) public {
-        require(hasReg[msg.sender] == false);
         require(codeListReview(code) == true);
+        require(keccak256(abi.encodePacked(code)) != keccak256(abi.encodePacked(addressCode[msg.sender])));
         address referrer = codeAddress[code];
         AddressPuntuation[referrer] += pointsRef;
         AddressPuntuation[msg.sender] += points; 
-        hasReg[msg.sender] = true;
         timesUsedReferralCode[referrer] += 1;
         codeUsed[msg.sender] = code;
     }
