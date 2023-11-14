@@ -580,13 +580,18 @@ contract B {
     mapping(uint16 => valid[]) tradSigIdToValid;
 
     mapping(address => uint16) public validatorScore1;
+    mapping(uint16 => address[]) public userValid;
 
     function validate(uint16 _traSignalId, uint8 posNeg) public {
-
+        require(findTraSignalIndex(_traSignalId) != 9999999999999999999); //Not in traSignalsGlob
         uint i =  findTraSignalIndex(_traSignalId);
         traSignal storage traGlob = traSignalsGlob[i];
         valid memory val2 = valid(msg.sender, posNeg);
         require(traGlob.timesVal < 6 );
+        for(uint8 u = 0; u < userValid[_traSignalId].length; u++){
+            require(msg.sender != userValid[_traSignalId][u]);
+        }
+        userValid[_traSignalId].push(msg.sender);
         if(traGlob.timesVal < 5){
             tradSigIdToValid[_traSignalId].push(val2);
             if(posNeg == 0 /*good Signal*/){
