@@ -654,6 +654,10 @@ contract B {
             return(per);
        } else {return(0);}
     }
+
+    function getAccu(address alpha) public view returns(uint) {
+        return(accuracyPer[alpha];
+    }
    
    function getTradGlobLength() public view returns(uint16){
         return(uint16(traSignalsGlob.length));
@@ -872,6 +876,10 @@ contract C {
             uint per = accuracyPer[addr];
             return(per);
        } else {return(0);}
+    }
+
+    function getAccu(address alpha) public view returns(uint) {
+        return(accuracyPer[alpha];
     }
    
    function getOncGlobLength() public view returns(uint16){
