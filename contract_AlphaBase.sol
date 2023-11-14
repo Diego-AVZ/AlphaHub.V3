@@ -661,7 +661,7 @@ contract B {
     }
 
     function getAccu(address alpha) public view returns(uint) {
-        return(accuracyPer[alpha];
+        return(accuracyPer[alpha]);
     }
    
    function getTradGlobLength() public view returns(uint16){
