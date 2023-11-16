@@ -426,7 +426,7 @@ contract A {
         return(false);
     } 
 
-    function seeTotalValidatorScore(address user) public view returns(uint){
+    function seeTotalValidatorScore(address user) public view returns(int){
         return(bC.seeValidatorScore1(user)); //+ bC.seeValidatorScore2(user) + ... + ...
     }
 
@@ -582,14 +582,14 @@ contract B {
         return alphaTradInfoFromAddress[alpha][index];
     }
 
-    mapping(address => uint) seeAlphaTraScore;
+    mapping(address => uint) public seeAlphaTraScore;
 
     function getAlphaScore(address alpha) public view returns(uint){
         return(seeAlphaTraScore[alpha]);
     }
 
-    mapping(address => uint) addrPosNum;        // Aciertos
-    mapping(address => uint) addrTotValNum;     // Total de señales valoradas
+    mapping(address => uint) public addrPosNum;        // Aciertos
+    mapping(address => uint) public addrTotValNum;     // Total de señales valoradas
                                                 // para obtener % de accierto
 
     struct valid{
@@ -597,67 +597,66 @@ contract B {
         uint8 val; //voto a la señal
     }
 
-    valid[] validList;
+    mapping(uint16 => valid[]) public tradSigIdToValid;
 
-    mapping(uint16 => valid[]) tradSigIdToValid;
-
-    mapping(address => uint16) public validatorScore1;
+    mapping(address => int) public validatorScore1;
     mapping(uint16 => address[]) public userValid;
 
+
     function validate(uint16 _traSignalId, uint8 posNeg) public {
-        uint i =  findTraSignalIndex(_traSignalId);
-        traSignal storage traGlob = traSignalsGlob[i];
-        valid memory val2 = valid(msg.sender, posNeg);
-        require(traGlob.timesVal < 6 );
-        require(traGlob.alpha != msg.sender);
-        for(uint8 u = 0; u < userValid[_traSignalId].length; u++){
-            require(msg.sender != userValid[_traSignalId][u]);
-        }
-        userValid[_traSignalId].push(msg.sender);
-        if(traGlob.timesVal < 5){
-            tradSigIdToValid[_traSignalId].push(val2);
-            if(posNeg == 0 /*good Signal*/){
-                traGlob.success++;
-                traGlob.timesVal++;
-            }
-            else{
-                traGlob.success--;
-                traGlob.timesVal++;
-            }
-        } else if(traGlob.timesVal == 5) {
-            tradSigIdToValid[_traSignalId].push(val2);
-            if(posNeg == 0){
-                traGlob.success++;
-                traGlob.timesVal++;
-            }
-            else{
-                traGlob.success--;
-                traGlob.timesVal++;
-            }
-            //
-            if(traGlob.success < 0){
-               addrTotValNum[traGlob.alpha]++;
-               seeAlphaTraScore[traGlob.alpha]--;
-               for (uint8 a; a < tradSigIdToValid[_traSignalId].length; a++){
-                    valid storage val3 = tradSigIdToValid[_traSignalId][a];
-                    if(val3.val == 0){
-                        validatorScore1[val3.user]--;
-                    } else {validatorScore1[val3.user]++;}
-                }
-            } else {
-                addrTotValNum[traGlob.alpha]++;
+    uint i = findTraSignalIndex(_traSignalId);
+    traSignal storage traGlob = traSignalsGlob[i];
+    valid memory val2 = valid(msg.sender, posNeg);
+    
+    require(traGlob.timesVal < 5);
+    require(traGlob.alpha != msg.sender);
+    
+    for (uint8 u = 0; u < userValid[_traSignalId].length; u++) {
+        require(msg.sender != userValid[_traSignalId][u]);
+    }
+    
+    userValid[_traSignalId].push(msg.sender);
+    
+    tradSigIdToValid[_traSignalId].push(val2);
+    
+    if (posNeg == 0 /*good Signal*/) {
+        traGlob.success++;
+    } else if (posNeg == 1) {
+        traGlob.success--;
+    }
+    
+    traGlob.timesVal++;
+    
+    if (traGlob.timesVal == 5) {
+        addrTotValNum[traGlob.alpha]++;
+        if (traGlob.success < 0) {
+                seeAlphaTraScore[traGlob.alpha]--;
+        } else if (traGlob.success >= 0) {
                 addrPosNum[traGlob.alpha]++;
                 seeAlphaTraScore[traGlob.alpha]++;
-                for (uint8 a; a < tradSigIdToValid[_traSignalId].length; a++){
-                    valid storage val3 = tradSigIdToValid[_traSignalId][a];
-                    if(val3.val == 1){
-                        validatorScore1[val3.user]--;
-                    } else {validatorScore1[val3.user]++;}
+        }
+        
+        for (uint8 a = 0; a < tradSigIdToValid[_traSignalId].length; a++) {
+            valid storage val3 = tradSigIdToValid[_traSignalId][a];
+            
+            if (traGlob.success < 0) {
+                if (val3.val == 0) {
+                    validatorScore1[val3.user]--;
+                } else {
+                    validatorScore1[val3.user]++;
+                }
+            } else if (traGlob.success >= 0) {
+                if (val3.val == 1) {
+                    validatorScore1[val3.user]--;
+                } else {
+                    validatorScore1[val3.user]++;
                 }
             }
-
         }
     }
+}
+
+
 
     function findTraSignalIndex(uint16 traSignalId) public view returns (uint16) {
         for (uint i = 0; i < traSignalsGlob.length; i++) {
@@ -668,7 +667,7 @@ contract B {
         revert("TraSignal not found");
     }
 
-    function seeValidatorScore1(address user) public view returns(uint16) {
+    function seeValidatorScore1(address user) public view returns(int) {
         return(validatorScore1[user]);
     }
 
