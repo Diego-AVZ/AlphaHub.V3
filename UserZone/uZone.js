@@ -64,6 +64,7 @@ async function connect() {
       showEthAddress();
       seeAlphasImFollowing();
       getValidatorPoints();
+      seeImfollowingAlphas();
 
     } catch (error) {
       console.log("ERROR al Conectar MTMSK"+ error);
@@ -89,19 +90,6 @@ function showEthAddress() {
 
 const ABI = [
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-    ],
-    name: "add1ToTotalSig",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [],
     name: "becomeAlpha",
     outputs: [],
@@ -111,19 +99,6 @@ const ABI = [
   {
     inputs: [],
     name: "changePeriod",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-    ],
-    name: "countAllAlphaSignals",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -148,7 +123,7 @@ const ABI = [
   },
   {
     inputs: [],
-    name: "paySimpleAnnual",
+    name: "payFullAnnual",
     outputs: [],
     stateMutability: "payable",
     type: "function",
@@ -161,14 +136,14 @@ const ABI = [
         type: "address",
       },
     ],
-    name: "paySimpleAnnualRefDiscount",
+    name: "payFullAnnualRefDiscount",
     outputs: [],
     stateMutability: "payable",
     type: "function",
   },
   {
     inputs: [],
-    name: "paySimpleMonth",
+    name: "payFullMonth",
     outputs: [],
     stateMutability: "payable",
     type: "function",
@@ -181,13 +156,19 @@ const ABI = [
         type: "address",
       },
     ],
-    name: "paySimpleMonthRefDiscount",
+    name: "payFullMonthRefDiscount",
     outputs: [],
     stateMutability: "payable",
     type: "function",
   },
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "timestamp",
+        type: "uint256",
+      },
+    ],
     name: "setActualPeriod",
     outputs: [],
     stateMutability: "nonpayable",
@@ -201,7 +182,25 @@ const ABI = [
         type: "string",
       },
     ],
-    name: "setAlphaHubBot",
+    name: "setAlphaBaseBot",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "mon",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "ann",
+        type: "uint256",
+      },
+    ],
+    name: "setFullPrices",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -238,28 +237,36 @@ const ABI = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "mon",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "ann",
-        type: "uint256",
-      },
-    ],
-    name: "setSimplePrices",
+    inputs: [],
+    name: "withdrawFromAlphaBase",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
     inputs: [],
-    name: "withdrawFromAlphaBase",
-    outputs: [],
-    stateMutability: "nonpayable",
+    name: "actualPeriod",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "addAllAlphaAccuracy",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -297,6 +304,19 @@ const ABI = [
   {
     inputs: [],
     name: "b",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "c",
     outputs: [
       {
         internalType: "address",
@@ -370,14 +390,8 @@ const ABI = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-    ],
-    name: "genNumIndex",
+    inputs: [],
+    name: "getBlockTime",
     outputs: [
       {
         internalType: "uint256",
@@ -397,6 +411,25 @@ const ABI = [
       },
     ],
     name: "getChatId",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint32",
+        name: "i",
+        type: "uint32",
+      },
+    ],
+    name: "getIndexChatIdList",
     outputs: [
       {
         internalType: "string",
@@ -434,31 +467,25 @@ const ABI = [
         type: "address",
       },
     ],
-    name: "getNumTraSignals",
-    outputs: [
-      {
-        internalType: "uint16",
-        name: "",
-        type: "uint16",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-    ],
     name: "isActiveAlpha",
     outputs: [
       {
         internalType: "bool",
         name: "",
         type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "periodNum",
+    outputs: [
+      {
+        internalType: "uint32",
+        name: "",
+        type: "uint32",
       },
     ],
     stateMutability: "view",
@@ -491,6 +518,25 @@ const ABI = [
         type: "uint256",
       },
     ],
+    name: "seeActiveAlphaAccu",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "t",
+        type: "uint256",
+      },
+    ],
     name: "seeActiveAlphaScore",
     outputs: [
       {
@@ -508,7 +554,7 @@ const ABI = [
     outputs: [
       {
         internalType: "address[]",
-        name: "",
+        name: "combined",
         type: "address[]",
       },
     ],
@@ -686,9 +732,9 @@ const ABI = [
     name: "seeTotalValidatorScore",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "int256",
         name: "",
-        type: "uint256",
+        type: "int256",
       },
     ],
     stateMutability: "view",
@@ -738,6 +784,16 @@ const ABI = [
         internalType: "uint256",
         name: "",
         type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
       },
     ],
     stateMutability: "view",
@@ -803,6 +859,24 @@ const ABI = [
         name: "",
         type: "address",
       },
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "showEarnedAmount",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
     ],
     stateMutability: "view",
     type: "function",
@@ -845,6 +919,25 @@ const ABI2 = [
     inputs: [
       {
         internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "accuracyPer",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
         name: "addr",
         type: "address",
       },
@@ -858,6 +951,19 @@ const ABI2 = [
       },
     ],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "actualPeriod",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -896,6 +1002,44 @@ const ABI2 = [
     name: "addTraSignal",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "addrPosNum",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "addrTotValNum",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -980,13 +1124,57 @@ const ABI2 = [
     type: "function",
   },
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: "uint16",
+        name: "traSignalId",
+        type: "uint16",
+      },
+    ],
+    name: "findTraSignalIndex",
+    outputs: [
+      {
+        internalType: "uint16",
+        name: "",
+        type: "uint16",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+    ],
+    name: "getAccu",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "i",
+        type: "uint256",
+      },
+    ],
     name: "getActiveAlphaTra",
     outputs: [
       {
-        internalType: "address[]",
+        internalType: "address",
         name: "",
-        type: "address[]",
+        type: "address",
       },
     ],
     stateMutability: "view",
@@ -1013,7 +1201,20 @@ const ABI2 = [
         type: "address",
       },
     ],
-    name: "getAlphaScore1",
+    name: "getAlphaScore",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getBlockTime",
     outputs: [
       {
         internalType: "uint256",
@@ -1227,6 +1428,38 @@ const ABI2 = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "periodNum",
+    outputs: [
+      {
+        internalType: "uint32",
+        name: "",
+        type: "uint32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "seeAlphaTraScore",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "address",
@@ -1256,16 +1489,22 @@ const ABI2 = [
     name: "seeValidatorScore1",
     outputs: [
       {
-        internalType: "uint16",
+        internalType: "int256",
         name: "",
-        type: "uint16",
+        type: "int256",
       },
     ],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "timestamp",
+        type: "uint256",
+      },
+    ],
     name: "setActualPeriod",
     outputs: [],
     stateMutability: "nonpayable",
@@ -1304,6 +1543,19 @@ const ABI2 = [
       },
     ],
     name: "traSignalAlphaLength",
+    outputs: [
+      {
+        internalType: "uint16",
+        name: "",
+        type: "uint16",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "traSignalNum",
     outputs: [
       {
         internalType: "uint16",
@@ -1456,6 +1708,59 @@ const ABI2 = [
     inputs: [
       {
         internalType: "uint16",
+        name: "",
+        type: "uint16",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "tradSigIdToValid",
+    outputs: [
+      {
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+      {
+        internalType: "uint8",
+        name: "val",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint16",
+        name: "",
+        type: "uint16",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "userValid",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint16",
         name: "_traSignalId",
         type: "uint16",
       },
@@ -1481,9 +1786,9 @@ const ABI2 = [
     name: "validatorScore1",
     outputs: [
       {
-        internalType: "uint16",
+        internalType: "int256",
         name: "",
-        type: "uint16",
+        type: "int256",
       },
     ],
     stateMutability: "view",
@@ -1710,8 +2015,8 @@ const ABI3 = [
 ];
 var web3Instance = new Web3(web3.currentProvider);
 
-const conAddress = "0xD55D833dC50631fa0E9F97160c68C2bFE6c9950c";
-const conAddress2 = "0x205aAd0c64A4a0D9b48784Ef0fa91Ada87D57944";
+const conAddress = "0x485BB4738609b6733bB910ffdaF4EbB2c704E406";
+const conAddress2 = "0x7C26A5E2711568940986a9e1A0fe53F09d8ae138";
 const conAddress3 = "0x10B0c63Eb35e64e4dFFF50457dBD3a0f06033303";
 const contract = new web3Instance.eth.Contract(ABI, conAddress);
 const contract2 = new web3Instance.eth.Contract(ABI2, conAddress2);
@@ -1785,6 +2090,7 @@ zoneBut.addEventListener("click", function () {
   validator.style.display = "block";
   numFollowingDiv.style.display = "block";
   seeTraSig2();
+  seeImfollowingAlphas();
 });
 
 lupa.addEventListener("click", function(){
@@ -1805,6 +2111,7 @@ lupa.addEventListener("click", function(){
     earnLogo.style.display = "block";
     out2.style.display = "none";
     divId2.style.display = "none";
+    siDiv.style.display = "none";
 
   }
 });
@@ -1822,6 +2129,7 @@ out.addEventListener("click", function () {
     userEarn.style.marginLeft = "5vw";
     userEarn.style.marginTop = "24vh";
   out2.style.display = "none";
+  siDiv.style.display = "block";
 });
 
 var alphaPrices;
@@ -1855,6 +2163,7 @@ monPri.addEventListener("click", async()=>{
       .payAlpha(SearchAlphaAddress, 1)
       .send({ from: connectedAddress, value: alphaPrices[0], });
       seeAlphasImFollowing();
+      seeImfollowingAlphas();
   } catch(error){console.log(error);}
 })
 
@@ -1864,6 +2173,7 @@ annPri.addEventListener("click", async () => {
       .payAlpha(SearchAlphaAddress, 2)
       .send({ from: connectedAddress, value: alphaPrices[1] });
       seeAlphasImFollowing();
+      seeImfollowingAlphas();
   } catch (error) {
     console.log(error);
   }
@@ -1929,9 +2239,12 @@ var moreInfoSig = document.getElementById("moreInfoSig");
 
 var sigId = document.getElementById("sigId");
 var idSignal;
+
 async function seeTraSig2(alphaAddress) {
   var tradingSigList = document.getElementById("tradingSigList");
-  var numSignals = await contract.methods.getNumTraSignals(alphaAddress).call();
+  var numSignals = await contract2.methods
+    .traSignalAlphaLength(alphaAddress)
+    .call();
 
   if (numSignals < 50) {
     tradingSigList.innerText = "";
@@ -1950,6 +2263,7 @@ async function seeTraSig2(alphaAddress) {
         traSignal[4], //dir
         traSignal[5], //id
         await contract.methods.seeName(traSignal[7]).call(), //alphaName
+        traSignal[8], //msg
       ];
       signalDiv.setAttribute("data-valor", JSON.stringify(dataValorList));
       
@@ -1963,6 +2277,7 @@ async function seeTraSig2(alphaAddress) {
           var sl = dataValor[2];
           var alphaName = dataValor[6];
           var potProfit = ((tp1 - entry) / entry)*100;  
+          var msg = dataValor[7];
           potProfit = Math.abs(potProfit);
           potProfit = potProfit.toFixed(2);
           document.getElementById("mrinfNam").style.display = "block";
@@ -1984,7 +2299,8 @@ async function seeTraSig2(alphaAddress) {
           document.getElementById("stopLossDiv4").innerText = "$" + sl;
           document.getElementById("stopLossDiv6").innerText = potLoss + "%";
           document.getElementById("mrinfAss").innerHTML= asset;
-          document.getElementById("entrymit2").innerHTML = entry;
+          document.getElementById("entrymit2").innerHTML = "$" + entry;
+          document.getElementById("alphaMsg").innerText = msg;
           if (asset == "BTC" || asset == "btc") {
             var btcImg = document.createElement("img");
             btcImg.src = "btc.png";
@@ -2064,7 +2380,12 @@ async function seeTraSig2(alphaAddress) {
       }
       dirP.innerText = `${LoS}`;
       dirP.classList.add("dirS");
-
+      /*
+      var msgTextMsg = document.createElement("p");
+      msgTextMsg.innerText = "Signal Message";
+      msgTextMsg.classList.add("msgTextmsg");
+      signalDiv.appendChild(msgTextMsg);
+      */
       var date = document.createElement("p");
       date.classList.add("date");
       var postBlock = `${traSignal[6]}`;
@@ -2102,13 +2423,13 @@ async function seeTraSig2(alphaAddress) {
         dolp3.classList.add("dolp1");
         dolp3.innerText = "Stop Loss";
       }
-
+      /*
       if(traSignal[8] != undefined){
         var msgSig = document.createElement("p");
         msgSig.innerText = `${traSignal[8]}`;
         msgSig.classList.add("msgSig");
         signalDiv.appendChild(msgSig);
-    }
+    }*/
 
       signalDiv.appendChild(dolp1);
       signalDiv.appendChild(dolp2);
@@ -2304,18 +2625,21 @@ earnLogo.addEventListener("click", function(){
   out.style.display = "none";
   input1.value = "";
   divId2.style.display = "block";
+  siDiv.style.display = "none";
 });
+
+var siDiv = document.getElementById("siDiv");
 
 out2.addEventListener("click", function () {
   userEarn.style.width = "2vw";
   userEarn.style.height = "4vh";
-  userEarn.style.marginTop = "25vh";
+  userEarn.style.marginTop = "24vh";
   userEarn.style.zIndex = "2";
   earnLogo.style.display = "block";
   out2.style.display = "none";
   search.style.marginLeft = "5vw";
   divId2.style.display = "none";
-
+  siDiv.style.display = "block";
 });
 
 var succBut = document.getElementById("succ");
@@ -2347,7 +2671,7 @@ failBut.addEventListener("click", async () => {
 var myRefCode = document.getElementById("myReferCode");
 
 myRefCode.addEventListener("mouseover", function () {
-  userEarn.style.backgroundColor = "#606060";
+  userEarn.style.backgroundColor = "#a1a1a1";
 });
 
 myRefCode.addEventListener("mouseout", function () {
@@ -2418,11 +2742,60 @@ async function seeAlphaInfo(alpha) {
   try{
     document.getElementById("seeTotalSig").innerText = await contract2.methods.traSignalAlphaLength(alpha).call(); //+++++++
     document.getElementById("seeTraSig").innerText = await contract2.methods.traSignalAlphaLength(alpha).call();
-    document.getElementById("seeOncSig").innerText = await contract4.methods.traSignalAlphaLength(alpha).call();
+    //document.getElementById("seeOncSig").innerText = await contract4.methods.traSignalAlphaLength(alpha).call();
     document.getElementById("alScore").innerText = await contract.methods.seeTotalAlphaScore(alpha).call();
     var totalAccuracy = await contract2.methods.getAccu(alpha).call(); // + if(>0){contract4...}
-    document.getElementById("alScore").innerText = totalAccuracy;
+    document.getElementById("alAccur").innerText = totalAccuracy;
   } catch(error){console.error(error);}
 }
+/*
+async function seeLastPay() {
+  try{
+    document.getElementById("npta").innerText = await contract.seeLastPay;
+  } catch (error){
+    console.error(error);
+  }
+} 
+*/
 
+var lupa2 = document.getElementById("lupa2");
 
+lupa2.addEventListener("mouseover", function(){
+  search.style.borderColor = "#a1a1a1";
+  search.style.borderStyle = "solid";
+});
+
+lupa2.addEventListener("mouseout", function () {
+  search.style.borderStyle = "none";
+});
+
+var earnLogo2 = document.getElementById("earnLogo2");
+var userEarn = document.getElementById("userEarn");
+
+earnLogo2.addEventListener("mouseover", function () {
+  userEarn.style.borderColor = "#a1a1a1";
+  userEarn.style.borderStyle = "solid";
+});
+
+earnLogo2.addEventListener("mouseout", function () {
+  userEarn.style.borderStyle = "none";
+});
+
+var followImg = document.getElementById("followImg");
+
+followImg.addEventListener("mouseover", function () {
+  myAlphas.style.borderColor = "#a1a1a1";
+  myAlphas.style.borderStyle = "solid";
+});
+
+followImg.addEventListener("mouseout", function () {
+  myAlphas.style.borderStyle = "none";
+});
+
+var numFollowing = document.getElementById("numFollowing");
+
+async function seeImfollowingAlphas() {
+  try{
+    numFollowing.innerText = await contract.methods.seeImFollowingListLen(connectedAddress).call();
+  } catch(error){console.error(error);}
+}
