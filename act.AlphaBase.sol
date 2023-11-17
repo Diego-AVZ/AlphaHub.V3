@@ -28,7 +28,7 @@ contract A {
     }
 
     /////////////
-    address public b = 0x9240dDc345D7084cC775EB65F91f7194DbBb48d8;
+    address public b = 0x7C26A5E2711568940986a9e1A0fe53F09d8ae138;
     address public c = 0x0fC5025C764cE34df352757e82f7B5c4Df39A836;
     ////////////
     B bC = B(b);
@@ -400,6 +400,10 @@ contract A {
         return(alphaMonthlyPrice[alpha], alphaAnnualPrice[alpha]);
     }
 
+    function seeAlphaFollowersLen(address alpha)public view returns(uint){
+        return(followers[alpha].length);
+    }
+
     function seeAlphasFollowing(address user, uint i) public view returns(address){
         require(i < imFollowing[user].length);
         return(imFollowing[user][i]);
@@ -424,6 +428,19 @@ contract A {
             } 
         }
         return(false);
+    } 
+
+    function seeNextTimePayThisAlpha (address alpha, address user) public view returns(uint) {
+        for(uint16 i = 0; i < followers[alpha].length; i++){
+            if(user == followers[alpha][i].follower){
+                if(followers[alpha][i].planPaid == 1){
+                    return (followers[alpha][i].lastAlphaPay + 30 days);
+                } else{
+                    return (followers[alpha][i].lastAlphaPay + 364 days);
+                }
+            } 
+        }
+        return(0);
     } 
 
     function seeTotalValidatorScore(address user) public view returns(int){
