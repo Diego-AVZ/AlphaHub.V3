@@ -193,7 +193,6 @@ body{
     margin-left: 66.5vw;
     color: rgb(140, 140, 140);
     background-color: #111111;
-    box-shadow: inset 0vw 0vw 0.5vw rgba(83, 83, 83, 0.818);
     border-radius: 0.5vw;
     padding: 1vw;
     z-index: 2;
@@ -304,7 +303,7 @@ body{
     z-index: 2;
     width: 5vw;
     height: 5vh;
-    box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);
+    
     background-color: #0000006c;
     border-radius: 1vw;
     text-align: center;
@@ -324,7 +323,6 @@ body{
     z-index: 2;
     width: 5vw;
     height: 5vh;
-    box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);
     background-color: #0000006c;
     border-radius: 1vw;
     text-align: center;
@@ -847,6 +845,101 @@ body{
     filter: invert(100%);
 } #lupa:hover{cursor: pointer;}
 
+#lupa2{
+    position: absolute;
+    display: block;
+    margin-left: 5.5vw;
+    margin-top: 13.5vh;
+    width: 4vw;
+    filter: invert(100%);
+} 
+
+#t1 {
+    position: absolute;
+    display: block;
+     left: 50%;
+    top: 5%;
+    transform: translate(-50%, -50%);
+    font-size: 1.2vw;
+}
+
+#t2 {
+    position: absolute;
+    display: block;
+    margin-left: 10vw;
+    margin-top: 16vh;
+    font-size: 1.2vw;
+}
+
+#t3 {
+    position: absolute;
+    display: block;
+    margin-left: 10vw;
+    margin-top: 30vh;
+    font-size: 1.2vw;
+    width: 25vw;
+    line-height: 4vh;
+}
+
+#t4 {
+    position: absolute;
+    display: block;
+    margin-left: 10vw;
+    margin-top: 48vh;
+    font-size: 1.2vw;
+    width: 25vw;
+    line-height: 4vh;
+}
+
+#t5 {
+    position: absolute;
+    display: block;
+    margin-left: 10vw;
+    margin-top: 65vh;
+    font-size: 1.2vw;
+    width: 25vw;
+    line-height: 4vh;
+}
+
+#blue {
+    position: absolute;
+    margin-left: 6vw;
+    margin-top: 48.5vh;
+    width: 3vw;
+    height: 6.5vh;
+    background-color: rgb(0 35 177 / 71%);
+    border-color: white;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 10px;
+}
+
+#earnLogo2 {
+    position: absolute;
+    margin-left: 6vw;
+    margin-top: 66.5vh;
+    filter: invert(100);
+    width: 2.5vw;
+}
+
+#followImg {
+    position: absolute;
+    display: block;
+    margin-left: 6vw;
+    margin-top: 30vh;
+    width: 3vw;
+    filter: invert(100%);
+}
+
+#followImg2 {
+    position: absolute;
+    display: block;
+    margin-left: 0.5vw;
+    margin-top: -3vh;
+    width: 1.5vw;
+    filter: invert(100%);
+}
+
 #tradingSigList {
     display: block;
     overflow: hidden;
@@ -1079,12 +1172,14 @@ body{
 
 .msgSig{
     position: absolute;
-    margin-left: 22vw;
-    margin-top: 6vh;
-    border: 1px solid rgb(45, 45, 45);
+    margin-left: 25vw;
+    margin-top: 5vh;
+    border: 1px solid rgba(45, 45, 45, 0);
+    background-color: #000000;
     font-size: 0.8vw;
-    width: 15vw;
-    max-height: 6vh;
+    width: 13vw;
+    border-radius: 0.4vw;
+    height: 6vh;
     padding: 0.5vw;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -1105,7 +1200,7 @@ body{
     height: 4vh;
     color: rgb(140, 140, 140);
     background-color: #111111;
-    box-shadow: inset 0vw 0vw 0.5vw rgba(83, 83, 83, 0.818);
+    
     border-radius: 0.5vw;
     padding: 1vw;
     z-index: 2;
@@ -1428,16 +1523,28 @@ body{
 
 #alphaMsg {
     position: absolute;
-    width: 21vw;
-    height:15vh;
+    width: 17vw;
+    height:11.2vh;
     z-index: 3;
     margin-top: 1vh;
     margin-left: 12.6vw;
     border-radius: 0.4vw;
     border: 0px;
     background-color: #0000006c;
+    padding-top: 2vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
     color: rgb(200,200,200);
     font-size: 1vw;
+}
+
+#msgTextTit{
+    position: absolute;
+    font-size:0.8vw;
+    margin-top: 2vh;
+    margin-left: 13.3vw;
+    z-index: 3;
+    color: rgb(140, 140, 140);
 }
 
 #validate {
@@ -1463,14 +1570,13 @@ body{
     margin-top: 8vh;
     width: 6vw; 
     height: 4vh;
-    background-color: #b20a0a71;
-    box-shadow: inset 0vw 0vw 0.5vw rgba(255, 61, 61, 0.818);
+    background-color: #b20a0a9f;
     border-radius: 0.5vw;
     color: white;
     font-size: 1.1vw;
     border-style: none;
 
-}
+} #fail:hover{cursor: pointer; box-shadow: 0vw 0vw 0.5vw rgba(250, 22, 22, 0.818); background-color: rgb(255, 0, 0);}
 
 #succ {
     position: absolute;
@@ -1478,13 +1584,12 @@ body{
     margin-top: 1vh;
     width: 6vw; 
     height: 4vh;
-    background-color: #076c0071;
-    box-shadow: inset 0vw 0vw 0.5vw rgba(27, 173, 17, 0.818);
+    background-color: #076c00a0;
     border-radius: 0.5vw;
     color: white;
     border-style: none;
     font-size: 1.1vw;
-}
+} #succ:hover{cursor: pointer; box-shadow: 0vw 0vw 0.5vw rgba(27, 173, 17, 0.818); background-color: #15b00add;}
 
 #sigId {
     position: absolute;
@@ -1561,7 +1666,6 @@ body{
     width: 2vw;
     height: 4vh;
     background-color: #111111;
-    box-shadow: inset 0vw 0vw 0.5vw rgba(83, 83, 83, 0.818);
     border-radius: 0.5vw;
     padding: 1vw;
     z-index: 2;
@@ -1586,7 +1690,6 @@ body{
     z-index: 2;
     width: 11vw;
     height: 5vh;
-    box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);
     background-color: #0000006c;
     border-radius: 1vw;
     text-align: center;
@@ -1600,9 +1703,9 @@ body{
     margin-left: 23vw;
     margin-top: 22vh;
     width: 15vw;
-    height: 28vh;
+    height: 26vh;
     display: none;
-    box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);
+    /*box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);*/
     background-color: #0000006c;
     border-radius: 0.5vw;
     color: white;
@@ -1626,7 +1729,6 @@ body{
     z-index: 2;
     width: 15vw;
     height: 4vh;
-    box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);
     background-color: #0000006c;
     border-radius: 0.6vw;
     text-align: center;
@@ -1665,7 +1767,7 @@ body{
 
 #npta {
     position: absolute;
-    margin-top: -2vh;
+    margin-top: -3vh;
     left: 50%;
     transform: translateX(-50%);
     font-size: 1.3vw;
@@ -1704,7 +1806,6 @@ body{
     width: 13vw;
     height: 12vh;
     display: block;
-    box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);
     background-color: #0000006c;
     border-radius: 0.5vw;
     color: white;
@@ -1719,7 +1820,6 @@ body{
     width: 6vw;
     height: 12vh;
     display: block;
-    box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);
     background-color: #0000006c;
     border-radius: 0.5vw;
     color: white;
@@ -1734,7 +1834,6 @@ body{
     width: 6vw;
     height: 12vh;
     display: block;
-    box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);
     background-color: #0000006c;
     border-radius: 0.5vw;
     color: white;
@@ -1749,7 +1848,6 @@ body{
     width: 6vw;
     height: 12vh;
     display: block;
-    box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);
     background-color: #0000006c;
     border-radius: 0.5vw;
     color: white;
@@ -1764,7 +1862,6 @@ body{
     width: 6vw;
     height: 12vh;
     display: block;
-    box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);
     background-color: #0000006c;
     border-radius: 0.5vw;
     color: white;
@@ -1780,7 +1877,6 @@ body{
     width: 13vw;
     height: 12vh;
     display: block;
-    box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);
     background-color: #0000006c;
     border-radius: 0.5vw;
     color: white;
@@ -1796,7 +1892,6 @@ body{
     width: 13vw;
     height: 12vh;
     display: block;
-    box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);
     background-color: #0000006c;
     border-radius: 0.5vw;
     color: white;
@@ -1824,3 +1919,13 @@ body{
     font-size: 1.6vw;
 }
 
+.msgTextmsg {
+    position: absolute;
+    font-size: 0.7vw;
+    color:rgb(171, 171, 171);
+    margin-left: 33.5vw;
+    margin-top: 10.5vh;
+    z-index: 4;
+    background-color: rgba(255, 0, 0, 0);
+    padding: 0.2vw;
+}
