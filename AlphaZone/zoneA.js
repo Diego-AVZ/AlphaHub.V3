@@ -15,9 +15,15 @@ walletBut.addEventListener("click", async () => {
       connectedAddress = Accounts[0];
       console.log(connectedAddress);
       walletBut.innerText = "Connected";
-      walletBut.style.paddingLeft = "3vw";
-      walletBut.style.background =
-        "linear-gradient(90deg, rgb(14 116 18), rgb(2, 165, 45), rgba(0, 24, 2, 0.541))";
+      walletBut.style.paddingLeft = "1vw";
+      walletBut.style.background = "#076c0071";
+      walletBut.style.width = "6.8vw";
+      walletBut.style.fontSize = "1vw";
+      walletBut.style.marginLeft = "5.5vw";
+      walletBut.style.marginTop = "-2vh";
+      walletBut.style.boxShadow =
+        "inset 0vw 0vw 0.5vw rgba(27, 173, 17, 0.818)";
+      walletBut.style.height = "5vh";     
       msg1.style.display = "none";
       cover.style.display = "none";
       cover2.style.display = "none";
@@ -27,6 +33,7 @@ walletBut.addEventListener("click", async () => {
       getSignalsNum();
       seeTraSig2();
       getTradSignalsNum();
+      getChatIdjs();
       /*seeIfIsAlpha();*/
     } catch (error) {
       console.log("ERROR al Conectar MTMSK");
@@ -46,9 +53,14 @@ async function connect() {
       connectedAddress = Accounts[0];
       console.log(connectedAddress);
       walletBut.innerText = "Connected";
-      walletBut.style.paddingLeft = "3vw";
-      walletBut.style.background =
-        "linear-gradient(90deg, rgb(14 116 18), rgb(2, 165, 45), rgba(0, 24, 2, 0.541))";
+      walletBut.style.paddingLeft = "1vw";
+      walletBut.style.background = "#076c0071";
+      walletBut.style.width = "6.8vw";
+      walletBut.style.fontSize = "1vw";
+      walletBut.style.marginLeft = "5.5vw";
+      walletBut.style.marginTop = "-2vh";
+      walletBut.style.boxShadow = "inset 0vw 0vw 0.5vw rgba(27, 173, 17, 0.818)";
+      walletBut.style.height = "5vh";      
       msg1.style.display = "none";
       cover.style.display = "none";
       cover2.style.display = "none";
@@ -58,6 +70,7 @@ async function connect() {
       getSignalsNum();
       seeTraSig2();
       getTradSignalsNum();
+      getChatIdjs();
       /*seeIfIsAlpha();*/
     } catch (error) {
       console.log("ERROR al Conectar MTMSK");
@@ -77,8 +90,8 @@ function showEthAddress() {
 }
 
 //CONNECT CONTRACT
-const conAddress = "0xF9b637Aff040A5b7b95161792D6Dc565C49DBCAB";
-const conAddress2 = "0x99669c81BE93c45FB74E4e1e00513c1BA532Bf21";
+const conAddress = "0x485BB4738609b6733bB910ffdaF4EbB2c704E406";
+const conAddress2 = "0x7C26A5E2711568940986a9e1A0fe53F09d8ae138";
 
 const web3Instance = new Web3(window.ethereum);
 
@@ -113,7 +126,9 @@ async function seeName() {
 }
 
 async function getAlphaScore() {
-  var hisScore = await contract.methods.getAlphaScore(connectedAddress).call();
+  var hisScore = await contract.methods
+    .seeTotalAlphaScore(connectedAddress)
+    .call();
   document.getElementById("score").innerHTML = `${hisScore}`;
 }
 
@@ -123,18 +138,20 @@ async function getSignalsNum() {
   document.getElementById("numSig").innerHTML = `${hisSignals}`;
 }
 
-async function getTradSignalsNum() {
+/*async function getTradSignalsNum() {
   try{
     var hisTraSignals = await contract.methods.getNumTraSignals(connectedAddress).call();
     document.getElementById("numTradSig").innerHTML = `${hisTraSignals}`;
   } catch(error){console.log("getTradSignalsNum() ERROR" + error);}
-}
+}*/
 
 var valueId;
 
 async function seeTraSig2() {
   var tradingSigList = document.getElementById("tradingSigList");
-  var numSignals = await contract.methods.getNumTraSignals(connectedAddress).call();
+  var numSignals = await contract2.methods
+    .traSignalAlphaLength(connectedAddress)
+    .call();
 
   if(numSignals < 50){
       tradingSigList.innerText = "";
@@ -144,16 +161,91 @@ async function seeTraSig2() {
         var signalDiv = document.createElement("div");
         signalDiv.classList.add("signalTrad");
 
-        signalDiv.setAttribute("data-valor", `${traSignal[2]}`);
+        var dataValorList = [
+          traSignal[0], //asset
+          traSignal[1], //entry
+          traSignal[2], //sl
+          traSignal[3], //tp1
+          traSignal[4], //dir
+          traSignal[5], //id
+          await contract.methods.seeName(traSignal[7]).call(), //alphaName
+          traSignal[8], //msg
+          traSignal[9], //success
+          traSignal[10], //timesVal
+        ];
+        signalDiv.setAttribute("data-valor", JSON.stringify(dataValorList));
 
-        (function (signal) {
-          // ESTA FUNCION PERMITE VALIDAR Y CALIFICAR LAS SEÑALES CON UN CLICK, CLICKANDO. CAMBIA `${traSignal[0]}` por EL ID de la señal o la address del Alpha
-          signal.addEventListener("click", function () {
-            console.log(signal.getAttribute("data-valor"));
+        function addClickHandler(div, data) {
+          div.addEventListener("click", function () {
+            bot.style.display = "none";
+            econ.style.display = "none";
+            sigInfo.style.display = "block";
+            var dataValor = JSON.parse(data);
+            idSignal = dataValor[5];
+            var tp1 = dataValor[3];
+            var asset = dataValor[0];
+            var entry = dataValor[1];
+            var sl = dataValor[2];
+            var alphaName = dataValor[6];
+            var potProfit = ((tp1 - entry) / entry) * 100;
+            var msg = dataValor[7];
+            var success = dataValor[8];
+            var timesVal = dataValor[9];
+            document.getElementById("tval").innerText = timesVal;
+            console.log("times Validated: " + dataValor[9]);
+            //document.getElementById("succ1").innerText = success;
+            potProfit = Math.abs(potProfit);
+            potProfit = potProfit.toFixed(2);
+            document.getElementById("mrinfNam").style.display = "block";
+            var percentageThreshold = 1;
+
+            if (entry * (1 + percentageThreshold / 100) > tp1) {
+              // The trade is considered "Short"
+              var potLoss = ((entry - sl) / entry) * 100;
+              document.getElementById("mrinfNam").innerText = "Short";
+              document.getElementById("imgLongmi").style.display = "none";
+              document.getElementById("imgShortmi").style.display = "block";
+              
+            } else {
+              // The trade is considered "Long"
+              potLoss = ((sl - entry) / entry) * 100;
+              document.getElementById("mrinfNam").innerText = "Long";
+              document.getElementById("imgLongmi").style.display = "block";
+              document.getElementById("imgShortmi").style.display = "none";
+            }
+
+            potLoss = potLoss.toFixed(2);
+            document.getElementById("takeProfitsDiv4").innerText = "$" + tp1;
+            document.getElementById("takeProfitsDiv6").innerText =
+              potProfit + "%";
+            document.getElementById("stopLossDiv4").innerText = "$" + sl;
+            document.getElementById("stopLossDiv6").innerText = potLoss + "%";
+            document.getElementById("mrinfAss").innerHTML = asset;
+            document.getElementById("entrymit2").innerHTML = "$" + entry;
+            document.getElementById("alphaMsg").innerText = msg;
+            if (asset == "BTC" || asset == "btc") {
+              var btcImg = document.createElement("img");
+              btcImg.src = "btc.png";
+              btcImg.classList.add("assetImg2");
+              moreInfoSig.appendChild(btcImg);
+            } else if (asset == "ETH" || asset == "eth") {
+              var ethImg = document.createElement("img");
+              ethImg.src = "eth.png";
+              ethImg.classList.add("assetImg2");
+              moreInfoSig.appendChild(ethImg);
+            } else {
+              var elseImg = document.createElement("img");
+              elseImg.src =
+                "https://image.spreadshirtmedia.net/image-server/v1/compositions/T56A2PA4115PT17X0Y67D157542882W24948H18711/views/1,width=550,height=550,appearanceId=2,backgroundColor=000000,noPt=true/signo-de-interrogacion-planeado-hae-simbolo-signo-regalo-bolsa-de-tela.jpg";
+              elseImg.classList.add("assetImg2");
+              moreInfoSig.appendChild(elseImg);
+              elseImg.style.borderRadius = "2vw";
+            }
           });
-        })(signalDiv);
+        }
 
-
+        addClickHandler(signalDiv, signalDiv.getAttribute("data-valor"));
+      
         var assetP = document.createElement("p");
         assetP.innerText = `${traSignal[0]}`;
         assetP.classList.add("assetS");
@@ -213,7 +305,11 @@ async function seeTraSig2() {
         var d = transDate.getDate();
         var h = transDate.getHours();
         var mi = transDate.getMinutes();
-        var postDate = `${y}/${m}/${d}  ${h}:${mi}`;
+        if (mi >= 10) {
+          var postDate = `${y}/${m}/${d}  ${h}:${mi}`;
+        } else {
+          var postDate = `${y}/${m}/${d}  ${h}:0${mi}`;
+        }
         date.innerHTML = postDate;
 
         if (traSignal[4] == 1) {
@@ -238,7 +334,6 @@ async function seeTraSig2() {
           dolp3.innerText = "Stop Loss";
         }
         
-
         signalDiv.appendChild(dolp1);
         signalDiv.appendChild(dolp2);
         signalDiv.appendChild(dolp3);
@@ -253,18 +348,88 @@ async function seeTraSig2() {
       }
     } else{
         for (let i = numSignals - 1; i >= numSignals-50; i--) { // solo salen las 50 primeras señales de trading
-          var traSignal = await contract.methods.seeTraSig2(i, connectedAddress).call();
+                  var traSignal = await contract.methods
+                    .seeTraSig2(i, connectedAddress, connectedAddress)
+                    .call();
+
           
           var signalDiv = document.createElement("div");
           signalDiv.classList.add("signalTrad");
-          signalDiv.setAttribute("data-valor", `${traSignal[7]}`);
+          var dataValorList = [
+            traSignal[0], //asset
+            traSignal[1], //entry
+            traSignal[2], //sl
+            traSignal[3], //tp1
+            traSignal[4], //dir
+            traSignal[5], //id
+            await contract.methods.seeName(traSignal[7]).call(), //alphaName
+            traSignal[8], //msg
+          ];
+          signalDiv.setAttribute("data-valor", JSON.stringify(dataValorList));
 
-          (function (signal) {
-            // ESTA FUNCION PERMITE VALIDAR Y CALIFICAR LAS SEÑALES CON UN CLICK, CLICKANDO. CAMBIA `${traSignal[0]}` por EL ID de la señal o la address del Alpha
-            signal.addEventListener("click", function () {
-              console.log(signal.getAttribute("data-valor"));
+          function addClickHandler(div, data) {
+            div.addEventListener("click", function () {
+              bot.style.display = "none";
+              econ.style.display = "none";
+              sigInfo.style.display = "block";
+              var dataValor = JSON.parse(data);
+              idSignal = dataValor[5];
+              var tp1 = dataValor[3];
+              var asset = dataValor[0];
+              var entry = dataValor[1];
+              var sl = dataValor[2];
+              var alphaName = dataValor[6];
+              var potProfit = ((tp1 - entry) / entry) * 100;
+              var msg = dataValor[7];
+              potProfit = Math.abs(potProfit);
+              potProfit = potProfit.toFixed(2);
+              document.getElementById("mrinfNam").style.display = "block";
+              var percentageThreshold = 1;
+              if (entry * (1 + percentageThreshold / 100) > tp1) {
+                // The trade is considered "Short"
+                var potLoss = ((entry - sl) / entry) * 100;
+                document.getElementById("mrinfNam").innerText = "Short";
+                document.getElementById("imgLongmi").style.display = "none";
+                document.getElementById("imgShortmi").style.display = "block";
+              } else {
+                // The trade is considered "Long"
+                potLoss = ((sl - entry) / entry) * 100;
+                document.getElementById("mrinfNam").innerText = "Long";
+                document.getElementById("imgLongmi").style.display = "block";
+                document.getElementById("imgShortmi").style.display = "none";
+              }
+              potLoss = potLoss.toFixed(2);
+              document.getElementById("takeProfitsDiv4").innerText = "$" + tp1;
+              document.getElementById("takeProfitsDiv6").innerText =
+                potProfit + "%";
+              document.getElementById("stopLossDiv4").innerText = "$" + sl;
+              document.getElementById("stopLossDiv6").innerText = potLoss + "%";
+              document.getElementById("mrinfAss").innerHTML = asset;
+              document.getElementById("entrymit2").innerHTML = "$" + entry;
+              document.getElementById("alphaMsg").innerText = msg;
+              if (asset == "BTC" || asset == "btc") {
+                var btcImg = document.createElement("img");
+                btcImg.src = "btc.png";
+                btcImg.classList.add("assetImg2");
+                moreInfoSig.appendChild(btcImg);
+              } else if (asset == "ETH" || asset == "eth") {
+                var ethImg = document.createElement("img");
+                ethImg.src = "eth.png";
+                ethImg.classList.add("assetImg2");
+                moreInfoSig.appendChild(ethImg);
+              } else {
+                var elseImg = document.createElement("img");
+                elseImg.src =
+                  "https://image.spreadshirtmedia.net/image-server/v1/compositions/T56A2PA4115PT17X0Y67D157542882W24948H18711/views/1,width=550,height=550,appearanceId=2,backgroundColor=000000,noPt=true/signo-de-interrogacion-planeado-hae-simbolo-signo-regalo-bolsa-de-tela.jpg";
+                elseImg.classList.add("assetImg2");
+                moreInfoSig.appendChild(elseImg);
+                elseImg.style.borderRadius = "2vw";
+              }
             });
-          })(signalDiv);
+          }
+
+          addClickHandler(signalDiv, signalDiv.getAttribute("data-valor"));
+
 
           var assetP = document.createElement("p");
           assetP.innerText = `${traSignal[0]}`;
@@ -325,7 +490,11 @@ async function seeTraSig2() {
           var d = transDate.getDate();
           var h = transDate.getHours();
           var mi = transDate.getMinutes();
-          var postDate = `${y}/${m}/${d}  ${h}:${mi}`;
+          if (mi >= 10) {
+            var postDate = `${y}/${m}/${d}  ${h}:${mi}`;
+          } else {
+            var postDate = `${y}/${m}/${d}  ${h}:0${mi}`;
+          }
           date.innerHTML = postDate;
 
           var dolp1 = document.createElement("p");
@@ -364,9 +533,26 @@ var E1 = document.getElementById("addEntry");
 var addTradBut = document.getElementById("addTradBut");
 // long & short
 
+var acIdBut = document.getElementById("addChat");
+var acId = document.getElementById("addChatId");
+
+var chatId ;
+
+acIdBut.addEventListener("click", async() => {
+  try {
+    await contract.methods.setAlphaBaseBot(acId.value).send({from: connectedAddress});
+    chatId = await contract.methods.getChatId(connectedAddress).call();
+  } catch(error){console.error(error);}
+}) 
+
+async function getChatIdjs() {
+  try{
+    chatId = await contract.methods.getChatId(connectedAddress).call();
+  } catch (error){console.error(error);}
+}  
 
 const botToken = "6973037553:AAHE61fhxhbxF2tZgjcmHi1zZot4pGypqxU";
-const chatId = "-4046315950"; // El ID del chat 
+var chatId ; 
 
 const telegramApiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
@@ -379,8 +565,10 @@ var D; //Encrypted TP
 addTradBut.addEventListener("click", async () => {
   
   try {
-    
-    await contract2.methods.addTraSignal(A1.value, E1.value, B1.value, C1.value, directionValue).send({ from: connectedAddress, /*gasPrice: "481878",*/ });
+    if (D1.value === "" || D1.value === undefined) {
+      D1.value = "No message for this Signal...";
+    }
+    await contract2.methods.addTraSignal(A1.value, E1.value, B1.value, C1.value, directionValue, D1.value).send({ from: connectedAddress, /*gasPrice: "481878",*/ });
       addTradBut.style.opacity = "20%";
       var dir;
     if (directionValue==1){
@@ -399,21 +587,23 @@ addTradBut.addEventListener("click", async () => {
         text: message,
       };
 
-      fetch(telegramApiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(messageData),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Mensaje enviado con éxito:", data);
+      if (chatId != undefined) {
+        console.log("sending to Telegram. . . ")
+        fetch(telegramApiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(messageData),
         })
-        .catch((error) => {
-          console.error("Error al enviar el mensaje:", error);
-        });
-
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Mensaje enviado con éxito:", data);
+          })
+          .catch((error) => {
+            console.error("Error al enviar el mensaje:", error);
+          });
+      }
 
     A1.value = "";
     B1.value = "";
@@ -636,56 +826,46 @@ var econBut = document.getElementById("econ");
 var botBut = document.getElementById("bot");
 var bot = document.getElementById("botW");
 var econ = document.getElementById("econW");
-var tw0 = document.getElementById("toolsWindow");
+var sigInfo = document.getElementById("moreInfoSig");
+
 
 econBut.addEventListener("click", function(){
-  tw0.style.display = "none";
   bot.style.display = "none";
   econ.style.display = "block"
+  sigInfo.style.display = "none";
 });
 
 botBut.addEventListener("click", function () {
-  tw0.style.display = "none";
   bot.style.display = "block";
   econ.style.display = "none";
+  sigInfo.style.display = "none";
 });
 
+var setPriceBut = document.getElementById("setPrice");
+var monPrice = document.getElementById("monPrice");
+var anPrice = document.getElementById("anPrice");
+
+setPriceBut.addEventListener("click", async() => {
+  try{
+    if (monPrice.value.includes(",") || anPrice.value.includes(",")) {
+      alert(
+        "Please, do not use commas ',' in ETH prices"
+      );
+      return;
+    }
+    if (monPrice.value != undefined && anPrice.value != undefined) {
+      var monPriceInWei = Math.round(parseFloat(monPrice.value) * 1e18);
+      var anPriceInWei = Math.round(parseFloat(anPrice.value) * 1e18);
+
+      await contract.methods.setPriceAlphaPlans(1, monPriceInWei.toString()).send({ from: connectedAddress });
+      await contract.methods.setPriceAlphaPlans(2, anPriceInWei.toString()).send({ from: connectedAddress });
+    }
+  } catch(error){console.error(error);}
+})
 
 
 // ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI
 const ABI = [
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "addr",
-        type: "address",
-      },
-    ],
-    name: "accuracyPercentage",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-    ],
-    name: "add1ToTotalSig",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
   {
     inputs: [],
     name: "becomeAlpha",
@@ -694,23 +874,10 @@ const ABI = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-    ],
-    name: "countAllAlphaSignals",
+    inputs: [],
+    name: "changePeriod",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "deposit",
-    outputs: [],
-    stateMutability: "payable",
     type: "function",
   },
   {
@@ -733,16 +900,55 @@ const ABI = [
   },
   {
     inputs: [],
-    name: "paySimpleAnnual",
+    name: "payFullAnnual",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "referrer",
+        type: "address",
+      },
+    ],
+    name: "payFullAnnualRefDiscount",
     outputs: [],
     stateMutability: "payable",
     type: "function",
   },
   {
     inputs: [],
-    name: "paySimpleMonth",
+    name: "payFullMonth",
     outputs: [],
     stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "referrer",
+        type: "address",
+      },
+    ],
+    name: "payFullMonthRefDiscount",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "timestamp",
+        type: "uint256",
+      },
+    ],
+    name: "setActualPeriod",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -753,7 +959,25 @@ const ABI = [
         type: "string",
       },
     ],
-    name: "setAlphaHubBot",
+    name: "setAlphaBaseBot",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "mon",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "ann",
+        type: "uint256",
+      },
+    ],
+    name: "setFullPrices",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -790,44 +1014,49 @@ const ABI = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "mon",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "ann",
-        type: "uint256",
-      },
-    ],
-    name: "setSimplePrices",
+    inputs: [],
+    name: "withdrawFromAlphaBase",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "clickAddress",
-        type: "address",
-      },
+    inputs: [],
+    name: "actualPeriod",
+    outputs: [
       {
         internalType: "uint256",
-        name: "points",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "posNeg",
+        name: "",
         type: "uint256",
       },
     ],
-    name: "validate",
-    outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "addAllAlphaAccuracy",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "addAllAlphaScores",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -852,6 +1081,19 @@ const ABI = [
   {
     inputs: [],
     name: "b",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "c",
     outputs: [
       {
         internalType: "address",
@@ -908,12 +1150,12 @@ const ABI = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "user",
-        type: "address",
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
-    name: "genNumIndex",
+    name: "ethInContractThisPeriod",
     outputs: [
       {
         internalType: "uint256",
@@ -925,14 +1167,8 @@ const ABI = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "alpha",
-        type: "address",
-      },
-    ],
-    name: "getAlphaScore",
+    inputs: [],
+    name: "getBlockTime",
     outputs: [
       {
         internalType: "uint256",
@@ -952,6 +1188,25 @@ const ABI = [
       },
     ],
     name: "getChatId",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint32",
+        name: "i",
+        type: "uint32",
+      },
+    ],
+    name: "getIndexChatIdList",
     outputs: [
       {
         internalType: "string",
@@ -989,12 +1244,25 @@ const ABI = [
         type: "address",
       },
     ],
-    name: "getNumTraSignals",
+    name: "isActiveAlpha",
     outputs: [
       {
-        internalType: "uint16",
+        internalType: "bool",
         name: "",
-        type: "uint16",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "periodNum",
+    outputs: [
+      {
+        internalType: "uint32",
+        name: "",
+        type: "uint32",
       },
     ],
     stateMutability: "view",
@@ -1022,6 +1290,57 @@ const ABI = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "t",
+        type: "uint256",
+      },
+    ],
+    name: "seeActiveAlphaAccu",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "t",
+        type: "uint256",
+      },
+    ],
+    name: "seeActiveAlphaScore",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "seeAllActiveAlpha",
+    outputs: [
+      {
+        internalType: "address[]",
+        name: "combined",
+        type: "address[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "alpha",
         type: "address",
@@ -1034,6 +1353,67 @@ const ABI = [
         name: "",
         type: "uint256",
       },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "i",
+        type: "uint256",
+      },
+    ],
+    name: "seeAlphasFollowing",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "seeDiscPrices",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+    ],
+    name: "seeImFollowingListLen",
+    outputs: [
       {
         internalType: "uint256",
         name: "",
@@ -1076,6 +1456,62 @@ const ABI = [
         internalType: "string",
         name: "",
         type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "seePrices",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+    ],
+    name: "seeTotalAlphaScore",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+    ],
+    name: "seeTotalValidatorScore",
+    outputs: [
+      {
+        internalType: "int256",
+        name: "",
+        type: "int256",
       },
     ],
     stateMutability: "view",
@@ -1125,6 +1561,16 @@ const ABI = [
         internalType: "uint256",
         name: "",
         type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
       },
     ],
     stateMutability: "view",
@@ -1190,6 +1636,56 @@ const ABI = [
         name: "",
         type: "address",
       },
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "showEarnedAmount",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "totalAlphaScore",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "volume",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
     ],
     stateMutability: "view",
     type: "function",
@@ -1199,6 +1695,25 @@ const ABI = [
 const contract = new web3Instance.eth.Contract(ABI, conAddress);
 
 const ABI2 = [
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "accuracyPer",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
   {
     inputs: [
       {
@@ -1216,6 +1731,19 @@ const ABI2 = [
       },
     ],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "actualPeriod",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -1245,10 +1773,53 @@ const ABI2 = [
         name: "_direction",
         type: "uint8",
       },
+      {
+        internalType: "string",
+        name: "_msg",
+        type: "string",
+      },
     ],
     name: "addTraSignal",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "addrPosNum",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "addrTotValNum",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -1306,15 +1877,100 @@ const ABI2 = [
         name: "alpha",
         type: "address",
       },
+      {
+        internalType: "string",
+        name: "_msg",
+        type: "string",
+      },
+      {
+        internalType: "int256",
+        name: "success",
+        type: "int256",
+      },
+      {
+        internalType: "uint8",
+        name: "timesVal",
+        type: "uint8",
+      },
     ],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
-    name: "deposit",
+    name: "changePeriod",
     outputs: [],
-    stateMutability: "payable",
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint16",
+        name: "traSignalId",
+        type: "uint16",
+      },
+    ],
+    name: "findTraSignalIndex",
+    outputs: [
+      {
+        internalType: "uint16",
+        name: "",
+        type: "uint16",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+    ],
+    name: "getAccu",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "i",
+        type: "uint256",
+      },
+    ],
+    name: "getActiveAlphaTra",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getActiveAlphaTraLen",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -1326,6 +1982,19 @@ const ABI2 = [
       },
     ],
     name: "getAlphaScore",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getBlockTime",
     outputs: [
       {
         internalType: "uint256",
@@ -1393,6 +2062,21 @@ const ABI2 = [
             name: "alpha",
             type: "address",
           },
+          {
+            internalType: "string",
+            name: "_msg",
+            type: "string",
+          },
+          {
+            internalType: "int256",
+            name: "success",
+            type: "int256",
+          },
+          {
+            internalType: "uint8",
+            name: "timesVal",
+            type: "uint8",
+          },
         ],
         internalType: "struct B.traSignal",
         name: "",
@@ -1454,6 +2138,21 @@ const ABI2 = [
             name: "alpha",
             type: "address",
           },
+          {
+            internalType: "string",
+            name: "_msg",
+            type: "string",
+          },
+          {
+            internalType: "int256",
+            name: "success",
+            type: "int256",
+          },
+          {
+            internalType: "uint8",
+            name: "timesVal",
+            type: "uint8",
+          },
         ],
         internalType: "struct B.traSignal",
         name: "",
@@ -1477,6 +2176,25 @@ const ABI2 = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "lastPostTra",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "maxLengthTrad",
     outputs: [
@@ -1484,6 +2202,113 @@ const ABI2 = [
         internalType: "uint16",
         name: "",
         type: "uint16",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "periodNum",
+    outputs: [
+      {
+        internalType: "uint32",
+        name: "",
+        type: "uint32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "seeAlphaTraScore",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+    ],
+    name: "seeLastPostTra",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+    ],
+    name: "seeValidatorScore1",
+    outputs: [
+      {
+        internalType: "int256",
+        name: "",
+        type: "int256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "timestamp",
+        type: "uint256",
+      },
+    ],
+    name: "setActualPeriod",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "traActiveAlphaProvsThisPeriod",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
       },
     ],
     stateMutability: "view",
@@ -1503,6 +2328,88 @@ const ABI2 = [
         internalType: "uint16",
         name: "",
         type: "uint16",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "traSignalNum",
+    outputs: [
+      {
+        internalType: "uint16",
+        name: "",
+        type: "uint16",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "traSignals",
+    outputs: [
+      {
+        internalType: "string",
+        name: "asset",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "priceEntry",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "stopLoss",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "takeProfit",
+        type: "string",
+      },
+      {
+        internalType: "uint8",
+        name: "direction",
+        type: "uint8",
+      },
+      {
+        internalType: "uint16",
+        name: "traSignalId",
+        type: "uint16",
+      },
+      {
+        internalType: "uint256",
+        name: "postDate",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+      {
+        internalType: "string",
+        name: "_msg",
+        type: "string",
+      },
+      {
+        internalType: "int256",
+        name: "success",
+        type: "int256",
+      },
+      {
+        internalType: "uint8",
+        name: "timesVal",
+        type: "uint8",
       },
     ],
     stateMutability: "view",
@@ -1558,6 +2465,21 @@ const ABI2 = [
         name: "alpha",
         type: "address",
       },
+      {
+        internalType: "string",
+        name: "_msg",
+        type: "string",
+      },
+      {
+        internalType: "int256",
+        name: "success",
+        type: "int256",
+      },
+      {
+        internalType: "uint8",
+        name: "timesVal",
+        type: "uint8",
+      },
     ],
     stateMutability: "view",
     type: "function",
@@ -1565,19 +2487,67 @@ const ABI2 = [
   {
     inputs: [
       {
+        internalType: "uint16",
+        name: "",
+        type: "uint16",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "tradSigIdToValid",
+    outputs: [
+      {
         internalType: "address",
-        name: "clickAddress",
+        name: "user",
         type: "address",
       },
       {
-        internalType: "uint256",
-        name: "points",
-        type: "uint256",
+        internalType: "uint8",
+        name: "val",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint16",
+        name: "",
+        type: "uint16",
       },
       {
         internalType: "uint256",
-        name: "posNeg",
+        name: "",
         type: "uint256",
+      },
+    ],
+    name: "userValid",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint16",
+        name: "_traSignalId",
+        type: "uint16",
+      },
+      {
+        internalType: "uint8",
+        name: "posNeg",
+        type: "uint8",
       },
     ],
     name: "validate",
@@ -1585,86 +2555,31 @@ const ABI2 = [
     stateMutability: "nonpayable",
     type: "function",
   },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "validatorScore1",
+    outputs: [
+      {
+        internalType: "int256",
+        name: "",
+        type: "int256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
 ];
 
 const contract2 = new web3Instance.eth.Contract(ABI2, conAddress2);
 
-var varWidth = "30vw";
-var varHeight = 350;
-
-new TradingView.widget({
-  width: varWidth,
-  height: varHeight,
-  symbol: "BINANCE:BTCUSDT",
-  interval: "D",
-  timezone: "Etc/UTC",
-  theme: "dark",
-  style: "1",
-  locale: "en",
-  toolbar_bg: "#f1f3f6",
-  enable_publishing: false,
-  hide_top_toolbar: false,
-  save_image: false,
-  container_id: "windowTool1",
-});
 
 
-var tw = document.getElementById("toolsWindowText");
-var tw1 = document.getElementById("windowTool1");
-var tw2 = document.getElementById("windowTool2");
-var tw3 = document.getElementById("windowTool3");
-var tw4 = document.getElementById("windowTool4");
-
-
-
-
-function cmc() {
-  tw.innerText = "";
-  tw1.style.display = "none";
-  tw2.style.display = "block";
-  tw3.style.display = "none";
-  tw4.style.display = "none";
-  tw0.style.display = "block";
-  bot.style.display = "none";
-  econ.style.display = "none";
-  
-
-}
-
-function tv() {
-  tw.innerText = "";
-  tw1.style.display = "block";
-  tw2.style.display = "none";
-  tw3.style.display = "none";
-  tw4.style.display = "none";
-  tw0.style.display = "block";
-  bot.style.display = "none";
-  econ.style.display = "none";
-
-}
-
-function uni() {
-  tw.innerText = "";
-  tw1.style.display = "none";
-  tw2.style.display = "none";
-  tw3.style.display = "block";
-  tw4.style.display = "none";
-  tw0.style.display = "block";
-  bot.style.display = "none";
-  econ.style.display = "none";
-
-}
-
-function mtry() {
-  tw.innerText = "";
-  tw1.style.display = "none";
-  tw2.style.display = "none";
-  tw3.style.display = "none";
-  tw4.style.display = "block";
-  tw0.style.display = "block";
-  bot.style.display = "none";
-  econ.style.display = "none";
-}
 
 
 
