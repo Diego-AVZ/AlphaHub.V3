@@ -58,9 +58,9 @@ async function connect() {
       walletBut.style.height = "5vh";
       msg1.style.display = "none";
       cover.style.display = "none";
-      mrc.innerHTML = await contract3.methods
+      mrc.innerHTML = "My code: " + await contract3.methods
         .seeMyCode(connectedAddress)
-        .call();
+        .call() ;
       showEthAddress();
       seeAlphasImFollowing();
       getValidatorPoints();
@@ -2064,8 +2064,6 @@ zoneBut.addEventListener("click", function () {
   beta.style.display = "none";
   alpha.style.display= "none";
   myZone.style.display = "none";
-  tools.style.display = "block";
-  wt.style.display = "none";
   myAlphas.style.display = "block";
   validate.style.display = "block";
   butSign.style.display = "block";
@@ -2145,8 +2143,14 @@ namBut.addEventListener("click", async () => {
       var name = iNam.value;
       alphaName.innerText = name.toUpperCase();
       alphaPrices = await contract.methods.seeAlphaPrices(SearchAlphaAddress).call();
-      monPri.innerText = `${alphaPrices[0]} ETH`;
-      annPri.innerText = `${alphaPrices[1]} ETH`;
+      var monthlyPriceInETH = alphaPrices[0] / 1e18;
+      var annualPriceInETH = alphaPrices[1] / 1e18;
+
+      monPri.innerText = `${monthlyPriceInETH} ETH`;
+      annPri.innerText = `${annualPriceInETH} ETH`;
+      document.getElementById("signals").innerText = await contract2.methods
+        .traSignalAlphaLength(SearchAlphaAddress)
+        .call(); //+++++
     }
     iNam.style.marginTop = "2vh";
     namBut.style.marginTop = "2vh";
@@ -2178,62 +2182,6 @@ annPri.addEventListener("click", async () => {
     console.log(error);
   }
 });
-
-
-var varWidth = "30vw";
-var varHeight = 350;
-
-new TradingView.widget({
-  width: varWidth,
-  height: varHeight,
-  symbol: "BINANCE:BTCUSDT",
-  interval: "D",
-  timezone: "Etc/UTC",
-  theme: "dark",
-  style: "1",
-  locale: "en",
-  toolbar_bg: "#f1f3f6",
-  enable_publishing: false,
-  hide_top_toolbar: false,
-  save_image: false,
-  container_id: "windowTool1",
-});
-
-function cmc() {
-  tw.innerText = "";
-  tw1.style.display = "none";
-  tw2.style.display = "block";
-  tw3.style.display = "none";
-  tw4.style.display = "none";
-  tw0.style.display = "block";
-}
-
-function tv() {
-  tw.innerText = "";
-  tw1.style.display = "block";
-  tw2.style.display = "none";
-  tw3.style.display = "none";
-  tw4.style.display = "none";
-  tw0.style.display = "block";
-}
-
-function uni() {
-  tw.innerText = "";
-  tw1.style.display = "none";
-  tw2.style.display = "none";
-  tw3.style.display = "block";
-  tw4.style.display = "none";
-  tw0.style.display = "block";
-}
-
-function mtry() {
-  tw.innerText = "";
-  tw1.style.display = "none";
-  tw2.style.display = "none";
-  tw3.style.display = "none";
-  tw4.style.display = "block";
-  tw0.style.display = "block";
-}
 
 var moreInfoSig = document.getElementById("moreInfoSig");
 
@@ -2281,17 +2229,20 @@ async function seeTraSig2(alphaAddress) {
           potProfit = Math.abs(potProfit);
           potProfit = potProfit.toFixed(2);
           document.getElementById("mrinfNam").style.display = "block";
-          if (entry > tp1) {
+          var percentageThreshold = 1;
+          if (entry * (1 + percentageThreshold / 100) > tp1) {
+            // The trade is considered "Short"
             var potLoss = ((entry - sl) / entry) * 100;
             document.getElementById("mrinfNam").innerText = "Short";
             document.getElementById("imgLongmi").style.display = "none";
             document.getElementById("imgShortmi").style.display = "block";
           } else {
-              potLoss = ((sl - entry) / entry) * 100; 
-              document.getElementById("mrinfNam").innerText = "Long";
-              document.getElementById("imgLongmi").style.display = "block";
-              document.getElementById("imgShortmi").style.display = "none";
-            }
+            // The trade is considered "Long"
+            potLoss = ((sl - entry) / entry) * 100;
+            document.getElementById("mrinfNam").innerText = "Long";
+            document.getElementById("imgLongmi").style.display = "block";
+            document.getElementById("imgShortmi").style.display = "none";
+          }
           potLoss = potLoss.toFixed(2);
           sigId.innerText = "id." + idSignal;
           document.getElementById("takeProfitsDiv4").innerText = "$" + tp1;
@@ -2445,23 +2396,85 @@ async function seeTraSig2(alphaAddress) {
   } else {
     for (let i = numSignals - 1; i >= numSignals - 50; i--) {
       // solo salen las 50 primeras señales de trading
-      var traSignal = await contract.methods
-        .seeTraSig2(i, connectedAddress)
+      await contract.methods
+        .seeTraSig2(i, alphaAddress, connectedAddress)
         .call();
 
       var signalDiv = document.createElement("div");
       signalDiv.classList.add("signalTrad");
-      signalDiv.setAttribute("data-valor", `${traSignal[5]}`);
+      var dataValorList = [
+        traSignal[0], //asset
+        traSignal[1], //entry
+        traSignal[2], //sl
+        traSignal[3], //tp1
+        traSignal[4], //dir
+        traSignal[5], //id
+        await contract.methods.seeName(traSignal[7]).call(), //alphaName
+        traSignal[8], //msg
+      ];
+      signalDiv.setAttribute("data-valor", JSON.stringify(dataValorList));
 
-      signalDiv.setAttribute("data-valor", `${traSignal[5]}`);
-
-      (function (signal) {
-        // ESTA FUNCION PERMITE VALIDAR Y CALIFICAR LAS SEÑALES CON UN CLICK, CLICKANDO. CAMBIA `${traSignal[0]}` por EL ID de la señal o la address del Alpha
-        signal.addEventListener("click", function () {
-          var idSignal = signal.getAttribute("data-valor");
+      function addClickHandler(div, data) {
+        div.addEventListener("click", function () {
+          var dataValor = JSON.parse(data);
+          idSignal = dataValor[5];
+          var tp1 = dataValor[3];
+          var asset = dataValor[0];
+          var entry = dataValor[1];
+          var sl = dataValor[2];
+          var alphaName = dataValor[6];
+          var potProfit = ((tp1 - entry) / entry) * 100;
+          var msg = dataValor[7];
+          potProfit = Math.abs(potProfit);
+          potProfit = potProfit.toFixed(2);
+          document.getElementById("mrinfNam").style.display = "block";
+          var percentageThreshold = 1;
+          if (entry * (1 + percentageThreshold / 100) > tp1) {
+            // The trade is considered "Short"
+            var potLoss = ((entry - sl) / entry) * 100;
+            document.getElementById("mrinfNam").innerText = "Short";
+            document.getElementById("imgLongmi").style.display = "none";
+            document.getElementById("imgShortmi").style.display = "block";
+          } else {
+            // The trade is considered "Long"
+            potLoss = ((sl - entry) / entry) * 100;
+            document.getElementById("mrinfNam").innerText = "Long";
+            document.getElementById("imgLongmi").style.display = "block";
+            document.getElementById("imgShortmi").style.display = "none";
+          }
+          potLoss = potLoss.toFixed(2);
           sigId.innerText = "id." + idSignal;
+          document.getElementById("takeProfitsDiv4").innerText = "$" + tp1;
+          document.getElementById("takeProfitsDiv6").innerText =
+            potProfit + "%";
+          document.getElementById("stopLossDiv4").innerText = "$" + sl;
+          document.getElementById("stopLossDiv6").innerText = potLoss + "%";
+          document.getElementById("mrinfAss").innerHTML = asset;
+          document.getElementById("entrymit2").innerHTML = "$" + entry;
+          document.getElementById("alphaMsg").innerText = msg;
+          if (asset == "BTC" || asset == "btc") {
+            var btcImg = document.createElement("img");
+            btcImg.src = "btc.png";
+            btcImg.classList.add("assetImg2");
+            moreInfoSig.appendChild(btcImg);
+          } else if (asset == "ETH" || asset == "eth") {
+            var ethImg = document.createElement("img");
+            ethImg.src = "eth.png";
+            ethImg.classList.add("assetImg2");
+            moreInfoSig.appendChild(ethImg);
+          } else {
+            var elseImg = document.createElement("img");
+            elseImg.src =
+              "https://image.spreadshirtmedia.net/image-server/v1/compositions/T56A2PA4115PT17X0Y67D157542882W24948H18711/views/1,width=550,height=550,appearanceId=2,backgroundColor=000000,noPt=true/signo-de-interrogacion-planeado-hae-simbolo-signo-regalo-bolsa-de-tela.jpg";
+            elseImg.classList.add("assetImg2");
+            moreInfoSig.appendChild(elseImg);
+            elseImg.style.borderRadius = "2vw";
+          }
         });
-      })(signalDiv);
+      }
+
+      addClickHandler(signalDiv, signalDiv.getAttribute("data-valor"));
+
 
       var assetP = document.createElement("p");
       assetP.innerText = `${traSignal[0]}`;
@@ -2685,14 +2698,25 @@ var referrerAddress;
 
 applyCode.addEventListener("click", async() => {
   try{
-    await contract3.methods
-      .regWithCode(refCodeUsed.value)
-      .send({ from: connectedAddress, gasPrice: "481878" });
-    referrerAddress = await contract3.methods.seeIfHasReg(connectedAddress).call();
-    var disPrices = await contract.methods.seeDiscPrices().call();
-    document.getElementById("simpleMonPrice").innerHTML = disPrices[0];
-    document.getElementById("simpleMonPrice").innerHTML = disPrices[1];
-
+    var reg = await contract3.methods.seeIfHasReg(connectedAddress).call();
+    if (reg != 0x0000000000000000000000000000000000000000) {
+      referrerAddress = await contract3.methods
+        .seeIfHasReg(connectedAddress)
+        .call();
+      var disPrices = await contract.methods.seeDiscPrices().call();
+      document.getElementById("simpleMonPrice").innerHTML = disPrices[0];
+      document.getElementById("simpleAnnPrice").innerHTML = disPrices[1];
+    } else {
+      await contract3.methods
+        .regWithCode(refCodeUsed.value)
+        .send({ from: connectedAddress, gasPrice: "481878" });
+      referrerAddress = await contract3.methods
+        .seeIfHasReg(connectedAddress)
+        .call();
+      var disPrices = await contract.methods.seeDiscPrices().call();
+      document.getElementById("simpleMonPrice").innerHTML = disPrices[0];
+      document.getElementById("simpleAnnPrice").innerHTML = disPrices[1];
+    }
   } catch(error){console.log(error);}
 });
 
@@ -2715,7 +2739,9 @@ var refLink;
 copyRef.addEventListener("click", async() => {
   try {
     var myRefCode = await contract3.methods.seeMyCode(connectedAddress).call();
-    refLink = "http://127.0.0.1:5501/AlphaHub%20V3/userZone/userZone.html?refCode=" + myRefCode.toString();
+    refLink =
+      "http://127.0.0.1:5500/userZone/userZone.html?refCode=" +
+      myRefCode.toString();
     copyToClipboard(refLink);
     alert("Enlace de referencia copiado al portapapeles: " + refLink);
 
@@ -2799,3 +2825,26 @@ async function seeImfollowingAlphas() {
     numFollowing.innerText = await contract.methods.seeImFollowingListLen(connectedAddress).call();
   } catch(error){console.error(error);}
 }
+
+var butBuyMon = document.getElementById("buy");
+var butBuyAnn = document.getElementById("buyB");
+
+butBuyMon.addEventListener("click", async() =>{
+  try {
+    var DiscPrices = await contract.methods.seeDiscPrices().call();
+    await contract.methods
+      .payFullMonthRefDiscount(referrerAddress)
+      .send({ from: connectedAddress, value: DiscPrices[0] });
+  } catch(error){console.error(error);}
+})
+
+butBuyAnn.addEventListener("click", async () => {
+  try {
+    var DiscPrices = await contract.methods.seeDiscPrices().call();
+    await contract.methods
+      .payFullAnnualRefDiscount(referrerAddress)
+      .send({ from: connectedAddress, value: DiscPrices[1] });
+  } catch (error) {
+    console.error(error);
+  }
+});
