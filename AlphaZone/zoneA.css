@@ -141,10 +141,10 @@ body{
     height: 80vh;
     bottom: 1vw;
     color: rgb(140, 140, 140);
-    background-color: #080808;
+    background-color: #161616;
     transform: translateX(-50%);
     left: 50%;
-    box-shadow: 0vw 0vw 1vw rgb(76 76 76 / 69%);
+
     border-radius: 1vw;
     padding: 1vw;
     z-index: 2;
@@ -208,25 +208,24 @@ body{
 }
 
 #alphaTrad{
-    margin-left: 1vw;
-    height: 7vh;
+    margin-left: 23.5vw;
     
 }
  #alphaTrad:hover{background: linear-gradient(0deg, rgb(0, 41, 191, 0.6), rgb(46, 81, 255, 0.6), rgb(0, 41, 191, 0.6), rgb(10, 2, 95, 0.6)); height: 7vh; transition: ease, 0.5s;}
 #alphaLows{
-    margin-left: 12vw;
+    margin-left: 32vw;
     
 
 } #alphaLows:hover{background: linear-gradient(0deg, rgb(0, 41, 191, 0.6), rgb(46, 81, 255, 0.6), rgb(0, 41, 191, 0.6), rgb(10, 2, 95, 0.6)); height: 7vh; transition: ease, 0.5s;}
 
 #alphaOnchain{
-    margin-left: 23vw;
+    margin-left: 40.5vw;
     
 
 } #alphaOnchain:hover{background: linear-gradient(0deg, rgb(0, 41, 191, 0.6), rgb(46, 81, 255, 0.6), rgb(0, 41, 191, 0.6), rgb(10, 2, 95, 0.6)); height: 7vh; transition: ease, 0.5s;}
 
 #alphaICO{
-    margin-left: 34vw;
+    margin-left: 49vw;
     
 
 } #alphaICO:hover{background: linear-gradient(0deg, rgb(0, 41, 191, 0.6), rgb(46, 81, 255, 0.6), rgb(0, 41, 191, 0.6), rgb(10, 2, 95, 0.6)); height: 7vh; transition: ease, 0.5s;}
@@ -245,22 +244,30 @@ body{
     top: -6vh;
 } #bot:hover{background: linear-gradient(0deg, rgb(0, 41, 191, 0.6), rgb(46, 81, 255, 0.6), rgb(0, 41, 191, 0.6), rgb(10, 2, 95, 0.6)); height: 7vh; top: -7vh;; transition: ease, 0.5s;}
 
+#ref{
+    margin-left: 48.7vw;
+    width: 12vw;
+    top: -6vh;
+} #ref:hover{background: linear-gradient(0deg, rgb(0, 41, 191, 0.6), rgb(46, 81, 255, 0.6), rgb(0, 41, 191, 0.6), rgb(10, 2, 95, 0.6)); height: 7vh; top: -7vh;; transition: ease, 0.5s;}
+
 
 .butAlpha {
     position: absolute;
-    bottom: 0.5vh;
-    width: 10vw;
-    height: 6vh;
+    width: 8vw;
+    height: 5vh;
     color: white;
     font-size: 1.2vw;
+    font-size: 1vw;
+    letter-spacing: 0.06vw;
     font-weight: 100;
-    border-radius: 0.8vw 0.8vw 0vw 0vw;
+    border-radius: 0.4vw 0.4vw 0vw 0vw;
     border-style: none;
-    box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
     text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
     opacity: 100%;
-    background: linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));
-    bottom: 0;
+    background: rgb(0 35 177 / 71%);
+    margin-top: -7vh; 
+    z-index: 3;
+    
 } .butAlpha:hover{cursor: pointer;}
 
 #set1 {
@@ -274,19 +281,19 @@ body{
 #newSig {
     position: absolute;
     width: 21vw;
-    height: 48vh;
+    height: 54vh;
     margin-top: 26vh;
     margin-left: 1vw;
-    background-color: #2d2d2e3d;
+    background-color: #0000006c;
     border-radius: 0.5vw;
-    box-shadow: inset 0vw 0vw 1vw 0px rgba(139, 139, 139, 0.44);
+    
 }
 
 #titAdd {
     position: absolute;
     color: rgba(255, 255, 255, 0.726);
     font-size: 1.5;
-    margin-top: 1vh;
+    margin-top: 2vh;
     left: 50%;
     transform: translateX(-50%);
     font-family: sans-serif;
@@ -421,22 +428,19 @@ body{
 
 #addTradBut {
     position: absolute;
-    /*background: linear-gradient(0deg, rgb(0, 41, 191, 0.3), rgb(46, 81, 255, 0.3), rgb(0, 41, 191, 0.3), rgb(10, 2, 95, 0.3));*/
     background-color: rgb(13 13 113);
     border-style: none;
     color: white;
-    border-radius: 0.5vw;
+    border-radius: 0.4vw;
     text-align: center;
     font-family: sans-serif;
-    font-size: 1.3vw;
-    padding-top: 1vw;
-    padding-bottom: 1vw;
-    width: 12vw;
-    margin-top: 33vh;
+    font-size: 1vw;
+    width: 8vw;
+    height: 5vh;
+    margin-top: 36vh;
     left: 50%;
     transform: translateX(-50%);
-    box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
-} #addTradBut:hover{cursor: pointer; box-shadow: inset 0vw 0vw 1.3vw rgb(39 115 253); background-color: rgba(13, 13, 113, 0.583);/* background: linear-gradient(0deg, rgb(0, 41, 191, 0.6), rgb(46, 81, 255, 0.6), rgb(0, 41, 191, 0.6), rgb(10, 2, 95, 0.6));*/ }
+} #addTradBut:hover{cursor: pointer; box-shadow: inset 0vw 0vw 1.3vw rgb(39 115 253); background-color: rgba(13, 13, 113, 0.583); transition: ease, 1s;}
 
 #setName{
     position: absolute;
@@ -486,13 +490,13 @@ body{
 
 .list {
     position: absolute;
-    width: 33vw;
-    height: 74vh;
+    width: 38vw;
+    height: 80vh;
     margin-top: 0vh;
-    margin-left: 23vw;
-    background-color: #2d2d2e3d;
+    margin-left: 22.5vw;
+    background-color: #2d2d2e00;
     border-radius: 0.5vw;
-    z-index: 2;
+    z-index: 4;
     color: white;
 }
 
@@ -515,15 +519,15 @@ body{
 }
 
 .signalTrad{
-    background-color: #131313;
-    box-shadow: inset 0vw 0vw 0.5vw rgb(83 83 83);
-    width: 30vw;
+    background-color: #0000006c;
+    box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);
+    width: 36vw;
     height: 18.5vh;
     border-radius: 0.5vw;
     margin-left: 1vw;
-    margin-top: 1vh;
+    margin-top: 1.25vh;
     
-} .signalTrad:hover{margin-left: 1.3vw; transition: ease, 1s; box-shadow: inset 0vw 0vw 0.5vw rgb(143, 142, 142);}
+} .signalTrad:hover{transition: ease, 1s; box-shadow: inset 0vw 0vw 0.5vw rgb(143, 142, 142);}
 
 .assetS{
     position: absolute;
@@ -546,8 +550,8 @@ body{
     padding: 0.5vw;
     padding-left: 1vw;
     padding-right: 1vw;
-    border-radius: 1vw;
-    box-shadow: inset 0vw 0vw 0.3vw rgb(84, 182, 224);
+    border-radius: 0.4vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgba(51, 112, 245, 0.541);
     text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
     max-width: 4.5vw;
     
@@ -564,8 +568,8 @@ body{
     padding: 0.5vw;
     padding-left: 1vw;
     padding-right: 1vw;
-    border-radius: 1vw;
-    box-shadow: inset 0vw 0vw 0.3vw rgb(155, 33, 33);
+    border-radius: 0.4vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgb(245, 5, 5);
     max-width: 4.5vw;
 }
 .slSshort{
@@ -580,15 +584,15 @@ body{
     padding: 0.5vw;
     padding-left: 1vw;
     padding-right: 1vw;
-    border-radius: 1vw;
-    box-shadow: inset 0vw 0vw 0.3vw rgb(155, 33, 33);
+    border-radius: 0.4vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgb(245, 5, 5);
     max-width: 4.5vw;
 }
 .tpSlong{
     position: absolute;
     margin-top: 2vh;
     margin-left: 8vw;
-    color:#ffffffdb;
+    color:#ffffff;
     font-size: 1vw;
     background-color: #0000006c;
     width: auto;
@@ -596,8 +600,8 @@ body{
     padding: 0.5vw;
     padding-left: 1vw;
     padding-right: 1vw;
-    border-radius: 1vw;
-    box-shadow: inset 0vw 0vw 0.3vw rgb(14, 113, 5);
+    border-radius: 0.4vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgb(15, 182, 0);
     max-width: 4.5vw;
 }
 .tpSshort{
@@ -612,8 +616,8 @@ body{
     padding: 0.5vw;
     padding-left: 1vw;
     padding-right: 1vw;
-    border-radius: 1vw;
-    box-shadow: inset 0vw 0vw 0.3vw rgb(14, 113, 5);
+    border-radius: 0.4vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgb(15, 182, 0);
     max-width: 4.5vw;
 }
 
@@ -665,7 +669,7 @@ body{
 .date {
     position: absolute;
     margin-top: 16vh;
-    margin-left: 22.5vw;
+    margin-left: 27.5vw;
     color:#b5b5b5ea;
     font-size: 0.7vw;
     text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
@@ -673,85 +677,389 @@ body{
     letter-spacing: 0.1vw;
 }
 
-#tools {
-    position: absolute;
-    width: 3vw;
-    height: 74vh;
-    margin-top: 0vh;
-    right: 1vw;
-    background-color: #2d2d2e3d;
-    border-radius: 0.5vw;
-    z-index: 2;
-    color: white;
-} #tools:hover{background-color: rgba(91, 91, 92, 0.239); box-shadow: inset 0vw 0vw 0.5vw rgb(83 83 83);}
-
 #tradData{
     position: absolute;
-    width: 35vw;
-    height: 23vh;
+    width: 32vw;
+    height: 29vh;
     margin-top: 0vh;
-    right: 5vw;
-    background-color: #2d2d2e3d;
+    right: 3.5vw;
+    background-color: #0000006c;
     border-radius: 0.5vw;
     z-index: 2;
     color: white;
 }
 
-.toolsImg{
-    width: 2vw;
-    margin-top: 3vh;
-    margin-left: 0.4vw;
-    border-radius: 1vw;
-    box-shadow: 0vw 0vw 0.5vw rgb(0, 0, 0);
-} .toolsImg:hover{cursor: pointer; box-shadow: 0vw 0vw 0.2vw rgb(74, 74, 74);}
 
-#toolsWindow{
+#moreInfoSig{
     position: absolute;
-    width: 35vw;
+    width: 32vw;
     height: 49vh;
-    margin-top: 25vh;
-    right: 5vw;
-    background-color: #2d2d2e3d;
+    margin-top: 31vh;
+    right: 3.5vw;
+    background-color: #00000000;
     border-radius: 0.5vw;
     color: white;
 
 }
 
-#toolsWindowText{
+.longImg {
     position: absolute;
+    width: 13px;
+    height: 13px;
+    background: radial-gradient(rgb(45, 158, 22), rgb(0, 112, 0));
+    border-radius: 0.5vw;
+    margin-top: 7.2vh;
+    margin-left: 2.2vw;
+}
+
+.shortImg {
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    background: radial-gradient(rgb(255, 10, 10), rgb(175, 1, 1));
+    border-radius: 0.5vw;
+    margin-top: 7.2vh;
+    margin-left: 2.2vw;
+}
+
+#takeProfitsDiv1 {
+    position: absolute;
+    display: flex;
+    width: 6vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 1vh;
+    margin-left: 0.3vw;
+    border-radius: 0.4vw 0vw 0vw 0vw;
+    border: 0px;
+    background-color: #0d140e;
+    color: white;
+    font-size: 1vw;
+    text-align: left;
+    align-items: center;
+    padding-left: 0.5vw;
+}
+
+#takeProfitsDiv2 {
+    position: absolute;
+    display: flex;
+    width: 6vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 6.1vh;
+    margin-left: 0.3vw;
+    border-radius: 0vw;
+    border: 0px;
+    background-color: #0d140e;
+    color: white;
+    font-size: 1vw;
+    text-align: left;
+    align-items: center;
+    padding-left: 0.5vw;
+}
+
+#takeProfitsDiv3 {
+    position: absolute;
+    display: flex;
+    width: 6vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 11.2vh;
+    margin-left: 0.3vw;
+    border-radius: 0vw 0vw 0vw 0.4vw;
+    border: 0px;
+    background-color: #0d140e;
+    color: white;
+    font-size: 1vw;
+    text-align: left;
+    align-items: center;
+    padding-left: 0.5vw;
+}
+
+#takeProfitsDiv4 {
+    position: absolute;
+    display: flex;
+    width: 4.5vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 1vh;
+    margin-left: 6.9vw;
+    border-radius: 0vw 0.4vw 0vw 0vw;
+    border: 0px;
+
+    background-color: #0000006c;
+    color: rgb(200,200,200);
+    font-size: 1vw;
+    justify-content: right;
+    align-items: center;
+    padding-right: 0.5vw;
+}
+
+#takeProfitsDiv5 {
+    position: absolute;
+    display: flex;
+    width: 4.5vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 6.1vh;
+    margin-left: 6.9vw;
+    border-radius: 0vw ;
+    border: 0px;
+
+    background-color: #0000006c;
+    color: rgb(200,200,200);
+    font-size: 1vw;
+    justify-content: right;
+    align-items: center;
+    padding-right: 0.5vw;
+}
+
+#takeProfitsDiv6 {
+    position: absolute;
+    display: flex;
+    width: 4.5vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 11.2vh;
+    margin-left: 6.9vw;
+    border-radius: 0vw  0vw  0.4vw 0vw;
+    border: 0px;
+
+    background-color: #0000006c;
+    color: rgb(200,200,200);
+    font-size: 1vw;
+    justify-content: right;
+    align-items: center;
+    padding-right: 0.5vw;
+}
+
+#stopLossDiv1 {
+    position: absolute;
+    display: flex;
+    width: 6vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 6.2vh;
+    margin-left: 0.3vw;
+    border-radius: 0.4vw 0vw 0vw 0vw;
+    border: 0px;
+
+    background-color: #140d0d;
+    color: white;
+    font-size: 1vw;
+    text-align: left;
+    align-items: center;
+    padding-left: 0.5vw;
+}
+
+#entrymit {
+    position: absolute;
+    display: flex;
+    width: 6vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 17.2vh;
+    margin-left: 0.3vw;
+    border-radius: 0vw;
+    border: 0px;
+    background-color: #0d0f14;
+    color: white;
+    font-size: 1vw;
+    text-align: left;
+    align-items: center;
+    padding-left: 0.5vw;
+}
+
+#stopLossDiv3 {
+    position: absolute;
+    display: flex;
+    width: 6vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 11.3vh;
+    margin-left: 0.3vw;
+    border-radius: 0vw 0vw 0vw 0.4vw;
+    border: 0px;
+
+    background-color: #140d0d;
+    color: white;
+    font-size: 1vw;
+    text-align: left;
+    align-items: center;
+    padding-left: 0.5vw;
+}
+
+#stopLossDiv4 {
+    position: absolute;
+    display: flex;
+    width: 4.5vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 6.2vh;
+    margin-left: 6.9vw;
+    border-radius: 0vw 0.4vw 0vw 0vw;
+    border: 0px;
+
+    background-color: #0000006c;
+    color: rgb(200,200,200);
+    font-size: 1vw;
+    justify-content: right;
+    align-items: center;
+    padding-right: 0.5vw;
+}
+
+#entrymit2 {
+    position: absolute;
+    display: flex;
+    width: 4.5vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 17.2vh;
+    margin-left: 6.9vw;
+    border-radius: 0vw ;
+    border: 0px;
+
+    background-color: #0000006c;
+    color: rgb(200,200,200);
+    font-size: 1vw;
+    justify-content: right;
+    align-items: center;
+    padding-right: 0.5vw;
+}
+
+#stopLossDiv6 {
+    position: absolute;
+    display: flex;
+    width: 4.5vw;
+    height:5vh;
+    z-index: 3;
+    margin-top: 11.3vh;
+    margin-left: 6.9vw;
+    border-radius: 0vw  0vw  0.4vw 0vw;
+    border: 0px;
+
+    background-color: #0000006c;
+    color: rgb(200,200,200);
+    font-size: 1vw;
+    justify-content: right;
+    align-items: center;
+    padding-right: 0.5vw;
+}
+
+#imgLongmi {
+    position: absolute;
+    display: none;
+    width: 3.5vw;
+    margin-top: 5.5vh;
+    margin-left: 8vw;
+}
+
+#imgShortmi {
+    position: absolute;
+    display: none;
+    width: 3.5vw;
+    margin-top: 5.5vh;
+    margin-left: 8vw;
+}
+
+.assetImg2 {
+    position: absolute;
+    width: 2.2vw;
+    margin-top: -26vh;
+    margin-left: 1vw;
+}
+
+#mrinfAss {
+    position: absolute;
+    color: white;
+    margin-top: 10vh;
+    margin-left: 1.1vw;
+    font-size: 1vw;
+}
+
+#mrinfNam{
+    position: absolute;
+    display: none;
+    color: rgb(195, 195, 195);
+    font-size: 1.1vw;
+    margin-top: 4vh;
+    margin-left: 4vw;
+    width: 3vw;
+    /*box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);*/
+    background-color: #0000006c;
+    padding: 1.4vw;
+    padding-left: 0.8vw;
+    padding-right:4vw;
+    border-radius: 0.4vw;
+}
+
+#alphaMsg {
+    position: absolute;
+    width: 15vw;
+    height:11.2vh;
+    z-index: 3;
+    margin-top: 1vh;
+    margin-left: 12.6vw;
+    border-radius: 0.4vw;
+    border: 0px;
+    background-color: #0000006c;
+    padding-top: 2vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    color: rgb(200,200,200);
+    font-size: 1vw;
+}
+
+#msgTextTit{
+    position: absolute;
+    font-size:0.8vw;
+    margin-top: 2vh;
+    margin-left: 13.3vw;
+    z-index: 3;
+    color: rgb(140, 140, 140);
+}
+
+#mis1{
+    margin-top: 13vh;
+    margin-left: 0vw;
+}
+
+#mis2{
+    margin-top: 30vh;
+    margin-left: 0vw;
+}
+
+#sigId {
+    display: none;
+}
+
+#timesVal {
+    position: absolute;
+    margin-left: 12.5vw;
+    margin-top: -13vh;
+    width: 6vw;
+    height: 12vh;
     display: block;
-    font-size: 3vw;
-    font-weight: 700;
+    background-color: #0000006c;
+    border-radius: 0.5vw;
+    color: white;
+    z-index: 3;
+    font-family: sans-serif;
 }
 
-#windowTool1{
-    right: 0.9vw;
-    z-index: 200;
-
-
-}
-
-#windowTool3{
+#tval {
     position: absolute;
-    margin-left: 0vw;
-    margin-top: -1vh;
-    overflow-x: hidden;
-    width: 35vw; 
-    height: 49vh;
-    z-index: 200;
-
-
+    left: 50%;
+    transform: translateX(-50%);
 }
 
-#windowTool4{
+#tval1 {
     position: absolute;
-    margin-left: 0vw;
-    margin-top: -1vh;
-    overflow-x: hidden;
-    width: 35vw; 
-    height: 49vh;
-    z-index: 200;
-
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8vw;
+    text-align: center;
+    bottom: -1vh;
 }
 
 /*TRADING DATA*/
@@ -768,8 +1076,8 @@ body{
     display: none;
     width: 20vw;
     height: 47vh;
-    margin-top: 25vh;
-    right: 12vw;
+    margin-top: 31vh;
+    right: 9vw;
     background-color: #2d2d2e3d;
     border-radius: 0.5vw;
     color: white;
@@ -783,10 +1091,10 @@ body{
 #econW{
     position: absolute;
     display: none;
-    width: 35vw;
+    width: 32vw;
     height: 47vh;
-    margin-top: 25vh;
-    right: 5vw;
+    margin-top: 31vh;
+    right: 3.5vw;
     background-color: #2d2d2e3d;
     border-radius: 0.5vw;
     color: rgba(255, 255, 255, 0.83);
@@ -802,7 +1110,6 @@ body{
     margin-top: 7.3vh;
     left: 50%;
     transform: translateX(-50%);
-    
     
 }
 
@@ -840,7 +1147,7 @@ body{
     transform: translateX(-50%);
     box-shadow: inset 0vw 0vw 1vw rgb(39 115 253);
     z-index: 3;
-}
+} #addChat:hover{cursor: pointer;}
 
 #monPrice{
     margin-top: 7.3vh;
