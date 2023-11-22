@@ -38,17 +38,42 @@
             <button id="changeNameBut">Write</button>
         </div>
         <img src="settings2.png" id="set1">
-        <p style="position: absolute; margin-top: 10vh; margin-left: 1vw;">Number of signals:</p><p id="numSig">0</p>
-        <p style="position: absolute; margin-top: 15vh; margin-left: 1vw;">Success:</p><p id="posi">0</p>
-        <p style="position: absolute; margin-top: 20vh; margin-left: 1vw;">Alpha Score:</p><p id="score">12</p>
-        
+        <!-- 
+            <p style="position: absolute; margin-top: 10vh; margin-left: 1vw;">Number of signals:</p><p id="numSig">0</p>
+            <p style="position: absolute; margin-top: 15vh; margin-left: 1vw;">Success:</p><p id="posi">0</p>
+            <p style="position: absolute; margin-top: 20vh; margin-left: 1vw;">Alpha Score:</p><p id="score">12</p>
+        -->
+        <div id="d1">
+            <p id="numSig1">0</p>
+            <p class="p1">Signals</p>
+        </div>
+
+        <div id="d2">
+            <p id="score1">0</p>
+            <p class="p1">AlphaScore</p>
+        </div>
+
+        <div id="d3">
+            <p id="folNum">0</p>
+            <p class="p1">Followers</p>
+        </div>
+
         <button class="butAlpha" id="alphaTrad">Trading</button>
         <button class="butAlpha" id="alphaOnchain">Onchain</button>
         <button class="butAlpha" id="alphaICO">Presales</button>
         <button class="butAlpha" id="alphaLows">LowCaps</button>
-        <button class="butAlpha" id="econ">Your Economics</button>
-        <button class="butAlpha" id="bot">AlphaBase <b>Bot</b></button>
-        <button class="butAlpha" id="ref">Referral Program</b></button>
+        <button id="econ">$</button>
+        <button id="infoBut">i</button>
+        <button id="bot"><b>Bot</b></button>
+        <button id="ref"><img src="https://cdn-icons-png.flaticon.com/512/4578/4578534.png" id="earnLogo"></button>
+
+        <div id="myReferCode">
+            <p id="mrc">No Referral Code</p>
+            <button id="butCopyRefLink">
+                <img src="copyLink.png" id="copyImg">
+                Link
+            </button>
+        </div>
 
         <div id="newSig">
             <p id="titAdd">Add Signals</p>
@@ -61,7 +86,7 @@
                 <button id="long">Long</button>
                 <button id="short">Short</button>
                 <input type="text" id="addMsg" class="input" placeholder="msg">
-                <button id="addTradBut">Add Signal</button>
+                <button id="addTradBut"><img src="https://cdn-icons-png.flaticon.com/512/62/62118.png" id="newSigImg2">Add Signal</button>
             </div>
 
             <div id="addOnchainSignals">
@@ -100,9 +125,27 @@
         
         </div>
         
-        <div id="tradingSigList" class="list">
-            0 Trading Signals
+        
+        <div id="alphaSignals">
+            <div id="tradingSigList" class="list">
+                <p id="t1"> No Trading Signals </p>
+                <p id="t2">Click on this icon to set your name</p>
+                <img src="settings2.png" id="set2">
+
+                <p id="t6">Click on this icon to set your annual and monthly prices</p>
+                <p id="t7">$</p>
+                
+                <p id="t3">Add value to the network in the "<b>add signal</b>" section. Generate income and a reputation.</p>
+                <img src="https://cdn-icons-png.flaticon.com/512/62/62118.png" id="newSigImg">
+
+                <p id="t4">You can change the signal type using the blue buttons at the top</p>
+                <div id="blue"></div>
+
+                <p id="t5">Click on this icon to create a referral link and generate income by inviting your friends</p>
+                <img src="https://cdn-icons-png.flaticon.com/512/4578/4578534.png" id="earnLogo2">
+            </div>
         </div>
+        
         
 
         <div id="onchainSigList" class="list">
@@ -148,10 +191,18 @@
         </div>
 
         <div id="success">
-            <p id="succ1">0</p>
-            <p id="succ2">times Validated</p>
+            <p id="succ1">Neutral</p>
+            <p id="succ2">Success?</p>
         </div>
 
+    </div>
+
+    <div id="userEarn">
+       <!-- <img src="https://cdn-icons-png.flaticon.com/512/4578/4578534.png" id="earnLogo"> -->
+            <p id="textRefer">Create your Referral Code and invite your friends, you will earn a 3% of their payments</p>
+            <input type="text" class="input" id="refCodeCreate" placeholder="write referral code">
+            <button id="create">Create code</button>
+            <p id="textRefer2">*ETH will be send directly to your wallet</p>
     </div>
 
         <div id="tradData">
@@ -168,8 +219,12 @@
             <input type="text" id="monPrice" class="input" placeholder="Monthly plan Price in 0.0 ETH">
             <input type="text" id="anPrice" class="input" placeholder="Annual plan Price in 0.0 ETH">
             <button id="setPrice">Set Prices</button>
-            <p id="earn">You Earned:</p>
-            <p id="followers">Followers:</p>
+
+            <div id="earned">
+                <p id="earn">0 ETH</p>
+                <p id="earnT">Earned</p>
+            </div>
+            <button id="withd">Withdraw</button>
         </div>
 
         <div id="botW">
