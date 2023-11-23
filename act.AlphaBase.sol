@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 //______________________________________________
-//_________________AlphaHub V3 dApp Contract___
+//_________________AlphaBase V3 dApp Contract___
 //______________26/09/2023, Author: DiegoAVZ___
 //______________________________________________
 
@@ -155,6 +155,8 @@ contract A {
     mapping(address => uint) monAnnu; // 1 -> monthly
                                       // 2 -> Annual
 
+    uint baseFee = 20;
+
     function payFullMonth() public payable {
         changePeriod();
         if(seeTotalAlphaScore(msg.sender) > 10 || seeTotalValidatorScore(msg.sender) > 10){
@@ -163,11 +165,12 @@ contract A {
             require(msg.value == fullPlanMon);
         }
         lastPay[msg.sender] = block.timestamp;
-            monAnnu[msg.sender] = 1; 
-
-            canValidate[msg.sender] = true;
-            volume = volume + msg.value;
-            ethInContractThisPeriod[actualPeriod] += msg.value;
+        monAnnu[msg.sender] = 1; 
+        canValidate[msg.sender] = true;
+        volume = volume + msg.value;
+        uint feeAlphaBase = msg.value/baseFee;
+        payable(AlphaBase).transfer(feeAlphaBase);
+        ethInContractThisPeriod[actualPeriod] += msg.value-feeAlphaBase;
     }
 
     uint discountFullMon = fullPlanMon/20;
@@ -178,9 +181,11 @@ contract A {
         lastPay[msg.sender] = block.timestamp;
         monAnnu[msg.sender] = 1; 
         canValidate[msg.sender] = true;
-
         payable(referrer).transfer(msg.value/33);
-        ethInContractThisPeriod[actualPeriod] += msg.value - msg.value/33;
+        uint feeAlphaBase = msg.value/baseFee;
+        payable(AlphaBase).transfer(feeAlphaBase);
+        ethInContractThisPeriod[actualPeriod] += msg.value - msg.value/33 - feeAlphaBase;
+        volume = volume + msg.value;
 
     }
 
@@ -190,6 +195,11 @@ contract A {
         lastPay[msg.sender] = block.timestamp;
         monAnnu[msg.sender] = 2; 
         canValidate[msg.sender] = true;
+        volume = volume + msg.value;
+        uint feeAlphaBase = msg.value/baseFee;
+        payable(AlphaBase).transfer(feeAlphaBase);
+        ethInContractThisPeriod[actualPeriod] += msg.value-feeAlphaBase;
+        
     }
 
     uint discountFullAnn = fullPlanAnnu/20;
@@ -200,7 +210,11 @@ contract A {
         lastPay[msg.sender] = block.timestamp;
         monAnnu[msg.sender] = 2; 
         canValidate[msg.sender] = true;
+        uint feeAlphaBase = msg.value/baseFee;
+        payable(AlphaBase).transfer(feeAlphaBase);
         payable(referrer).transfer(msg.value/33);
+        volume = volume + msg.value;
+        ethInContractThisPeriod[actualPeriod] += msg.value - msg.value/33 - feeAlphaBase;
     }
 
     function seePrices() public view returns(uint, uint){
@@ -233,10 +247,16 @@ contract A {
     }
 
     uint32 constant points = 10000;
+    mapping(uint => mapping(address =>bool)) public withdrawThisPeriod;
+
+    function seeIfHasWithd(address alpha) public view returns (bool){
+        return (withdrawThisPeriod[actualPeriod-period][alpha]);
+    }
 
     function withdrawFromAlphaBase() public{
         
         require(isActiveAlpha(msg.sender));
+        require(withdrawThisPeriod[actualPeriod-period][msg.sender] == false);
 
         uint total = ethInContractThisPeriod[actualPeriod-period];
 
@@ -262,6 +282,7 @@ contract A {
         uint ethToSend = amountA + amountB; // +C +D
         address alpha = msg.sender;
         payable(alpha).transfer(ethToSend);
+        withdrawThisPeriod[actualPeriod-period][msg.sender] = true;
     }
 
     function showEarnedAmount() public view returns(uint){
@@ -368,7 +389,7 @@ contract A {
     mapping(address => uint) alphaMonthlyPrice; 
     mapping(address => address[]) imFollowing;
 
-    address AlphaHub = 0x8DE959Dc78ed8948851af6a5453c01fD8AEDA8E0;
+    address AlphaBase = 0x29443a0C0785f57CaF62F55F617E923Cb1536361;
 
     function payAlpha(address alpha, uint8 plan) public payable{
         if(plan == 1){
@@ -382,7 +403,7 @@ contract A {
                     // 2 -> Annual
         uint fee = msg.value/20;
         payable(alpha).transfer(msg.value-fee);
-        payable(AlphaHub).transfer(fee);
+        payable(AlphaBase).transfer(fee);
         imFollowing[msg.sender].push(alpha);
     }
 
