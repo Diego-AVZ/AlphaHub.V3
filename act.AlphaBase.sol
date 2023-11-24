@@ -173,11 +173,11 @@ contract A {
         ethInContractThisPeriod[actualPeriod] += msg.value-feeAlphaBase;
     }
 
-    uint discountFullMon = fullPlanMon/20;
+    uint discount = 20;
 
     function payFullMonthRefDiscount(address referrer) public payable {
         changePeriod();
-        require(msg.value == fullPlanMon - discountFullMon);
+        require(msg.value == fullPlanMon - (fullPlanMon/discount));
         lastPay[msg.sender] = block.timestamp;
         monAnnu[msg.sender] = 1; 
         canValidate[msg.sender] = true;
@@ -202,11 +202,9 @@ contract A {
         
     }
 
-    uint discountFullAnn = fullPlanAnnu/20;
-
     function payFullAnnualRefDiscount(address referrer) public payable {
         changePeriod();
-        require(msg.value == fullPlanAnnu - discountFullAnn);
+        require(msg.value == fullPlanAnnu - (fullPlanAnnu/discount));
         lastPay[msg.sender] = block.timestamp;
         monAnnu[msg.sender] = 2; 
         canValidate[msg.sender] = true;
@@ -237,8 +235,8 @@ contract A {
     }
 
     function seeDiscPrices() public view returns(uint, uint){
-        uint discPriceMon = fullPlanMon - discountFullMon;
-        uint discPriceAnn = fullPlanAnnu - discountFullAnn;
+        uint discPriceMon = fullPlanMon - (fullPlanMon/discount);
+        uint discPriceAnn = fullPlanAnnu - (fullPlanAnnu/discount);
         return(discPriceMon, discPriceAnn);
     }
 
