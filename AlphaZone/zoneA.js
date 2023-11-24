@@ -1,6 +1,6 @@
 const web3Instance = new Web3(window.ethereum);
-const conAddress = "0x485BB4738609b6733bB910ffdaF4EbB2c704E406";
-const conAddress2 = "0x7C26A5E2711568940986a9e1A0fe53F09d8ae138";
+const conAddress = "0x6994eD4f085b000eC4e0cA4F58cFCb11f075e13a";
+const conAddress2 = "0xc533936679A325622c42b9eF721a3E59Cf6B300c";
 const conAddress3 = "0x10B0c63Eb35e64e4dFFF50457dBD3a0f06033303";
 // ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI ABI
 const ABI = [
@@ -484,6 +484,25 @@ const ABI = [
         type: "address",
       },
     ],
+    name: "seeAlphaFollowersLen",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+    ],
     name: "seeAlphaPrices",
     outputs: [
       {
@@ -546,6 +565,25 @@ const ABI = [
     inputs: [
       {
         internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+    ],
+    name: "seeIfHasWithd",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
         name: "user",
         type: "address",
       },
@@ -594,6 +632,30 @@ const ABI = [
         internalType: "string",
         name: "",
         type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "alpha",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+    ],
+    name: "seeNextTimePayThisAlpha",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -823,6 +885,30 @@ const ABI = [
         internalType: "uint256",
         name: "",
         type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "withdrawThisPeriod",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
       },
     ],
     stateMutability: "view",
@@ -1933,6 +2019,25 @@ const ABI3 = [
     stateMutability: "view",
     type: "function",
   },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "timesUsedReferralCode",
+    outputs: [
+      {
+        internalType: "uint32",
+        name: "",
+        type: "uint32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
 ];
 
 const contract3 = new web3Instance.eth.Contract(ABI3, conAddress3);
@@ -1972,6 +2077,9 @@ walletBut.addEventListener("click", async () => {
       seeTraSig2();
       seeAlphaSignals();
       getChatIdjs();
+      mrc.innerHTML = await contract3.methods
+        .seeMyCode(connectedAddress)
+        .call();
       /*seeIfIsAlpha();*/
     } catch (error) {
       console.log("ERROR al Conectar MTMSK");
@@ -2009,6 +2117,9 @@ async function connect() {
       seeTraSig2();
      seeAlphaSignals();
       getChatIdjs();
+      mrc.innerHTML = await contract3.methods
+        .seeMyCode(connectedAddress)
+        .call();
       /*seeIfIsAlpha();*/
     } catch (error) {
       console.log("ERROR al Conectar MTMSK");
@@ -2100,6 +2211,7 @@ async function seeTraSig2() {
 
       function addClickHandler(div, data) {
         div.addEventListener("click", function () {
+          
           bot.style.display = "none";
           econ.style.display = "none";
           sigInfo.style.display = "block";
@@ -2145,17 +2257,24 @@ async function seeTraSig2() {
           document.getElementById("mrinfAss").innerHTML = asset;
           document.getElementById("entrymit2").innerHTML = "$" + entry;
           document.getElementById("alphaMsg").innerText = msg;
+          var existingImages = moreInfoSig.getElementsByClassName("assetImg2");
+          while (existingImages.length > 0) {
+            existingImages[0].parentNode.removeChild(existingImages[0]);
+          }
           if (asset == "BTC" || asset == "btc") {
+      
             var btcImg = document.createElement("img");
             btcImg.src = "btc.png";
             btcImg.classList.add("assetImg2");
             moreInfoSig.appendChild(btcImg);
           } else if (asset == "ETH" || asset == "eth") {
+            
             var ethImg = document.createElement("img");
             ethImg.src = "eth.png";
             ethImg.classList.add("assetImg2");
             moreInfoSig.appendChild(ethImg);
           } else {
+            
             var elseImg = document.createElement("img");
             elseImg.src =
               "https://image.spreadshirtmedia.net/image-server/v1/compositions/T56A2PA4115PT17X0Y67D157542882W24948H18711/views/1,width=550,height=550,appearanceId=2,backgroundColor=000000,noPt=true/signo-de-interrogacion-planeado-hae-simbolo-signo-regalo-bolsa-de-tela.jpg";
@@ -2883,7 +3002,7 @@ copyRef.addEventListener("click", async () => {
   try {
     var myRefCode = await contract3.methods.seeMyCode(connectedAddress).call();
     refLink =
-      "http://127.0.0.1:5500/userZone/userZone.html?refCode=" +
+      "https://alphabase-test.github.io/AlphaScoutZone/AlphaScout.html?refCode=" +
       myRefCode.toString();
     copyToClipboard(refLink);
     alert("Enlace de referencia copiado al portapapeles: " + refLink);
