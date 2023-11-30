@@ -2176,7 +2176,7 @@ zoneBut.addEventListener("click", function () {
   butSign.style.display = "block";
   alphaSignals.style.display = "block";
   search.style.marginTop = "15vh";
-  search.style.marginLeft = "5vw";
+  search.style.marginLeft = "2vw";
   search.style.width = "2vw";
   search.style.height = "4vh";
   input1.style.display = "none";
@@ -2201,7 +2201,7 @@ zoneBut.addEventListener("click", function () {
 lupa.addEventListener("click", function(){
   if (userZoneOn == true){
     search.style.marginTop = "15vh";
-    search.style.marginLeft = "5vw";
+    search.style.marginLeft = "2vw";
     search.style.width = "28vw";
     search.style.height = "25vh";
     search.style.zIndex = "3";
@@ -2209,7 +2209,7 @@ lupa.addEventListener("click", function(){
     namBut.style.display = "block";
     lupa.style.display = "none";
     out.style.display = "block";
-    userEarn.style.marginLeft = "35.5vw";
+    userEarn.style.marginLeft = "33.5vw";
     userEarn.style.marginTop = "15vh";
     userEarn.style.width = "2vw";
     userEarn.style.height = "4vh";
@@ -2231,7 +2231,7 @@ out.addEventListener("click", function () {
     alphaSearch.style.display = "none";
     out.style.display = "none";
     input1.value = "";
-    userEarn.style.marginLeft = "5vw";
+    userEarn.style.marginLeft = "2vw";
     userEarn.style.marginTop = "24vh";
   out2.style.display = "none";
   siDiv.style.display = "block";
@@ -2262,6 +2262,7 @@ namBut.addEventListener("click", async () => {
     iNam.style.marginTop = "2vh";
     namBut.style.marginTop = "2vh";
     divAS.style.display = "block"
+    document.getElementById("followers").innerText = await contract.methods.seeAlphaFollowersLen(SearchAlphaAddress).call();
     seeAlphasImFollowing();
   } catch (error) {
     console.log("error searching name" + error);
@@ -2697,9 +2698,9 @@ async function seeAlphasImFollowing() {
         alpha.addEventListener("click", function () {
           console.log(alpha.getAttribute("data-valor"));
           var alphaClick = alpha.getAttribute("data-valor");
-          alphaClick;
           seeTraSig2(alphaClick);
           seeAlphaInfo(alphaClick);
+          seeNextTimePayThisAlphaJS(alphaClick);
         });
       })(alphaP);
     }
@@ -2724,7 +2725,7 @@ var divId2 = document.getElementById("divId2");
 
 earnLogo.addEventListener("click", function(){
   userEarn.style.marginTop = "15vh";
-  userEarn.style.marginLeft = "5vw";
+  userEarn.style.marginLeft = "2vw";
   userEarn.style.width = "28vw";
   userEarn.style.height = "25vh";
   userEarn.style.zIndex = "3";
@@ -2734,7 +2735,7 @@ earnLogo.addEventListener("click", function(){
   out2.style.display = "block";
   input1.style.display = "none";
   namBut.style.display = "none";
-  search.style.marginLeft = "35.5vw";
+  search.style.marginLeft = "33.5vw";
   search.style.width = "2vw";
   search.style.height = "4vh";
   search.style.zIndex = "2";
@@ -2757,7 +2758,7 @@ out2.addEventListener("click", function () {
   userEarn.style.zIndex = "2";
   earnLogo.style.display = "block";
   out2.style.display = "none";
-  search.style.marginLeft = "5vw";
+  search.style.marginLeft = "2vw";
   divId2.style.display = "none";
   siDiv.style.display = "block";
 });
@@ -2976,9 +2977,38 @@ butBuyAnn.addEventListener("click", async () => {
 
 async function seePricesJs() {
   try {
-    var prices = await contract.methods.seePrices().call({from: connectedAddress});
-    document.getElementById("simpleMonPrice").innerText = prices[0];
-    document.getElementById("simpleAnnPrice").innerText = prices[1];
+    var prices = await contract.methods
+      .seePrices()
+      .call({ from: connectedAddress });
 
-  } catch(error){console.error(error);}
+    var simpleMonPriceInEth = prices[0] / 1e18;
+    var simpleAnnPriceInEth = prices[1] / 1e18;
+
+    document.getElementById("simpleMonPrice").innerText =
+      simpleMonPriceInEth;
+    document.getElementById("simpleAnnPrice").innerText =
+      simpleAnnPriceInEth;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function seeNextTimePayThisAlphaJS(alphaAddress) {
+  try {
+    
+    const timestamp = await contract.methods
+      .seeNextTimePayThisAlpha(alphaAddress, connectedAddress)
+      .call();
+
+    const date = new Date(timestamp * 1000); 
+
+    const day = date.getDate();
+    const month = date.getMonth() + 1; 
+    const year = date.getFullYear();
+
+    const formattedDate = `${day}/${month}/${year}`;
+    document.getElementById("npta").innerHTML = formattedDate;
+  } catch (error) {
+    console.error(error);
+  }
 }
