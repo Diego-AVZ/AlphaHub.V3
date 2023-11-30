@@ -67,20 +67,20 @@ body{
 #wallet {
     position: absolute;
     color: white;
-    background: linear-gradient(112deg, rgb(13 44 101), rgb(0, 41, 191), rgb(46 128 255), rgb(0, 41, 191), rgb(10 2 95), rgba(2, 0, 24, 0.541));
-    left: 87vw;
+    font-size: 1.2vw;
+    box-shadow: inset 0vw 0vw 1vw rgb(91 169 255);
+    background-color: #00197E;
+    left: 86vw;
     top: 2vw;
     border-style: none;
     border-radius: 0.5vw;
-    height: 3vw;
-    width: 13vw;
-    text-align: left;
-    padding-left: 1vw;
+    height: 2.5vw;
+    width: 10vw;
+    text-align: center;
     font-family: sans-serif;
-    font-size: 1.4vw;
     text-shadow: 0vw 0vw 1vw rgb(0 0 0);
 
-} #wallet:hover{text-shadow: 0vw 0vw 1vw rgb(255, 255, 255); cursor: pointer; transition: ease-in, 0.8s; letter-spacing: 1px; opacity:0.9; width: 13.5vw;}
+} #wallet:hover{text-shadow: 0vw 0vw 1vw rgb(255, 255, 255); cursor: pointer; transition: ease-in, 0.8s; background-color: #0932d8;}
 
 #msg1 {
     position: absolute;
@@ -88,16 +88,17 @@ body{
     color: rgb(255 255 255 / 90%);
     font-family: sans-serif;
     font-size: 1.4vw;
-    background: linear-gradient(39deg, rgba(13, 44, 101, 0.9), rgb(0, 41, 191, 0.9), rgb(46, 128, 255, 0.9), rgb(0, 41, 191, 0.90), rgb(10, 2, 95, 0.90), rgba(2, 0, 24, 0.9));
+    box-shadow: inset 0vw 0vw 2vw rgb(91 169 255);
+    background-color: #00197E;
     text-align: center;
     justify-content: center;
     align-items: center;
     border-radius: 1vw;
-    top: 70%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 30vw;
-    height: 10vw;
+    height: 8vw;
     text-shadow: 0vw 0vw 1vw rgb(0, 0, 0);
     letter-spacing: 2px;
     z-index: 3;
@@ -125,8 +126,8 @@ body{
     margin-top: 16vh;
     margin-left: 2.5vw;
     color: rgb(140, 140, 140);
-    background-color: #14141440;
-    box-shadow: inset 0vw 0vw 1vw rgb(40 40 40 / 77%);
+    background-color: #111111;
+    /* box-shadow: inset 0vw 0vw 1vw rgb(40 40 40 / 77%); */
     border-radius: 0.5vw;
     padding: 1vw;
     z-index: 2;
@@ -140,8 +141,8 @@ body{
     margin-top: 40vh;
     margin-left: 2.5vw;
     color: rgb(140, 140, 140);
-    background-color: #14141440;
-    box-shadow: inset 0vw 0vw 1vw rgb(40 40 40 / 77%);
+    background-color: #111111;
+    /* box-shadow: inset 0vw 0vw 1vw rgb(40 40 40 / 77%); */
     border-radius: 0.5vw;
     padding: 1vw;
     z-index: 2;
@@ -156,8 +157,8 @@ body{
     margin-top: 21vh;
     margin-left: 34.5vw;
     color: rgb(255, 255, 255);
-    background-color: #14141440;
-    box-shadow: inset 0vw 0vw 1vw rgb(40 40 40 / 77%);
+    background-color: #111111;
+    /* box-shadow: inset 0vw 0vw 1vw rgb(40 40 40 / 77%); */
     border-radius: 0.5vw;
     padding: 1vw;
     z-index: 2;
@@ -167,7 +168,6 @@ body{
     justify-content: center;
     text-shadow: 0vw 0vw 0.5vw rgba(0, 0, 0);
     padding-bottom: 5vh;
-    
 } #alpha:hover{margin-top: 19vh; transition: ease, 1s; box-shadow: inset 0vw 0vw 1vw rgba(92, 92, 92, 0.92);}
 
 #myZone {
@@ -177,8 +177,8 @@ body{
     margin-top: 16vh;
     margin-left: 66.5vw;
     color: rgb(140, 140, 140);
-    background-color: #14141440;
-    box-shadow: inset 0vw 0vw 1vw rgb(40 40 40 / 77%);
+    background-color: #111111;
+    /* box-shadow: inset 0vw 0vw 1vw rgb(40 40 40 / 77%); */
     border-radius: 0.5vw;
     padding: 1vw;
     z-index: 2;
@@ -197,7 +197,7 @@ body{
     padding: 1vw;
     z-index: 2;
     font-size: 1.3vw;
-    
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
 }
 
 #out {
@@ -275,7 +275,7 @@ body{
     font-size: 1vw;
     font-family: sans-serif;
     margin-top: 3.8vh;
-    margin-left: 84.4vw;
+    margin-left: 82.4vw;
     color:rgb(155, 155, 155);
     text-shadow: 0vw 0vw 0.1vw rgb(0, 0, 0);
     z-index: 2;
@@ -298,18 +298,18 @@ body{
     font-size: 1vw;
     font-family: sans-serif;
     margin-top: 15.6vh;
-    margin-left: 11vw;
+    margin-left: 7vw;
     color: rgb(184, 180, 180);
     z-index: 2;
     width: 5vw;
     height: 5vh;
-    
     background-color: #0000006c;
     border-radius: 1vw;
     text-align: center;
     padding-top: 7vh;
     padding-bottom: 0.5vh;
     letter-spacing: 0.5px;
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
 }
 
 #numFollowingDiv{
@@ -318,7 +318,7 @@ body{
     font-size: 0.9vw;
     font-family: sans-serif;
     margin-top: 15.5vh;
-    margin-left: 17vw;
+    margin-left: 13vw;
     color: rgb(184, 180, 180);
     z-index: 2;
     width: 5vw;
@@ -329,6 +329,7 @@ body{
     padding-top: 5.5vh;
     padding-bottom: 2vh;
     letter-spacing: 0.5px;
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
 } 
 
 #numFollowing {
@@ -572,6 +573,7 @@ body{
     margin-top: 9.5vh;
     margin-left: 23vw;
     color:white;
+    text-align: center;
 }
 
 #s {
@@ -750,79 +752,10 @@ body{
     right: 0.5vw;
 }
 
-#tools {
-    position: absolute;
-    display: none;
-    width: 3vw;
-    height: 80vh;
-    margin-top: 15vh;
-    left: 2vw;
-    background-color: #2d2d2e3d;
-    border-radius: 0.5vw;
-    z-index: 2;
-    color: white;
-} #tools:hover{background-color: rgba(91, 91, 92, 0.239); box-shadow: inset 0vw 0vw 0.5vw rgb(83 83 83);}
-
-.toolsImg{
-    width: 2vw;
-    margin-top: 3vh;
-    margin-left: 0.4vw;
-    border-radius: 1vw;
-    box-shadow: 0vw 0vw 0.5vw rgb(0, 0, 0);
-} .toolsImg:hover{cursor: pointer; box-shadow: 0vw 0vw 0.2vw rgb(74, 74, 74);}
-
-#toolsWindow{
-    position: absolute;
-    display: none;
-    width: 35vw;
-    height: 50vh;
-    margin-top: 45vh;
-    left: 5.5vw;
-    background-color: #19191971;
-    border-radius: 0.5vw;
-    color: white;
-    z-index: 2;
-    /*box-shadow: inset 0vw 0vw 0.5vw rgba(83, 83, 83, 0.818);*/
-    overflow-y: scroll;
-}
-
-#toolsWindowText{
-    position: absolute;
-    display: block;
-    font-size: 3vw;
-    font-weight: 700;
-}
-
-#windowTool1{
-    right: 0.9vw;
-    margin-top: 2vh;
-    z-index: 200;
-}
-
-#windowTool3{
-    position: absolute;
-    margin-left: 0vw;
-    margin-top: -1vh;
-    overflow-x: hidden;
-    width: 35vw; 
-    height: 49vh;
-    z-index: 200;
-}
-
-#windowTool4{
-    position: absolute;
-    margin-left: 0vw;
-    margin-top: -1vh;
-    overflow-x: hidden;
-    width: 35vw; 
-    height: 49vh;
-    z-index: 200;
-
-}
 
 #alphaSignals {
     position: absolute;
-    right: 17.7vw;
+    right: 19vw;
     margin-top: 14vh;
     width: 42vw;
     height: 79vh;
@@ -948,13 +881,13 @@ body{
 
 .signalTrad{
     background-color: #0000006c;
-    box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
     width: 40vw;
     height: 18.5vh;
     border-radius: 0.5vw;
     margin-left: 1vw;
     margin-top: 1.25vh;
-    
+    background: linear-gradient(8deg, #000000d1, #080808a3, #1717177a, black);
 } .signalTrad:hover{transition: ease, 1s; box-shadow: inset 0vw 0vw 0.5vw rgb(143, 142, 142);}
 
 .assetS{
@@ -970,9 +903,9 @@ body{
     position: absolute;
     margin-top: 7vh;
     margin-left: 8vw;
-    color:#c5c4c4;
+    color: #ffffff;
     font-size: 1vw;
-    background-color: #0000006c;
+    background-color: #000c56;
     width: auto;
     text-align: center;
     padding: 0.5vw;
@@ -982,7 +915,6 @@ body{
     box-shadow: inset 0vw 0vw 0.3vw rgba(51, 112, 245, 0.541);
     text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
     max-width: 4.5vw;
-    
 }
 .slSlong{
     position: absolute;
@@ -990,7 +922,7 @@ body{
     margin-left: 8vw;
     color:#ffffffd7;
     font-size: 1vw;
-    background-color: #0000006c;
+    background-color: #5e0000;
     width: auto;
     text-align: center;
     padding: 0.5vw;
@@ -1006,7 +938,7 @@ body{
     margin-left: 8vw;
     color:#ffffffd7;
     font-size: 1vw;
-    background-color: #0000006c;
+    background-color: #5c0000;
     width: auto;
     text-align: center;
     padding: 0.5vw;
@@ -1022,7 +954,7 @@ body{
     margin-left: 8vw;
     color:#ffffff;
     font-size: 1vw;
-    background-color: #0000006c;
+    background-color: #0a4007;
     width: auto;
     text-align: center;
     padding: 0.5vw;
@@ -1038,7 +970,7 @@ body{
     margin-left: 8vw;
     color:#ffffffdb;
     font-size: 1vw;
-    background-color: #0000006c;
+    background-color: #0887006c;
     width: auto;
     text-align: center;
     padding: 0.5vw;
@@ -1117,14 +1049,14 @@ body{
     font-size: 1vw;
     letter-spacing: 0.06vw;
     font-weight: 100;
-    border-radius: 0.4vw 0.4vw 0vw 0vw;
+    border-radius: 0.4vw;
     border-style: none;
     text-shadow: 0vw 0vw 0.3vw rgb(0, 0, 0);
     opacity: 100%;
     background: rgb(0 35 177 / 71%);
-    margin-top: 7.7vh; 
+    margin-top: 6.7vh;
     z-index: 3;
-    
+    box-shadow: inset 0vw 0vw 1vw rgb(0 189 255);
 } .butAlpha:hover{cursor: pointer;}
 
 #alphaTrad{
@@ -1155,7 +1087,7 @@ body{
     text-align: left;
     margin-left: 1.5vw;
     margin-top: 2vh;
-    border-radius: 0.5vw;
+    border-radius: 1vw;
     background-color: #1d1d1d;
     border-style: none;
     width: 10vw;
@@ -1168,7 +1100,8 @@ body{
     font-family: sans-serif;
     box-shadow: 0vw 0vw 0.6vw rgb(0 0 0);
     color: #b9b9b9;
-} .myAlphaName:hover {box-shadow: 0vw 0vw 0.2vw rgba(133, 132, 132, 0.818); }
+    /* box-shadow: inset 0vw 0vw 1vw rgb(22 22 22); */
+} .myAlphaName:hover {box-shadow: 0vw 0vw 0.2vw rgba(133, 132, 132, 0.818);cursor: pointer;}
 
 .msgSig{
     position: absolute;
@@ -1195,16 +1128,16 @@ body{
     display: none;
     position: absolute;
     margin-top: 24vh;
-    margin-left: 5vw;
+    margin-left: 2vw;
     width: 2vw;
     height: 4vh;
     color: rgb(140, 140, 140);
     background-color: #111111;
-    
     border-radius: 0.5vw;
     padding: 1vw;
     z-index: 2;
     font-size: 1.3vw;
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
 }
 
 #textRefer {
@@ -1280,10 +1213,10 @@ body{
     position: absolute;
     width: 34.5vw;
     height: 50vh;
-    z-index: 3;
-    background-color: #19191900;
+    z-index: 2;
+    background-color: #00000000;
     margin-top: 45vh;
-    margin-left: 5vw;
+    margin-left: 2vw;
     border-radius: 0.5vw;
 }
 
@@ -1297,12 +1230,13 @@ body{
     margin-left: 0.3vw;
     border-radius: 0.4vw 0vw 0vw 0vw;
     border: 0px;
-    background-color: #0d140e;
+    background-color: #093f06;
     color: white;
     font-size: 1vw;
     text-align: left;
     align-items: center;
     padding-left: 0.5vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgb(15, 182, 0);
 }
 
 #takeProfitsDiv2 {
@@ -1315,12 +1249,13 @@ body{
     margin-left: 0.3vw;
     border-radius: 0vw;
     border: 0px;
-    background-color: #0d140e;
+    background-color: #093f06;
     color: white;
     font-size: 1vw;
     text-align: left;
     align-items: center;
     padding-left: 0.5vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgb(15, 182, 0);
 }
 
 #takeProfitsDiv3 {
@@ -1333,12 +1268,13 @@ body{
     margin-left: 0.3vw;
     border-radius: 0vw 0vw 0vw 0.4vw;
     border: 0px;
-    background-color: #0d140e;
+    background-color: #093f06;
     color: white;
     font-size: 1vw;
     text-align: left;
     align-items: center;
     padding-left: 0.5vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgb(15, 182, 0);
 }
 
 #takeProfitsDiv4 {
@@ -1351,13 +1287,13 @@ body{
     margin-left: 6.9vw;
     border-radius: 0vw 0.4vw 0vw 0vw;
     border: 0px;
-
     background-color: #0000006c;
     color: rgb(200,200,200);
     font-size: 1vw;
     justify-content: right;
     align-items: center;
     padding-right: 0.5vw;
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
 }
 
 #takeProfitsDiv5 {
@@ -1368,15 +1304,15 @@ body{
     z-index: 3;
     margin-top: 6.1vh;
     margin-left: 6.9vw;
-    border-radius: 0vw ;
+    border-radius: 0vw;
     border: 0px;
-
     background-color: #0000006c;
     color: rgb(200,200,200);
     font-size: 1vw;
     justify-content: right;
     align-items: center;
     padding-right: 0.5vw;
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
 }
 
 #takeProfitsDiv6 {
@@ -1389,13 +1325,13 @@ body{
     margin-left: 6.9vw;
     border-radius: 0vw  0vw  0.4vw 0vw;
     border: 0px;
-
     background-color: #0000006c;
     color: rgb(200,200,200);
     font-size: 1vw;
     justify-content: right;
     align-items: center;
     padding-right: 0.5vw;
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
 }
 
 #stopLossDiv1 {
@@ -1408,13 +1344,13 @@ body{
     margin-left: 0.3vw;
     border-radius: 0.4vw 0vw 0vw 0vw;
     border: 0px;
-
-    background-color: #140d0d;
+    background-color: #5e0000;
     color: white;
     font-size: 1vw;
     text-align: left;
     align-items: center;
     padding-left: 0.5vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgb(245, 5, 5);
 }
 
 #entrymit {
@@ -1425,14 +1361,15 @@ body{
     z-index: 3;
     margin-top: 17.2vh;
     margin-left: 0.3vw;
-    border-radius: 0vw;
+    border-radius: 0.4vw 0vw 0vw 0.4vw;
     border: 0px;
-    background-color: #0d0f14;
+    background-color: #000b50;
     color: white;
     font-size: 1vw;
     text-align: left;
     align-items: center;
     padding-left: 0.5vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgba(51, 112, 245, 0.541);
 }
 
 #stopLossDiv3 {
@@ -1445,13 +1382,13 @@ body{
     margin-left: 0.3vw;
     border-radius: 0vw 0vw 0vw 0.4vw;
     border: 0px;
-
-    background-color: #140d0d;
+    background-color: #5e0000;
     color: white;
     font-size: 1vw;
     text-align: left;
     align-items: center;
     padding-left: 0.5vw;
+    box-shadow: inset 0vw 0vw 0.3vw rgb(245, 5, 5);
 }
 
 #stopLossDiv4 {
@@ -1464,13 +1401,13 @@ body{
     margin-left: 6.9vw;
     border-radius: 0vw 0.4vw 0vw 0vw;
     border: 0px;
-
     background-color: #0000006c;
     color: rgb(200,200,200);
     font-size: 1vw;
     justify-content: right;
     align-items: center;
     padding-right: 0.5vw;
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
 }
 
 #entrymit2 {
@@ -1481,15 +1418,15 @@ body{
     z-index: 3;
     margin-top: 17.2vh;
     margin-left: 6.9vw;
-    border-radius: 0vw ;
+    border-radius: 0vw;
     border: 0px;
-
     background-color: #0000006c;
     color: rgb(200,200,200);
     font-size: 1vw;
     justify-content: right;
     align-items: center;
     padding-right: 0.5vw;
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
 }
 
 #stopLossDiv6 {
@@ -1502,13 +1439,13 @@ body{
     margin-left: 6.9vw;
     border-radius: 0vw  0vw  0.4vw 0vw;
     border: 0px;
-
     background-color: #0000006c;
     color: rgb(200,200,200);
     font-size: 1vw;
     justify-content: right;
     align-items: center;
     padding-right: 0.5vw;
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
 }
 
 #mis1{
@@ -1536,6 +1473,7 @@ body{
     padding-right: 2vw;
     color: rgb(200,200,200);
     font-size: 1vw;
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
 }
 
 #msgTextTit{
@@ -1557,7 +1495,7 @@ body{
     border-radius: 0.5vw;
     color: white;
     z-index: 3;
-    /*box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);*/
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
     background-color: #0000006c;
     text-align: center;
     padding-top: 1.5vh;
@@ -1640,6 +1578,7 @@ body{
     padding-left: 0.8vw;
     padding-right:4vw;
     border-radius: 0.4vw;
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
 }
 
 #imgLongmi {
@@ -1662,13 +1601,14 @@ body{
     display: none;
     position: absolute;
     margin-top: 33vh;
-    margin-left: 5vw;
+    margin-left: 2vw;
     width: 2vw;
     height: 4vh;
     background-color: #111111;
     border-radius: 0.5vw;
     padding: 1vw;
     z-index: 2;
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
 }
 
 #LaunchLogoBut{
@@ -1685,27 +1625,28 @@ body{
     font-size: 0.9vw;
     font-family: sans-serif;
     margin-top: 30vh;
-    margin-left: 11vw;
+    margin-left: 7vw;
     color: rgb(184, 180, 180);
     z-index: 2;
     width: 11vw;
-    height: 5vh;
+    height: 5.7vh;
     background-color: #0000006c;
     border-radius: 1vw;
     text-align: center;
     padding-top: 5.5vh;
     padding-bottom: 0vh;
     letter-spacing: 0.5px;
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
 }
 
 #myAlphas {
     position: absolute;
-    margin-left: 23vw;
-    margin-top: 22vh;
+    margin-left: 20vw;
+    margin-top: 15.5vh;
     width: 15vw;
-    height: 26vh;
+    height: 30.1vh;
     display: none;
-    /*box-shadow: inset 0vw 0vw 0.1vw rgb(180 180 180);*/
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
     background-color: #0000006c;
     border-radius: 0.5vw;
     color: white;
@@ -1723,30 +1664,33 @@ body{
     display: none;
     font-size: 0.9vw;
     font-family: sans-serif;
-    margin-top: 15.6vh;
-    margin-left: 23vw;
-    color: rgb(184, 180, 180);
-    z-index: 2;
-    width: 15vw;
+    margin-top: 43vh;
+    margin-left: 2vw;
+    color: rgb(187, 187, 187);
+    z-index: 4;
+    width: 12vw;
     height: 4vh;
     background-color: #0000006c;
-    border-radius: 0.6vw;
+    border-radius: 0.4vw 0vw 0vw 0.4vw;
     text-align: center;
     letter-spacing: 0.5px;
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
 }
 
 #butCopyRefLink {
     position: absolute;
     width: 4vw;
-    height: 3.3vh;
+    height: 3.85vh;
     color: white;
-    background-color: rgb(0 35 177 / 71%);
+    background-color: rgb(0 43 140);
     font-size: 1vw;
     padding-left: 1.5vw;
     border-style: none;
-    border-radius: 0.4vw;
-    margin-top: 0.4vh;
-    right: 0.2vw;
+    border-radius: 0vw 0.4vw 0.4vw 0vw;
+    margin-top: 0vh;
+    right: -4vw;
+    box-shadow: inset 0vw 0vw 0.4vw rgb(0 189 255);
+    z-index: 4;
 } #butCopyRefLink:hover{cursor: pointer;    background-color: rgba(35, 74, 228, 0.71);
 }
 
@@ -1755,14 +1699,14 @@ body{
     filter: invert(100);
     width: 1vw;
     left: 0.2vw;
-    top: 0.5vh;
+    top: 0.9vh;
 }
 
 #mrc {
     position: absolute;
     margin-top: 1vh;
     margin-left: 1vw;
-    color: #3f3e3e;
+    color: #6f6d6d;
 }
 
 #npta {
@@ -1811,6 +1755,7 @@ body{
     color: white;
     z-index: 3;
     font-family: sans-serif;
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
 }
 
 #numSignalsTra {
@@ -1825,6 +1770,7 @@ body{
     color: white;
     z-index: 3;
     font-family: sans-serif;
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
 }
 
 #numSignalsOnc {
@@ -1839,6 +1785,7 @@ body{
     color: white;
     z-index: 3;
     font-family: sans-serif;
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
 }
 
 #numSignalsLow {
@@ -1853,6 +1800,7 @@ body{
     color: white;
     z-index: 3;
     font-family: sans-serif;
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
 }
 
 #numSignalsIco {
@@ -1867,6 +1815,7 @@ body{
     color: white;
     z-index: 3;
     font-family: sans-serif;
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
 }
 
 #alScoreDiv {
@@ -1882,6 +1831,7 @@ body{
     color: white;
     z-index: 3;
     font-family: sans-serif;
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
 }
 
 #accurTot {
@@ -1897,6 +1847,7 @@ body{
     color: white;
     z-index: 3;
     font-family: sans-serif;
+    box-shadow: inset 0vw 0vw 1vw rgb(0 0 0);
 }
 
 .SigAm {
